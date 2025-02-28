@@ -1,5 +1,4 @@
 import Header from '../../components/Header/Header';
-import './LandingPage.css';
 
 export default function LandingPage() {
   return (
