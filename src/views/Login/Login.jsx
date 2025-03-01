@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../../context/AppContext';
 import { loginUser } from '../../services/authentication.service';
 import { getUserData } from '../../services/user.service';
-import { Box, Heading, Text, Stack, Input, Button } from '@chakra-ui/react';
 
 const Login = () => {
     const [credentials, setCredentials] = useState({
@@ -40,62 +39,49 @@ const Login = () => {
     };
 
     return (
-        <div className="login-page">
-            <div className="home-background"></div>
-            <div className="content-container">
-                <Box
-                    maxW="sm"
-                    w="full"
-                    p={6}
-                    borderRadius="md"
-                    boxShadow="lg"
-                    bg="gray.800"
-                    color="white"
-                    mt={-40} 
-                >
-                    <Heading as="h2" size="xl" textAlign="center" mb={4}>Login</Heading>
-                    <Text textAlign="center" mb={4}>Enter your credentials to log in</Text>
-                    <Stack gap="4" w="full">
-                        <Input
-                            placeholder="Email"
-                            value={credentials.email}
-                            onChange={updateCredentials('email')}
-                            bg="gray.700"
-                            _hover={{ bg: "gray.600" }}
-                            _focus={{ bg: "gray.600" }}
-                            color="white"
-                        />
-                        <Input
-                            type="password"
-                            placeholder="Password"
-                            value={credentials.password}
-                            onChange={updateCredentials('password')}
-                            bg="gray.700"
-                            _hover={{ bg: "gray.600" }}
-                            _focus={{ bg: "gray.600" }}
-                            color="white"
-                        />
-                    </Stack>
-
-                    {/* Buttons */}
-                    <Stack direction="row" spacing={4} justify="flex-end" mt={4}>
-                        <Button className="cancel-login-button" variant="solid" onClick={() => navigate('/')}>Cancel</Button>
-                        <Button className="login-button" variant="solid" onClick={login}>Login</Button>
-                    </Stack>
-
-                    {/* "Don't have an account?" link below the buttons */}
-                    <Text textAlign="center" mt={4}>
-                        Don't have an account?{" "}
-                        <Button
-                            variant="link"
-                            color="blue.500"
-                            bg={"transparent"}
-                            onClick={() => navigate('/register')}
-                        >
-                            Register
-                        </Button>
-                    </Text>
-                </Box>
+        <div className="min-h-screen flex items-center justify-center bg-gray-900">
+            <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-sm">
+                <h2 className="text-2xl font-bold text-white text-center mb-4">Login</h2>
+                <p className="text-gray-400 text-center mb-6">Enter your credentials to log in</p>
+                <div className="space-y-4">
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        value={credentials.email}
+                        onChange={updateCredentials('email')}
+                        className="w-full p-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        value={credentials.password}
+                        onChange={updateCredentials('password')}
+                        className="w-full p-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
+                <div className="flex justify-end space-x-4 mt-6">
+                    <button
+                        onClick={() => navigate('/')}
+                        className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        onClick={login}
+                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                    >
+                        Login
+                    </button>
+                </div>
+                <p className="text-gray-400 text-center mt-6">
+                    Don't have an account?{" "}
+                    <button
+                        onClick={() => navigate('/register')}
+                        className="text-blue-500 hover:underline"
+                    >
+                        Register
+                    </button>
+                </p>
             </div>
         </div>
     );

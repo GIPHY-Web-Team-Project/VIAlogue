@@ -2,7 +2,6 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../../context/AppContext";
 import defaultProfilePicture from "../../../assets/default-profile-picture.jpg";
-import { Box, Text, Image, HStack } from "@chakra-ui/react";
 
 export default function UserInfo() {
     const { userData } = useContext(AppContext);
@@ -13,43 +12,30 @@ export default function UserInfo() {
     };
 
     return (
-        <Box 
-            position="fixed"
-            width="250px"
-            height="100px"
-            bottom="30px"
-            right="25px"
-            p={2}
-            bg="gray.800"
-            borderRadius="md"
-            display="flex"
-            alignItems="center"
-            boxShadow="lg"
-            pt={30}
-        >
-            <HStack spacing={3} >
+        <div className="fixed bottom-7 right-6 w-64 h-24 p-2 bg-gray-800 rounded-md shadow-lg flex items-center">
+            <div className="flex items-center space-x-3">
                 {/* User's Profile Picture */}
-                <Image
-                    mb="40px"
-                    ml="20px"
-                    boxSize="40px"
-                    borderRadius="full"
+                <img
+                    className="w-10 h-10 rounded-full"
                     src={userData?.photoURL || defaultProfilePicture}
                     alt="User Profile"
                 />
                 {/* User's Username */}
-                <Text color="white" fontSize="lg" fontWeight="bold" mt="40px" mr="20px" ml="-52px">
-                    {userData?.username || "Loading..."}
-                </Text>
+                <div className="text-white">
+                    <p className="text-lg font-bold">{userData?.username || "Loading..."}</p>
+                    <p className="text-xs">Created: {userData?.createdOn.slice(0, 10)}</p>
+                </div>
                 {/* Settings Icon */}
-                <HStack spacing={1} className="settings-container" onClick={handleSettingsClick} fontSize="22px">
-                    <Text className="emoji">
+                <div
+                    className="flex items-center space-x-1 cursor-pointer text-white"
+                    onClick={handleSettingsClick}
+                >
+                    <span role="img" aria-label="settings">
                         ⚙️
-                    </Text>
-                    <Text className="settings-text">User Settings</Text>
-                </HStack>
-            </HStack>
-                <Text color='white' fontSize="12px" mt={10}  mb={3}> Created: <br /> {userData.createdOn.slice(0, 10)}</Text>
-        </Box>
+                    </span>
+                    <p className="text-sm">Settings</p>
+                </div>
+            </div>
+        </div>
     );
 }

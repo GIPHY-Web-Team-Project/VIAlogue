@@ -5,7 +5,6 @@ import { auth, db, signOut, ref } from "../../services/firebase";
 import { update } from "firebase/database";
 import { uploadProfilePicture, getUserData } from "../../services/user.service";
 import defaultProfilePicture from "../../assets/default-profile-picture.jpg";
-import { Box, Text, Image, VStack, HStack, Input, Button } from "@chakra-ui/react";
 
 export default function Profile() {
     const { user, userData, setAppState } = useContext(AppContext);
@@ -82,103 +81,126 @@ export default function Profile() {
     };
 
     return (
-        <Box p={5} bg="gray.700" color="white" borderRadius="md" maxW="400px" m="auto" textAlign="center" mt={180}>
-            <Text fontSize="2xl" fontWeight="bold" mb={4}>User Profile</Text>
-            <div className="profile-picture-container">
-                <Image
-                    className="profile-picture"
-                    boxSize="100px"
-                    borderRadius="full"
-                    src={profilePicture}
-                    alt="Profile"
-                    onClick={() => fileInputRef.current.click()}
-                    cursor="pointer"
-                />
-                <span className="hover-text">Change Profile Picture</span>
-                <span className="plus-sign">+</span>
-            </div>
-            <Input
-                type="file"
-                ref={fileInputRef}
-                display="none"
-                onChange={handleProfilePictureChange}
-            />
-            <VStack spacing={4} align="start">
-                <Text>Username:</Text>
-                <Text bg="gray.600" p={2} borderRadius="md" width="100%">{userData?.username}</Text>
-                <Text>Email:</Text>
-                <Text bg="gray.600" p={2} borderRadius="md" width="100%">{userData?.email}</Text>
-
-                {/* First Name */}
-                <Text>First Name:</Text>
-                {isEditingField.firstName ? (
-                    <HStack>
-                        <Input
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                        />
-                        <Button size="sm" colorScheme="blue" onClick={() => handleSaveField("firstName")}>
-                            Save
-                        </Button>
-                    </HStack>
-                ) : (
-                    <HStack justify="space-between" width="100%">
-                        <Text bg="gray.600" p={2} borderRadius="md" width="70%">{firstName || "Not set"}</Text>
-                        <Button size="sm" onClick={() => setIsEditingField((prev) => ({ ...prev, firstName: true }))}>
-                            Edit
-                        </Button>
-                    </HStack>
-                )}
-
-                {/* Last Name */}
-                <Text>Last Name:</Text>
-                {isEditingField.lastName ? (
-                    <HStack>
-                        <Input
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                        />
-                        <Button size="sm" colorScheme="blue" onClick={() => handleSaveField("lastName")}>
-                            Save
-                        </Button>
-                    </HStack>
-                ) : (
-                    <HStack justify="space-between" width="100%">
-                        <Text bg="gray.600" p={2} borderRadius="md" width="70%">{lastName || "Not set"}</Text>
-                        <Button size="sm" onClick={() => setIsEditingField((prev) => ({ ...prev, lastName: true }))}>
-                            Edit
-                        </Button>
-                    </HStack>
-                )}
-
-                {/* Telephone */}
-                <Text>Telephone:</Text>
-                {isEditingField.telephone ? (
-                    <HStack>
-                        <Input
-                            value={telephone}
-                            onChange={(e) => setTelephone(e.target.value)}
-                        />
-                        <Button size="sm" colorScheme="blue" onClick={() => handleSaveField("telephone")}>
-                            Save
-                        </Button>
-                    </HStack>
-                ) : (
-                    <HStack justify="space-between" width="100%">
-                        <Text bg="gray.600" p={2} borderRadius="md" width="70%">{telephone || "Not set"}</Text>
-                        <Button size="sm" onClick={() => setIsEditingField((prev) => ({ ...prev, telephone: true }))}>
-                            Edit
-                        </Button>
-                    </HStack>
-                )}
-                {isLoggedIn && (
-                    <HStack justify="space-between" width="100%">
-                        <Button className="logout-btn" onClick={handleLogout} colorScheme="red" bg="red.600" color={"white"} borderRadius={30} w={"200px"} mx={"80px"} mt={3}>
+        <div className="min-h-screen flex items-center justify-center bg-gray-900">
+            <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
+                <h2 className="text-2xl font-bold text-white text-center mb-6">User Profile</h2>
+                <div className="flex flex-col items-center">
+                    <img
+                        src={profilePicture}
+                        alt="Profile"
+                        className="w-24 h-24 rounded-full cursor-pointer"
+                        onClick={() => fileInputRef.current.click()}
+                    />
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        className="hidden"
+                        onChange={handleProfilePictureChange}
+                    />
+                </div>
+                <div className="mt-6 space-y-4">
+                    <div>
+                        <label className="text-gray-400">Username:</label>
+                        <div className="bg-gray-700 p-2 rounded text-white">{userData?.username}</div>
+                    </div>
+                    <div>
+                        <label className="text-gray-400">Email:</label>
+                        <div className="bg-gray-700 p-2 rounded text-white">{userData?.email}</div>
+                    </div>
+                    <div>
+                        <label className="text-gray-400">First Name:</label>
+                        {isEditingField.firstName ? (
+                            <div className="flex space-x-2">
+                                <input
+                                    value={firstName}
+                                    onChange={(e) => setFirstName(e.target.value)}
+                                    className="w-full p-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                                <button
+                                    onClick={() => handleSaveField("firstName")}
+                                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                                >
+                                    Save
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="flex justify-between items-center">
+                                <div className="bg-gray-700 p-2 rounded text-white w-3/4">{firstName || "Not set"}</div>
+                                <button
+                                    onClick={() => setIsEditingField((prev) => ({ ...prev, firstName: true }))}
+                                    className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+                                >
+                                    Edit
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                    <div>
+                        <label className="text-gray-400">Last Name:</label>
+                        {isEditingField.lastName ? (
+                            <div className="flex space-x-2">
+                                <input
+                                    value={lastName}
+                                    onChange={(e) => setLastName(e.target.value)}
+                                    className="w-full p-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                                <button
+                                    onClick={() => handleSaveField("lastName")}
+                                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                                >
+                                    Save
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="flex justify-between items-center">
+                                <div className="bg-gray-700 p-2 rounded text-white w-3/4">{lastName || "Not set"}</div>
+                                <button
+                                    onClick={() => setIsEditingField((prev) => ({ ...prev, lastName: true }))}
+                                    className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+                                >
+                                    Edit
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                    <div>
+                        <label className="text-gray-400">Telephone:</label>
+                        {isEditingField.telephone ? (
+                            <div className="flex space-x-2">
+                                <input
+                                    value={telephone}
+                                    onChange={(e) => setTelephone(e.target.value)}
+                                    className="w-full p-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                                <button
+                                    onClick={() => handleSaveField("telephone")}
+                                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                                >
+                                    Save
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="flex justify-between items-center">
+                                <div className="bg-gray-700 p-2 rounded text-white w-3/4">{telephone || "Not set"}</div>
+                                <button
+                                    onClick={() => setIsEditingField((prev) => ({ ...prev, telephone: true }))}
+                                    className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+                                >
+                                    Edit
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                    {isLoggedIn && (
+                        <button
+                            onClick={handleLogout}
+                            className="w-full bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                        >
                             Logout
-                        </Button>
-                    </HStack>
-                )}
-            </VStack>
-        </Box>
+                        </button>
+                    )}
+                </div>
+            </div>
+        </div>
     );
 }

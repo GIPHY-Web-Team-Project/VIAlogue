@@ -1,42 +1,25 @@
 import { useNavigate } from "react-router-dom";
-import { Box, Button, Heading, VStack } from "@chakra-ui/react";
 
 export default function Home() {
     const navigate = useNavigate();
-  
+
     return (
-      <Box
-        className="home-page"
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="flex-start"
-        color="white"
-        textAlign="center"
-        pt="10vh"
-      >
-        <Heading as="h1" mb={8} fontSize="4xl">
-          Welcome to VIAlogue!
-        </Heading>
-  
-        <VStack spacing={4}>
-          <Button
-            colorScheme="blue"
-            width="200px"
-            size="lg"
-            onClick={() => navigate("/register")}
-          >
-            Go to Register
-          </Button>
-          <Button
-            colorScheme="blue"
-            width="200px"
-            size="lg"
-            onClick={() => navigate("/login")}
-          >
-            Go to Login
-          </Button>
-        </VStack>
-      </Box>
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white">
+            <h1 className="text-4xl font-bold mb-8">Welcome to VIAlogue!</h1>
+            <div className="space-y-4">
+                <button
+                    onClick={() => navigate("/register")}
+                    className="w-48 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                >
+                    Go to Register
+                </button>
+                <button
+                    onClick={() => navigate("/login")}
+                    className="w-48 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                >
+                    Go to Login
+                </button>
+            </div>
+        </div>
     );
-  }
+}
