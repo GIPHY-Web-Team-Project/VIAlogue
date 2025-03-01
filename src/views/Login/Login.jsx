@@ -1,0 +1,104 @@
+import { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AppContext } from '../../context/AppContext';
+import { loginUser } from '../../services/authentication.service';
+import { getUserData } from '../../services/user.service';
+import { Box, Heading, Text, Stack, Input, Button } from '@chakra-ui/react';
+
+const Login = () => {
+    const [credentials, setCredentials] = useState({
+        email: '',
+        password: ''
+    });
+    const { setAppState } = useContext(AppContext);
+    const navigate = useNavigate();
+
+    const login = async () => {
+        if (!credentials.email || !credentials.password) {
+            return alert('Please enter both email and password');
+        }
+
+        try {
+            const userCredential = await loginUser(credentials.email, credentials.password);
+            const firebaseUser = userCredential.user;
+
+            const userData = await getUserData(firebaseUser.uid);
+            setAppState({ user: firebaseUser, userData });
+
+            navigate('/teams');
+        } catch (error) {
+            console.error('Login failed', error);
+            alert('Login failed: ' + error.message);
+        }
+    };
+
+    const updateCredentials = (prop) => (e) => {
+        setCredentials({
+            ...credentials,
+            [prop]: e.target.value
+        });
+    };
+
+    return (
+        <div className="login-page">
+            <div className="home-background"></div>
+            <div className="content-container">
+                <Box
+                    maxW="sm"
+                    w="full"
+                    p={6}
+                    borderRadius="md"
+                    boxShadow="lg"
+                    bg="gray.800"
+                    color="white"
+                    mt={-40} 
+                >
+                    <Heading as="h2" size="xl" textAlign="center" mb={4}>Login</Heading>
+                    <Text textAlign="center" mb={4}>Enter your credentials to log in</Text>
+                    <Stack gap="4" w="full">
+                        <Input
+                            placeholder="Email"
+                            value={credentials.email}
+                            onChange={updateCredentials('email')}
+                            bg="gray.700"
+                            _hover={{ bg: "gray.600" }}
+                            _focus={{ bg: "gray.600" }}
+                            color="white"
+                        />
+                        <Input
+                            type="password"
+                            placeholder="Password"
+                            value={credentials.password}
+                            onChange={updateCredentials('password')}
+                            bg="gray.700"
+                            _hover={{ bg: "gray.600" }}
+                            _focus={{ bg: "gray.600" }}
+                            color="white"
+                        />
+                    </Stack>
+
+                    {/* Buttons */}
+                    <Stack direction="row" spacing={4} justify="flex-end" mt={4}>
+                        <Button className="cancel-login-button" variant="solid" onClick={() => navigate('/')}>Cancel</Button>
+                        <Button className="login-button" variant="solid" onClick={login}>Login</Button>
+                    </Stack>
+
+                    {/* "Don't have an account?" link below the buttons */}
+                    <Text textAlign="center" mt={4}>
+                        Don't have an account?{" "}
+                        <Button
+                            variant="link"
+                            color="blue.500"
+                            bg={"transparent"}
+                            onClick={() => navigate('/register')}
+                        >
+                            Register
+                        </Button>
+                    </Text>
+                </Box>
+            </div>
+        </div>
+    );
+};
+
+export default Login;
