@@ -84,42 +84,48 @@ export default function Register() {
   };
 
   return (
-    <div id='register-form-id'>
-      <h3 id='register-text'>Register</h3>
+    <div className='flex flex-grow items-center justify-center bg-gray-900'>
       <div>
-        <label className='register-label-form' htmlFor='firstName'>
+        <h3 className='text-2xl font-bold text-center mb-4'>Register</h3>
+        <label className='text-gray-400' htmlFor='firstName'>
           First name:{' '}
         </label>
-        <input className='register-input-form' value={user.firstName} onChange={updateUser('firstName')} type='text' name='firstName' id='firstName' />
+        <input className='w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' value={user.firstName} onChange={updateUser('firstName')} type='text' name='firstName' id='firstName' />
         <br />
         <br />
-        <label className='register-label-form' htmlFor='lastName'>
+        <label className='text-gray-400' htmlFor='lastName'>
           Last name:{' '}
         </label>
-        <input className='register-input-form' value={user.lastName} onChange={updateUser('lastName')} type='text' name='lastName' id='lastName' />
+        <input className='w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' value={user.lastName} onChange={updateUser('lastName')} type='text' name='lastName' id='lastName' />
         <br />
         <br />
-        <label className='register-label-form' htmlFor='username'>
+        <label className='text-gray-400' htmlFor='username'>
           Username:{' '}
         </label>
-        <input className='register-input-form' value={user.username} onChange={updateUser('username')} type='text' name='username' id='username' />
+        <input className='w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' value={user.username} onChange={updateUser('username')} type='text' name='username' id='username' />
         <br />
         <br />
-        <label className='register-label-form' htmlFor='email'>
+        <label className='text-gray-400' htmlFor='email'>
           Email:{' '}
         </label>
-        <input className='register-input-form' value={user.email} onChange={updateUser('email')} type='email' name='email' id='email' />
+        <input className='w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' value={user.email} onChange={updateUser('email')} type='email' name='email' id='email' />
         <br />
         <br />
-        <label className='register-label-form' htmlFor='password'>
+        <label className='text-gray-400' htmlFor='password'>
           Password:{' '}
         </label>
-        <input className='register-input-form' value={user.password} onChange={updateUser('password')} type='password' name='password' id='password' />
+        <input className='w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' value={user.password} onChange={updateUser('password')} type='password' name='password' id='password' />
         <br />
         <br />
-        <button onClick={register} id='btn-register-form'>
+        <button className='btn' onClick={register} id='btn-register-form'>
           Register
         </button>
+        <p className='text-gray-400 text-center mt-6'>
+          Already have an account?{' '}
+          <button onClick={() => navigate('/login')} className='text-blue-500 cursor-pointer hover:underline'>
+            Login
+          </button>
+        </p>
       </div>
       <Modal show={showModal} handleClose={handleCloseModal} message={modalMessage} />
     </div>

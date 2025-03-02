@@ -42,17 +42,17 @@ export default function Login() {
   return (
     <div className='min-h-screen flex items-center justify-center bg-gray-900'>
       <div className='bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-sm'>
-        <h2 className='text-2xl font-bold text-white text-center mb-4'>Login</h2>
+        <h2 className='text-2xl font-bold text-center mb-4'>Login</h2>
         <p className='text-gray-400 text-center mb-6'>Enter your credentials to log in</p>
         <div className='space-y-4'>
-          <input type='email' placeholder='Email' value={user.email} onChange={updateUser('email')} className='w-full p-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500' />
-          <input type='password' placeholder='Password' value={user.password} onChange={updateUser('password')} className='w-full p-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500' />
+          <input type='email' placeholder='Email' value={user.email} onChange={updateUser('email')} className='w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' />
+          <input type='password' placeholder='Password' value={user.password} onChange={updateUser('password')} className='w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' />
         </div>
         <div className='flex justify-end space-x-4 mt-6'>
-          <button onClick={() => navigate('/')} className='bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700'>
+          <button onClick={() => navigate('/')} className='bg-gray-600 px-4 py-2 rounded hover:bg-gray-700 cursor-pointer'>
             Cancel
           </button>
-          <button onClick={login} className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600'>
+          <button onClick={login} className='btn'>
             Login
           </button>
         </div>

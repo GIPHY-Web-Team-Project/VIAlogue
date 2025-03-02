@@ -17,7 +17,7 @@ function App() {
   return (
     <BrowserRouter>
       <AppContext.Provider value={{ ...appState, setAppState }}>
-        <div className='font-medium flex flex-col w-screen h-screen bg-white text-black'>
+        <div className='font-medium flex flex-col w-screen h-screen bg-gray-900 text-white'>
           <Header />
           <Routes>
             <Route path='/' element={<LandingPage />} />
