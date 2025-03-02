@@ -1,1 +1,40 @@
 @import 'tailwindcss';
+
+@theme {
+    /* COLOUR PALETTE */
+    
+    /* white + black */
+    --color-white: oklch(95.22% 0.0111 89.72);
+    --color-black: oklch(23.93% 0 0);
+    
+    /* main colours */
+    --color-light-blue: oklch(80.94% 0.0515 204);
+    --color-blue: oklch(66.98% 0.0882 196.21);
+    --color-dark-blue: oklch(54.11% 0.1221 248.21);
+}
+
+/* COLOURS 
+
+--- white + black ---
+white: #f2efe7
+black: #2a3335
+
+--- main colours ---
+light-blue: #9acbd0
+blue: #48a6a7
+dark-blue: #2973b2
+*/
+
+.btn {
+    color: #f2efe7;
+    background-color: #2973B2;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn:hover {
+    color: #1f1f1f;
+    background-color: #48a6a7;
+}
