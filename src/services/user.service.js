@@ -37,12 +37,14 @@ export const createUserHandle = async (username, firstName, lastName, uid, email
   await set(ref(db, `users/${username}`), user);
 };
 
-export const getUserData = async (username) => {
-  const snapshot = await get(query(ref(db, 'users'), orderByChild('username'), equalTo(username)));
+export const getUserData = async (uid) => {
+  const snapshot = await get(query(ref(db, 'users'), orderByChild('uid'), equalTo(uid)));
 
   if (snapshot.exists()) {
     return snapshot.val();
   }
+
+  return null;
 };
 
 export const getAllUsers = async () => {

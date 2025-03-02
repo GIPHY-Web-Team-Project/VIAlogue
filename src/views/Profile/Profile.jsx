@@ -1,47 +1,45 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppContext } from '../../context/AppContext';
-import { auth, db, signOut, ref } from '../../services/firebase';
-import { update } from 'firebase/database';
-import { uploadProfilePicture, getUserData } from '../../services/user.service';
-import defaultProfilePicture from '../../assets/default-profile-picture.jpg';
+import { ref, update } from 'firebase/database';
+import { getUserData } from '../../services/user.service';
+// import defaultProfilePicture from '../../assets/default-profile-picture.jpg';
+import { AppContext } from '../../store/app-context';
+import { auth, db } from '../../config/firebase-config';
+import { signOut } from 'firebase/auth';
 
 export default function Profile() {
   const { user, userData, setAppState } = useContext(AppContext);
   const fileInputRef = useRef(null);
-  const [profilePicture, setProfilePicture] = useState(defaultProfilePicture);
+  // const [profilePicture, setProfilePicture] = useState(defaultProfilePicture);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [telephone, setTelephone] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   const [isEditingField, setIsEditingField] = useState({
     firstName: false,
     lastName: false,
-    telephone: false,
   });
 
   useEffect(() => {
     if (userData) {
-      setProfilePicture(userData.photoURL || defaultProfilePicture);
+      // setProfilePicture(userData.photoURL || defaultProfilePicture);
       setFirstName(userData.firstName || '');
       setLastName(userData.lastName || '');
-      setTelephone(userData.telephone || '');
     }
   }, [userData]);
 
-  const handleProfilePictureChange = async (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      try {
-        const newPictureUrl = await uploadProfilePicture(file, user?.uid, userData.username);
-        setProfilePicture(newPictureUrl);
-      } catch (error) {
-        console.error('Error uploading profile picture:', error);
-      }
-    }
-  };
+  // const handleProfilePictureChange = async (event) => {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     try {
+  //       const newPictureUrl = await uploadProfilePicture(file, user?.uid, userData.username);
+  //       setProfilePicture(newPictureUrl);
+  //     } catch (error) {
+  //       console.error('Error uploading profile picture:', error);
+  //     }
+  //   }
+  // };
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -64,7 +62,7 @@ export default function Profile() {
   const handleSaveField = async (field) => {
     try {
       const updatedData = {
-        [field]: field === 'firstName' ? firstName : field === 'lastName' ? lastName : telephone,
+        [field]: field === 'firstName' ? firstName : field === 'lastName' && lastName,
       };
 
       const userRef = ref(db, `users/${userData.username}`);
@@ -80,17 +78,17 @@ export default function Profile() {
   };
 
   return (
-    <div className='min-h-screen flex items-center justify-center bg-gray-900'>
+    <div className='flex flex-grow items-center justify-center bg-gray-900'>
       <div className='bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md'>
         <h2 className='text-2xl font-bold text-center mb-6'>User Profile</h2>
         <div className='flex flex-col items-center'>
-          <img src={profilePicture} alt='Profile' className='w-24 h-24 rounded-full cursor-pointer' onClick={() => fileInputRef.current.click()} />
-          <input type='file' ref={fileInputRef} className='hidden' onChange={handleProfilePictureChange} />
+          <img alt='Profile' className='w-24 h-24 rounded-full cursor-pointer' onClick={() => fileInputRef.current.click()} />
+          <input type='file' ref={fileInputRef} className='hidden' />
         </div>
         <div className='mt-6 space-y-4'>
           <div>
             <label className='text-gray-400'>Username:</label>
-            <div className='bg-gray-700 p-2 rounded text-whte'>{userData?.username}</div>
+            <div className='bg-gray-700 p-2 rounded'>{userData?.username}</div>
           </div>
           <div>
             <label className='text-gray-400'>Email:</label>
@@ -127,24 +125,6 @@ export default function Profile() {
               <div className='flex justify-between items-center'>
                 <div className='bg-gray-700 p-2 rounded w-3/4'>{lastName || 'Not set'}</div>
                 <button onClick={() => setIsEditingField((prev) => ({ ...prev, lastName: true }))} className='bg-gray-600 px-4 py-2 rounded hover:bg-gray-700'>
-                  Edit
-                </button>
-              </div>
-            )}
-          </div>
-          <div>
-            <label className='text-gray-400'>Telephone:</label>
-            {isEditingField.telephone ? (
-              <div className='flex space-x-2'>
-                <input value={telephone} onChange={(e) => setTelephone(e.target.value)} className='w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' />
-                <button onClick={() => handleSaveField('telephone')} className='bg-blue-500 px-4 py-2 rounded hover:bg-blue-600'>
-                  Save
-                </button>
-              </div>
-            ) : (
-              <div className='flex justify-between items-center'>
-                <div className='bg-gray-700 p-2 rounded w-3/4'>{telephone || 'Not set'}</div>
-                <button onClick={() => setIsEditingField((prev) => ({ ...prev, telephone: true }))} className='bg-gray-600 px-4 py-2 rounded hover:bg-gray-700'>
                   Edit
                 </button>
               </div>
