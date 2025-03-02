@@ -1,139 +1,127 @@
-import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { AppContext } from "../../context/AppContext";
-import { registerUser } from "../../services/authentication.service";
-import { createUserHandle, getUserByUsername } from "../../services/user.service";
-import { PasswordInput, PasswordStrengthMeter } from "../../components/PasswordInput";
-import { USERNAME_MIN_LENGTH, USERNAME_MAX_LENGTH } from "../../utils/constants";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { createUserHandle, getUserByUsername, getUserByEmail } from '../../services/user.service';
+import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
+import { auth } from '../../config/firebase-config';
+import { nameCheck } from '../../utils/nameUtils';
+import Modal from '../../components/Modal/Modal';
 
-const Register = () => {
-    const [user, setUser] = useState({
-        username: "",
-        email: "",
-        password: "",
-    });
-    const [passwordStrength, setPasswordStrength] = useState(0);
-    const { setAppState } = useContext(AppContext);
-    const navigate = useNavigate();
+export default function Register() {
+  const [user, setUser] = useState({
+    firstName: '',
+    lastName: '',
+    username: '',
+    email: '',
+    password: '',
+  });
 
-    const register = async () => {
-        if (!user.username || !user.email || !user.password) {
-            return alert("Please fill out all fields");
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const navigate = useNavigate();
+
+  /**
+   * Registers a new user with the provided email and password.
+   *
+   * This function performs the following steps:
+   * 1. Checks if the email and password are provided.
+   * 2. Logs the registration attempt.
+   * 3. Checks if a user with the provided email already exists.
+   * 4. Validates the first and last names.
+   * 5. Creates a new user with the provided email and password.
+   * 6. Creates a user handle with the provided or derived username.
+   * 7. Signs out the user and shows a success modal.
+   *
+   * @throws {Error} If the email or password is not provided.
+   * @throws {Error} If a user with the provided email already exists.
+   * @throws {Error} If the first or last names are invalid.
+   */
+  const register = () => {
+    if (!user.email || !user.password || !user.username) {
+      return alert('Please fill all empty sections.');
+    }
+
+    if (!nameCheck(user.firstName) || !nameCheck(user.lastName)) {
+      throw new Error('First and last names must be between 4 and 32 characters and contain only letters');
+    }
+
+    console.log('Registering user: ', user.username);
+    getUserByUsername(user.username)
+      .then((userFromDB) => {
+        if (userFromDB) {
+          throw new Error(`User with username ${user.username} already exists`);
         }
 
-        if (user.username.length < USERNAME_MIN_LENGTH || user.username.length > USERNAME_MAX_LENGTH) {
-            return alert(`Username must be between ${USERNAME_MIN_LENGTH} and ${USERNAME_MAX_LENGTH} characters`);
-        }
-
-        try {
-            const userFromDB = await getUserByUsername(user.username);
-            if (userFromDB) {
-                throw new Error(`User ${user.username} already exists`);
-            }
-
-            const credential = await registerUser(
-                user.email,
-                user.password,
-                user.username
-            );
-            await createUserHandle(user.username, credential.user.uid, user.email);
-
-            setAppState({
-                user: credential.user,
-                userData: null,
-            });
-
-            navigate("/login");
-        } catch (error) {
-            console.error("Register failed", error);
-            alert("Registration failed: " + error.message);
-        }
-    };
-
-    const updateUser = (prop) => (e) => {
-        const value = e.target.value;
-        setUser({
-            ...user,
-            [prop]: value,
+        getUserByEmail(user.email).then((userFromDB) => {
+          if (userFromDB) {
+            throw new Error(`User with email ${user.email} already exists`);
+          }
         });
 
-        if (prop === "password") {
-            setPasswordStrength(calculatePasswordStrength(value));
-        }
-    };
+        return createUserWithEmailAndPassword(auth, user.email, user.password);
+      })
+      .then((userCredential) => {
+        return createUserHandle(user.username, user.firstName, user.lastName, userCredential.user.uid, user.email).then(() => {
+          signOut(auth);
+          setModalMessage('Registration successful! Please log in.');
+          setShowModal(true);
+        });
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  };
 
-    const calculatePasswordStrength = (password) => {
-        let strength = 0;
-        if (password.length >= 8) strength++;
-        if (/[A-Z]/.test(password)) strength++;
-        if (/[a-z]/.test(password)) strength++;
-        if (/[0-9]/.test(password)) strength++;
-        if (/[^A-Za-z0-9]/.test(password)) strength++;
-        return Math.min(strength, 4);
-    };
+  const updateUser = (prop) => (e) => {
+    setUser({
+      ...user,
+      [prop]: e.target.value,
+    });
+  };
 
-    return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-900">
-            <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-sm">
-                <h2 className="text-2xl font-bold text-white text-center mb-4">Register</h2>
-                <p className="text-gray-400 text-center mb-6">Fill in the form below to create an account</p>
-                <div className="space-y-4">
-                    <div>
-                        <label className="text-gray-400">Username <span className="text-red-500">*</span></label>
-                        <input
-                            type="text"
-                            placeholder="Username"
-                            value={user.username}
-                            onChange={updateUser("username")}
-                            className="w-full p-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
-                    <div>
-                        <label className="text-gray-400">Email <span className="text-red-500">*</span></label>
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            value={user.email}
-                            onChange={updateUser("email")}
-                            className="w-full p-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
-                    <div>
-                        <label className="text-gray-400">Password <span className="text-red-500">*</span></label>
-                        <PasswordInput
-                            value={user.password}
-                            onChange={updateUser("password")}
-                            className="w-full p-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                        <PasswordStrengthMeter value={passwordStrength} />
-                    </div>
-                </div>
-                <div className="flex justify-end space-x-4 mt-6">
-                    <button
-                        onClick={() => navigate('/')}
-                        className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        onClick={register}
-                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                    >
-                        Register
-                    </button>
-                </div>
-                <p className="text-gray-400 text-center mt-6">
-                    Already have an account?{" "}
-                    <button
-                        onClick={() => navigate('/login')}
-                        className="text-blue-500 hover:underline"
-                    >
-                        Login
-                    </button>
-                </p>
-            </div>
-        </div>
-    );
-};
+  const handleCloseModal = () => {
+    setShowModal(false);
+    navigate('/login');
+  };
 
-export default Register;
+  return (
+    <div id='register-form-id'>
+      <h3 id='register-text'>Register</h3>
+      <div>
+        <label className='register-label-form' htmlFor='firstName'>
+          First name:{' '}
+        </label>
+        <input className='register-input-form' value={user.firstName} onChange={updateUser('firstName')} type='text' name='firstName' id='firstName' />
+        <br />
+        <br />
+        <label className='register-label-form' htmlFor='lastName'>
+          Last name:{' '}
+        </label>
+        <input className='register-input-form' value={user.lastName} onChange={updateUser('lastName')} type='text' name='lastName' id='lastName' />
+        <br />
+        <br />
+        <label className='register-label-form' htmlFor='username'>
+          Username:{' '}
+        </label>
+        <input className='register-input-form' value={user.username} onChange={updateUser('username')} type='text' name='username' id='username' />
+        <br />
+        <br />
+        <label className='register-label-form' htmlFor='email'>
+          Email:{' '}
+        </label>
+        <input className='register-input-form' value={user.email} onChange={updateUser('email')} type='email' name='email' id='email' />
+        <br />
+        <br />
+        <label className='register-label-form' htmlFor='password'>
+          Password:{' '}
+        </label>
+        <input className='register-input-form' value={user.password} onChange={updateUser('password')} type='password' name='password' id='password' />
+        <br />
+        <br />
+        <button onClick={register} id='btn-register-form'>
+          Register
+        </button>
+      </div>
+      <Modal show={showModal} handleClose={handleCloseModal} message={modalMessage} />
+    </div>
+  );
+}
