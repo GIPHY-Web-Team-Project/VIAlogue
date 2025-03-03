@@ -2,47 +2,49 @@ import React, { useEffect, useContext } from 'react';
 import { ChatContext } from '../../../store/chat.context';
 import { getChatsByUserId } from '../../../services/chat.services';
 import { useNavigate } from 'react-router-dom';
-import { AppContext } from '../../../store/app-context';
-import CreateChat from '../CreateChat/CreateChat';
 
 export const ChatList = ({ userId }) => {
-    const { userData } = useContext(AppContext);
-    const { chats, setChats, selectedChat, setSelectedChat } = useContext(ChatContext);
+    const { chats, setChats, setSelectedChat } = useContext(ChatContext);
     const navigate = useNavigate();
 
     useEffect(() => {
-        async function fetchChats() {
-            try {
-                const unsubscribe = await getChatsByUserId(userId, ((chats) => {
-                    setChats(chats);
-                }));
-                return () => {
-                    if (typeof unsubscribe === 'function') {
-                        unsubscribe();
-                    }
-                };
-            } catch {
-                console.log('Error getting chats');
+        const unsubscribe = getChatsByUserId(userId, (chats) => {
+            setChats(chats);
+        });
+
+        return () => {
+            if (typeof unsubscribe === 'function') {
+                unsubscribe();
             }
-        }
-        fetchChats();
-    }, [userId, setChats]);
+        };
+    }, [userId]);
 
     const handleNewChat = () => {
-        navigate(`/users/${userData.username}/chats/newchat`);
+        navigate(`/chats/newchat`);
     }
+
+    const handleChatClick = (chat) => {
+        setSelectedChat(chat);
+        navigate(`/chats/${chat.id}`);
+    };
 
     return (
         <div>
-            {chats ? (chats.map(chat => (
-                <div key={chat.id} onClick={() => setSelectedChat(chat)} className={`chat ${selectedChat && selectedChat.id === chat.id ? 'selected' : 'normal'}`}>
-                    {chat.title}
+            <br/>
+            {chats && chats.length > 0 ? (
+                chats.map(chat => (
+                    <div key={chat.id} onClick={() => handleChatClick(chat)}>
+                        <button>{chat.title}</button>
+                    </div>
+                ))) : (
+                <div>
+                    <p>No chats yet. Click below to start your first chat: </p>
+                    <br />
                 </div>
-            ))) : (
-                <p>No chats yet</p>
             )
             }
-            <button onClick={handleNewChat}>New Chat</button>
+            <br/>
+            <button onClick={handleNewChat} className='btn'>Start a new chat</button>
         </div>
     )
 }

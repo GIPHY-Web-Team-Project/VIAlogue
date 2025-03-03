@@ -1,4 +1,4 @@
-import { get, query, orderByChild, equalTo, set, ref } from 'firebase/database';
+import { get, query, orderByChild, equalTo, set, ref, onValue } from 'firebase/database';
 import { encodeEmail } from '../utils/emailUtils';
 import { db } from '../config/firebase-config';
 
@@ -47,22 +47,16 @@ export const getUserData = async (uid) => {
   return null;
 };
 
-export const getAllUsers = async () => {
-  const snapshot = await get(ref(db, 'users'));
-  const usersData = snapshot.val();
+export const getAllUsers = async (callback) => {
+  const usersRef = ref(db, 'users');
 
-  if (usersData) {
-    return Object.keys(usersData).map((userId) => {
-      const user = usersData[userId];
-      return {
-        id: user.uid,
-        username: user.username,
-        email: user.email,
-        isAdmin: user.isAdmin,
-        photoURL: user.photoURL || null,
-      };
-    });
-  }
+  const unsubscribe = onValue(usersRef, (snapshot) => {
+    if (snapshot.exists()) {
+      callback(Object.values(snapshot.val()));
+    } else {
+      callback([]);
+    }
+  });
 
-  return [];
+  return () => unsubscribe();
 };

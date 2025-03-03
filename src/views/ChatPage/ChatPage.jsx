@@ -1,27 +1,41 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { ChatContext } from '../../store/chat.context';
 import { AppContext } from '../../store/app-context';
 import { ChatList } from '../../components/Channels/ChatList/ChatList';
 import { ChatWindow } from '../../components/Channels/ChatWindow/ChatWindow';
 
 export const ChatPage = () => {
-    const { user, userData } = useContext(AppContext);
-    const { selectedChat } = useContext(ChatContext);
+    const { userData } = useContext(AppContext);
+    const { selectedChat, setSelectedChat } = useContext(ChatContext);
+    
+    useEffect(() => {
+        const lastChat = localStorage.getItem('lastSelectedChat');
+        if (lastChat) {
+            setSelectedChat(JSON.parse(lastChat));
+        }
+    }, [setSelectedChat]);
+
+    useEffect(() => {
+        if (selectedChat) {
+            localStorage.setItem('lastSelectedChat', JSON.stringify(selectedChat));
+        }
+    }, [selectedChat]);
 
     return (
-        <div>
-            {userData && 
-                <div>
-                    <ChatList userId={user?.uid} />
-                    { selectedChat ? (
-                        <ChatWindow chat={selectedChat} /> 
-                    ) : (
-                        <p>You don't have any chats yet? Click on new chat and select some friends to start with!</p>
-                    )}
-                </div>
-            }
+        <div style={{ display: 'flex' }}>
+            {userData && (
+                <>
+                    <div style={{ flex: 1 }}>
+                        <ChatList userId={userData.uid} />
+                    </div>
+                    <br/><br/>
+                    <div style={{ flex: 2 }}>
+                        {selectedChat && <ChatWindow selectedChat={selectedChat} />}
+                    </div>
+                </>
+            )}
         </div>
-    )
-}
+    );
+};
 
 export default ChatPage;

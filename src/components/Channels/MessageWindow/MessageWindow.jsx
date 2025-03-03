@@ -5,6 +5,8 @@ export const MessageWindow = ({ chatId, sender }) => {
     const [message, setMessage] = useState('');
 
     const handleNewMessage = () => {
+        console.log(chatId);
+        console.log(message);
         addMessage(chatId, message, sender);
         setMessage(''); 
     }

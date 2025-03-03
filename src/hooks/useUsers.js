@@ -9,29 +9,26 @@ import { getAllUsers } from '../services/user.service';
  * @returns {Object} An object containing users, setUsers, originalUsers, and setOriginalUsers.
  *
  */
-export const useUsers = (userData, navigate) => {
+export const useUsers = (userData) => {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        if (!userData) {
-            navigate('/login');
-            return;
-        }
+        let unsubscribe = () => {}; 
 
-        const fetchAllUsers = async() => {
-            const unsubscribe = await getAllUsers((users) => {
-            setUsers(users);
-        })
+        const fetchAllUsers = async () => {
+            unsubscribe = await getAllUsers((fetchedUsers) => {
+                setUsers(fetchedUsers || []); // ✅ Ensure users is never undefined
+            });
+        };
+
+        fetchAllUsers();
 
         return () => {
             if (typeof unsubscribe === 'function') {
                 unsubscribe();
             }
         };
-        }
+    }, [userData]);
 
-        fetchAllUsers();
-    }, [userData, navigate]);
-
-    return { users, setUsers };
+    return { users: users || [] };
 }

@@ -2,14 +2,17 @@ import { db } from '../config/firebase-config';
 import { ref, push, onValue, update } from 'firebase/database';
 
 export const getChatsByUserId = async (userId, callback) => {
-    const chatsRef = await ref(db, 'chats');
+    const chatsRef = ref(db, 'chats');
     const unsubscribe = onValue(chatsRef, (snapshot) => {
         if (snapshot.exists()) {
             const chats = snapshot.val();
-            const filteredChats = Object.values(chats).filter(chat => chat.users.includes(userId));
-            return callback(filteredChats);
+            const filteredChats = Object.values(chats).filter(chat =>
+                chat.users.some(user => user.uid === userId) && !chat.isDeleted
+            );
+
+            callback(filteredChats);
         } else {
-            return callback([]);
+            callback([]);
         }
     });
     return unsubscribe;

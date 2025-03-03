@@ -2,22 +2,37 @@ import { ref, push, update, remove, onValue } from 'firebase/database';
 import { db } from '../config/firebase-config';
 
 export const getMessagesByChatId = async (chatId, callback) => {
-    const messagesRef = ref(db, `chats/${chatId}/messages`);
-    const unsubscribe = onValue(messagesRef, (snapshot) => {
-        if (snapshot.exists()) {
-            const messages = snapshot.val();
-            callback(Object.values(messages));
-        } else {
+    const chatMessagesRef = ref(db, `chats/${chatId}/messages`);
+    
+    onValue(chatMessagesRef, async (snapshot) => {
+        if (!snapshot.exists()) {
             callback([]);
+            return;
         }
+
+        const messageIds = Object.keys(snapshot.val());
+        const messages = [];
+
+        for (const messageId of messageIds) {
+            const messageRef = ref(db, `messages/${messageId}`);
+            await new Promise((resolve) => {
+                onValue(messageRef, (msgSnapshot) => {
+                    if (msgSnapshot.exists()) {
+                        messages.push(msgSnapshot.val());
+                    }
+                    resolve();
+                }, { onlyOnce: true });
+            });
+        }
+
+        callback(messages);
     });
-    return unsubscribe;
-}
+};
 
 export const addMessage = async (chatId, message, sender) => {
     const newMessage = {
-        ...message,
         chatId,
+        message,
         createdOn: new Date().toString(),
         sender,
     }
@@ -34,6 +49,6 @@ export const deleteMessage = async (chatId, messageId) => {
 
 export const updateMessage = async (chatId, messageId, updatedMessage) => {
     await update(ref(db, `messages/${messageId}`), updatedMessage);
-    /* await update(ref(db, `chats/${chatId}/messages/${messageId}`), updatedMessage); */
+    await update(ref(db, `chats/${chatId}/messages/${messageId}`), updatedMessage);
 }
 

@@ -13,26 +13,25 @@ export const CreateChat = () => {
     const [selectedUsers, setSelectedUsers] = useState([userData]);
     const [selectedSearch, setSelectedSearch] = useState('username');
     const navigate = useNavigate();
-    const { users } = useUsers(userData, navigate);
+    const { users } = useUsers(userData);
     const [userList, setUserList] = useState([]);
     const [modalMessage, setModalMessage] = useState('');
     const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
-        if (users) {
+        if (users && userList.length !== users.length) { 
             const usersWithoutLoggedIn = users.filter(user => user.username !== userData.username);
             setUserList(usersWithoutLoggedIn);
         }
-    }, [users]);
+    }, [users]); 
 
     const handleUserSelect = (user) => {
-        setSelectedUsers([...selectedUsers, user]);
-        setUserList(userList.filter(u => u.username !== user.username));
+        setSelectedUsers(prevSelected => [...prevSelected, user]);
+        setUserList(prevList => prevList.filter(u => u.username !== user.username));
     };
 
     const handleCreateChat = async () => {
-        const selected = selectedUsers.map(user => user);
-        const chatUsers = [...selected, userData];
+        const chatUsers = selectedUsers.map(user => user);
 
         if (chatUsers.length < 2) {
             setModalMessage('Please select at least 2 users to create a chat');
@@ -45,7 +44,7 @@ export const CreateChat = () => {
         try {
             await createChat(chatUsers, chatTitle, (chatId) => {
                 setSelectedChat({id: chatId, chatUsers});
-                navigate(`users/${userData.username}/chats/${chatId}`);
+                navigate(`/chats/${chatId}`);
             })
         } catch {
             console.log('Error creating chat');
@@ -63,17 +62,18 @@ export const CreateChat = () => {
     const handleSearch = () => {
         const searchData = document.getElementById('search').value.toLowerCase();
         if (!searchData) {
-            setUserList(users);
+            if (userList.length !== users.length) setUserList(users);
             return;
         }
-
-        const filteredData = users.filter(user => {
-            if (selectedSearch === 'username' || selectedSearch === 'email') {
-                return user[selectedSearch].toLowerCase().includes(searchData);
-            }
-        });
-        setUserList(filteredData);
-    }
+    
+        const filteredData = users.filter(user => 
+            user[selectedSearch]?.toLowerCase().includes(searchData)
+        );
+    
+        if (JSON.stringify(userList) !== JSON.stringify(filteredData)) {
+            setUserList(filteredData);
+        }
+    };
 
     return (
         <div>
@@ -87,7 +87,7 @@ export const CreateChat = () => {
                 <option value='username'>username</option>
                 <option value='email'>email</option>
             </select>
-            <button onClick={handleSearch}>Search</button>
+            <button onClick={handleSearch} className='btn'>Search</button>
             <br/><br/>
             <h3>Selected users</h3>
             <ul>
@@ -95,7 +95,7 @@ export const CreateChat = () => {
                     <div key={user.username}>
                         <li>
                             <span>{user.username} ({user.email})</span>
-                            <button onClick={() => handleRemove(user)}>Remove</button>
+                            <button onClick={() => handleRemove(user)} className='btn'>Remove</button>
                         </li>
                     </div>
                 ))}
@@ -107,13 +107,13 @@ export const CreateChat = () => {
                     <div key={user.uid}>
                         <li>
                             <span>{user.username} ({user.email})</span>
-                            <button onClick={(userObj) => handleUserSelect(userObj)}>Select</button>
+                            <button onClick={() => handleUserSelect(user)} className='btn'>Select</button>
                         </li>
                     </div>
                 ))}
             </ul>
             <br/><br/><br/>
-            <button onClick={handleCreateChat}>Create Chat</button>
+            <button onClick={handleCreateChat} className='btn'>Create Chat</button>
             <Modal message={modalMessage} show={showModal} handleClose={handleCloseModal}/>
         </div> 
     )
