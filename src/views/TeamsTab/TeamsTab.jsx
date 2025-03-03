@@ -1,6 +1,10 @@
 import { useContext } from 'react';
 import { AppContext } from '../../store/app-context';
 import { useNavigate } from 'react-router';
+import SideBar from '../../components/SideBar/SideBar';
+
+// use subscribe / unsubscribe logic from forum CommentSection to show all teams
+//
 
 export default function TeamsTab() {
   const { user, userData } = useContext(AppContext);
@@ -21,10 +25,12 @@ export default function TeamsTab() {
   }
 
   return (
-    <div>
-      <h1>{user && userData?.username}</h1>
-
-      <button className='btn'>Create a Team</button>
+    <div className='flex flex-grow'>
+      <SideBar type='menu' />
+      <div>
+        <h1>{user && userData?.username}</h1>
+        <button className='btn'>Create a Team</button>
+      </div>
     </div>
   );
 }

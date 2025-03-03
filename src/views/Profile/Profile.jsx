@@ -6,6 +6,7 @@ import { getUserData } from '../../services/user.service';
 import { AppContext } from '../../store/app-context';
 import { auth, db } from '../../config/firebase-config';
 import { signOut } from 'firebase/auth';
+import SideBar from '../../components/SideBar/SideBar';
 
 export default function Profile() {
   const { user, userData, setAppState } = useContext(AppContext);
@@ -78,8 +79,9 @@ export default function Profile() {
   };
 
   return (
-    <div className='flex flex-grow items-center justify-center bg-gray-900'>
-      <div className='bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md'>
+    <div className='flex flex-grow items-center bg-gray-900'>
+      <SideBar type='menu' />
+      <div className='bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md mx-auto'>
         <h2 className='text-2xl font-bold text-center mb-6'>User Profile</h2>
         <div className='flex flex-col items-center'>
           <img alt='Profile' className='w-24 h-24 rounded-full cursor-pointer' onClick={() => fileInputRef.current.click()} />
