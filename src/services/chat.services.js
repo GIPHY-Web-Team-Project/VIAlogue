@@ -1,0 +1,62 @@
+import { db } from '../config/firebase-config';
+import { ref, push, onValue, update } from 'firebase/database';
+
+export const getChatsByUserId = async (userId, callback) => {
+    const chatsRef = await ref(db, 'chats');
+    const unsubscribe = onValue(chatsRef, (snapshot) => {
+        if (snapshot.exists()) {
+            const chats = snapshot.val();
+            const filteredChats = Object.values(chats).filter(chat => chat.users.includes(userId));
+            return callback(filteredChats);
+        } else {
+            return callback([]);
+        }
+    });
+    return unsubscribe;
+}
+
+export const getChatById = async (chatId, callback) => {
+    const chatRef = await ref(db, `chats/${chatId}`);
+    const unsubscribe = onValue(chatRef, (snapshot) => {
+        if(snapshot.exists()) {
+            return callback(Object.values(snapshot.val()));
+        } else {
+            return callback(null);
+        }
+    })
+    return unsubscribe;
+}
+
+export const createChat = async (users, title = '', callback) => {
+    const chat = {
+        users,
+        title,
+        messages: [],
+    }
+
+    const result = await push(ref(db, 'chats'), chat);
+    const id = result.key;
+    await update(ref(db, `chats/${id}`), { id });
+    return callback(id);
+}
+
+export const updateChat = async (chatId, updatedChat) => {
+    await update(ref(db, `chats/${chatId}`), updatedChat);
+}
+
+export const deleteChat = async (chatId) => {
+    await update(ref(db, `chats/${chatId}`), { isDeleted: true });
+}
+
+export const sortChats = (chats, sortBy) => {
+    switch (sortBy) {
+        case 'recent':
+            return chats.sort((a, b) => new Date(b.messages[b.messages.length - 1].createdOn) - new Date(a.messages[a.messages.length - 1].createdOn));
+        case 'oldest':
+            return chats.sort((a, b) => new Date(a.messages[a.messages.length - 1].createdOn) - new Date(b.messages[b.messages.length - 1].createdOn));
+        case 'title':
+            return chats.sort((a, b) => a.title.localeCompare(b.title));
+        default:
+            return chats;
+    }
+}
