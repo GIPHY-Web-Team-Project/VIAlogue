@@ -19,6 +19,7 @@ export const MessageWindow = ({ chatId, sender }) => {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
             />
+            <br/>
             <button onClick={handleNewMessage}>Send</button>
         </div>
     )

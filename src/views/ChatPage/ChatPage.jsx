@@ -3,37 +3,88 @@ import { ChatContext } from '../../store/chat.context';
 import { AppContext } from '../../store/app-context';
 import { ChatList } from '../../components/Channels/ChatList/ChatList';
 import { ChatWindow } from '../../components/Channels/ChatWindow/ChatWindow';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { updateChat } from '../../services/chat.services';
 
 export const ChatPage = () => {
     const { userData } = useContext(AppContext);
-    const { selectedChat, setSelectedChat } = useContext(ChatContext);
-    
-    useEffect(() => {
-        const lastChat = localStorage.getItem('lastSelectedChat');
-        if (lastChat) {
-            setSelectedChat(JSON.parse(lastChat));
-        }
-    }, [setSelectedChat]);
+    const { selectedChat, setSelectedChat, chats } = useContext(ChatContext);
+    const navigate = useNavigate();
+    const [participants, setParticipants] = useState([]);
 
     useEffect(() => {
-        if (selectedChat) {
-            localStorage.setItem('lastSelectedChat', JSON.stringify(selectedChat));
+        if (!userData || chats) return;
+
+        const lastChatId = localStorage.getItem(`lastOpenedChat_${userData.uid}`);
+
+        if (lastChatId) {
+            const lastChat = chats.find(chat => chat.id === lastChatId);
+            if (lastChat) {
+                setSelectedChat(lastChat);
+                setParticipants(lastChat.users);
+                return;
+            }
         }
-    }, [selectedChat]);
+
+        const userChats = chats.filter(chat => chat.users.some(user => user.uid === userData.uid));
+
+        if (userChats.length > 0) {
+            setSelectedChat(userChats[0]);
+            localStorage.setItem(`lastOpenedChat_${userData.uid}`, userChats[0].id);
+            setParticipants(userChats[0].users);
+        }
+    }, [chats, userData]);
+
+    useEffect(() => {
+        if (selectedChat && userData) {
+            localStorage.setItem(`lastOpenedChat_${userData.uid}`, selectedChat.id);
+            setParticipants(selectedChat.users);
+        }
+    }, [selectedChat, userData]);
+
+    const handleLeaveChat = async () => {
+        if (!selectedChat || !userData) return;
+
+        const updatedUsers = selectedChat.users.filter(user => user.uid !== userData.uid);
+        await updateChat(selectedChat.id, { users: updatedUsers });
+
+        if (updatedUsers.length === 0) {
+            await updateChat(selectedChat.id, { isDeleted: true });
+        }
+
+        setSelectedChat(null);
+        localStorage.removeItem(`lastOpenedChat_${userData.uid}`);
+        navigate("/chats");
+    };
 
     return (
-        <div style={{ display: 'flex' }}>
-            {userData && (
-                <>
-                    <div style={{ flex: 1 }}>
-                        <ChatList userId={userData.uid} />
+        <div>
+            <div>
+                <ChatList userId={userData?.uid} />
+            </div>
+
+            <div>
+                {selectedChat ? (
+                    <div>
+                        <ChatWindow chatId={selectedChat.id} />
+                        <h3>Participants</h3>
+                        <ul>
+                            {participants.map(user => (
+                                <li key={user.uid}>{user.username}
+                                    {selectedChat && (userData.username === user.username )&& (
+                                        <button className='btn' onClick={handleLeaveChat} style={{ marginTop: "10px", backgroundColor: "red", color: "white" }}>
+                                            Leave Chat
+                                        </button>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
                     </div>
-                    <br/><br/>
-                    <div style={{ flex: 2 }}>
-                        {selectedChat && <ChatWindow selectedChat={selectedChat} />}
-                    </div>
-                </>
-            )}
+                ) : (
+                    <p>Select a chat to start messaging.</p>
+                )}
+            </div>
         </div>
     );
 };

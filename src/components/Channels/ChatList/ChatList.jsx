@@ -25,7 +25,7 @@ export const ChatList = ({ userId }) => {
 
     const handleChatClick = (chat) => {
         setSelectedChat(chat);
-        navigate(`/chats/${chat.id}`);
+        /*navigate(`/chats/${chat.id}`);*/
     };
 
     return (
