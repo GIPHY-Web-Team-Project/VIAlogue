@@ -3,32 +3,17 @@ import { AppContext } from '../../../store/app-context';
 import { ChatContext } from '../../../store/chat.context';
 import { createChat } from '../../../services/chat.services';
 import { useNavigate } from 'react-router-dom';
-import { useUsers } from '../../../hooks/useUsers';
 import Modal from '../../Modal/Modal';
-import { useEffect } from 'react';
 import SearchBar from '../../SearchBar/SearchBar';
+import SelectUsers from '../../SelectUsers/SelectUsers';
 
 export const CreateChat = () => {
   const { userData } = useContext(AppContext);
   const { setSelectedChat } = useContext(ChatContext);
-  const [selectedUsers, setSelectedUsers] = useState([userData]);
   const navigate = useNavigate();
-  const { users } = useUsers(userData);
-  const [userList, setUserList] = useState([]);
   const [modalMessage, setModalMessage] = useState('');
+  const [selectedUsers, setSelectedUsers] = useState([userData]);
   const [showModal, setShowModal] = useState(false);
-
-  useEffect(() => {
-    if (users && userList.length !== users.length) {
-      const usersWithoutLoggedIn = users.filter((user) => user.username !== userData.username);
-      setUserList(usersWithoutLoggedIn);
-    }
-  }, [users]);
-
-  const handleUserSelect = (user) => {
-    setSelectedUsers((prevSelected) => [...prevSelected, user]);
-    setUserList((prevList) => prevList.filter((u) => u.username !== user.username));
-  };
 
   const handleCreateChat = async () => {
     const chatUsers = selectedUsers.map((user) => user);
@@ -55,10 +40,6 @@ export const CreateChat = () => {
     setShowModal(false);
   };
 
-  const handleRemove = (user) => {
-    setSelectedUsers(selectedUsers.filter((selectedUser) => selectedUser.username !== user.username));
-  };
-
   return (
     <div>
       <h2>Start a new chat</h2>
@@ -66,43 +47,7 @@ export const CreateChat = () => {
       <input type='text' id='title' placeholder='Enter title' />
       <br />
       <br />
-      <SearchBar type='users' objects={users} objectList={userList} setObjectList={setUserList} />
-      <br />
-      <br />
-      <h3>Selected users</h3>
-      <ul>
-        {selectedUsers.map((user) => (
-          <div key={user.username}>
-            <li>
-              <span>
-                {user.username} ({user.email})
-              </span>
-              <button onClick={() => handleRemove(user)} className='btn'>
-                Remove
-              </button>
-            </li>
-          </div>
-        ))}
-      </ul>
-      <br />
-      <br />
-      <h3>Users to choose from:</h3>
-      <ul>
-        {userList.map((user) => (
-          <div key={user.uid}>
-            <li>
-              <span>
-                {user.username} ({user.email})
-              </span>
-              <button onClick={() => handleUserSelect(user)} className='btn'>
-                Select
-              </button>
-            </li>
-          </div>
-        ))}
-      </ul>
-      <br />
-      <br />
+      <SelectUsers selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
       <br />
       <button onClick={handleCreateChat} className='btn'>
         Create Chat
