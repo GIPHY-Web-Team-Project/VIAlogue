@@ -1,12 +1,13 @@
 import React, { useContext, useEffect } from 'react';
 import { ChatContext } from '../../store/chat.context';
 import { AppContext } from '../../store/app-context';
-import { ChatList } from '../../components/Channels/ChatList/ChatList';
+// import { ChatList } from '../../components/Channels/ChatList/ChatList';
 import { ChatWindow } from '../../components/Channels/ChatWindow/ChatWindow';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { updateChat } from '../../services/chat.services';
 import SideBar from '../../components/SideBar/SideBar';
+import { ParticipantsTab } from '../../components/ParticipantsTab/ParticipantsTab';
 
 export const ChatPage = () => {
   const { userData } = useContext(AppContext);
@@ -78,22 +79,7 @@ export const ChatPage = () => {
               <button className='btn' onClick={toggleShowParticipants} style={{ marginTop: '10px', backgroundColor: 'blue', color: 'white' }}>
                 {showParticipants ? 'Hide Participants' : 'Show Participants'}
               </button>
-              {showParticipants && (
-                <>
-                  <ul>
-                    {participants.map((user) => (
-                      <li key={user.uid}>
-                        {user.username} &nbsp;&nbsp;&nbsp;&nbsp;
-                        {selectedChat && userData.username === user.username && (
-                          <button className='btn' onClick={handleLeaveChat} style={{ marginTop: '10px', backgroundColor: 'red', color: 'white' }}>
-                            Leave Chat
-                          </button>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              )}
+              {showParticipants && <ParticipantsTab participants={participants} selectedObj={selectedChat} handleLeave={handleLeaveChat} />}
             </div>
           </>
         ) : (

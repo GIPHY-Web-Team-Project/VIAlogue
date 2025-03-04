@@ -4,7 +4,6 @@ import { ChatContext } from '../../../store/chat.context';
 import { createChat } from '../../../services/chat.services';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../Modal/Modal';
-import SearchBar from '../../SearchBar/SearchBar';
 import SelectUsers from '../../SelectUsers/SelectUsers';
 
 export const CreateChat = () => {
@@ -32,7 +31,7 @@ export const CreateChat = () => {
         navigate(`/chats/${chatId}`);
       });
     } catch {
-      console.log('Error creating chat');
+      console.error('Error creating chat');
     }
   };
 

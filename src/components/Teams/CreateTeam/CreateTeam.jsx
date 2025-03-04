@@ -1,37 +1,49 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { useUsers } from '../../../hooks/useUsers';
 import { AppContext } from '../../../store/app-context';
+import SelectUsers from '../../SelectUsers/SelectUsers';
+import { createTeam } from '../../../services/team.services';
+import Modal from '../../Modal/Modal';
 
-// get all users, map users and create an <option> element for every user, inside of a <select> element
-// create a function that adds a user to the team when the user is selected. This is done by appending a user to the team.members array
-// create a function that removes a user from the team when the user is deselected. This is done by filtering the team.members array
-// create a function that creates a team when the create button is clicked. This is done by sending a POST request to the server with the team object
-//
-
-export default function CreateTeam() {
-  const [team, setTeam] = useState({
-    name: '',
-    members: [],
-  });
-  const [selectedUsers, setSelectedUsers] = useState([userData]);
+export default function CreateTeam({ setViewCreateWindow }) {
   const { userData } = useContext(AppContext);
-  const { users } = useUsers(userData);
-
+  const [selectedUsers, setSelectedUsers] = useState([userData]);
+  const [modalMessage, setModalMessage] = useState('');
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
-  const handleUpdateValue = (key, value) => {};
+  const handleCreateTeam = async () => {
+    const teamMembers = selectedUsers.map((user) => user.username);
 
-  const handleCreateTeam = () => {};
+    if (teamMembers.length < 2) {
+      setModalMessage('Please select at least 2 users to create a chat');
+      setShowModal(true);
+      return;
+    }
+
+    const teamTitle = document.getElementById('title').value.toLowerCase();
+
+    try {
+      await createTeam(teamTitle, userData.username, teamMembers, (teamId) => {
+        // setSelectedTeam({ id: teamId, teamMembers });
+        navigate(`/teams/${teamId}`);
+      });
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
   return (
     <div>
       <h3>Create Team</h3>
       <label htmlFor='title'>Title: </label>
-      <input value={team.name} onChange={(e) => handleUpdateValue('title', e.target.value)} type='text' name='title' id='create-title-input' />
+      <input type='text' name='title' id='title' />
       <br /> <br />
-      <label htmlFor='content'>Members: </label>
-      <textarea value={team.members} onChange={(e) => handleUpdateValue('content', e.target.value)} name='content' id='create-content-textarea' cols='30' rows='10'></textarea>
+      <SelectUsers selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
       <br /> <br />
       <div className=''>
         <button
@@ -41,10 +53,13 @@ export default function CreateTeam() {
             navigate(`/`);
           }}
         >
-          Create Post
+          Create Team
         </button>
-        <BackBtn />
+        <button onClick={() => setViewCreateWindow(false)} className='btn'>
+          Cancel
+        </button>
       </div>
+      <Modal message={modalMessage} show={showModal} handleClose={handleCloseModal} />
     </div>
   );
 }
