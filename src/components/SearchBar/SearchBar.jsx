@@ -31,6 +31,7 @@ export default function SearchBar({ type, objects, objectList, setObjectList }) 
           </select>
         </>
       )}
+      {/* <FilterSelect type={type} setSelectedSearch={setSelectedSearch} /> */}
       <button onClick={handleSearch} className='btn'>
         Search
       </button>

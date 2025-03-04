@@ -1,11 +1,12 @@
 import { useNavigate } from 'react-router';
+import { ChatList } from '../Channels/ChatList/ChatList';
 
-export default function SideBar({ type }) {
+export default function SideBar({ type, userId }) {
   const navigate = useNavigate();
 
   if (type === 'menu') {
     return (
-      <div className='flex flex-col justify-between h-full w-64 bg-gray-800 flex-col p-4'>
+      <div className='flex flex-col justify-between h-full w-64 bg-gray-700 flex-col p-4'>
         <div className='flex flex-col gap-4'>
           <button onClick={() => navigate('/teams')} className='btn'>
             Teams
@@ -20,15 +21,12 @@ export default function SideBar({ type }) {
       </div>
     );
   } else if (type === 'channels') {
-    return (
-      <div>
-        <h1>Here you will see the teams' channels</h1>
-      </div>
-    );
+    return <ChatList userId={userId} />;
   } else if (type === 'users') {
     return (
       <div>
-        <h1>Here you will see the users</h1>
+        <button>Participants</button>
+        {/* {participants && <ChatParticipatns/>} */}
       </div>
     );
   }
