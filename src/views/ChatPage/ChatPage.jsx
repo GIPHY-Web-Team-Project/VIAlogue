@@ -12,9 +12,10 @@ export const ChatPage = () => {
     const { selectedChat, setSelectedChat, chats } = useContext(ChatContext);
     const navigate = useNavigate();
     const [participants, setParticipants] = useState([]);
+    const [showParticipants, setShowParticipants] = useState(false);
 
     useEffect(() => {
-        if (!userData || chats) return;
+        if (!userData || !chats) return;
 
         const lastChatId = localStorage.getItem(`lastOpenedChat_${userData.uid}`);
 
@@ -58,6 +59,9 @@ export const ChatPage = () => {
         navigate("/chats");
     };
 
+    const toggleShowParticipants = () => {
+        setShowParticipants(!showParticipants);
+    }
     return (
         <div>
             <div>
@@ -68,10 +72,16 @@ export const ChatPage = () => {
                 {selectedChat ? (
                     <div>
                         <ChatWindow chatId={selectedChat.id} />
+                        <br/><br/>
                         <h3>Participants</h3>
+                        <button className='btn' onClick={toggleShowParticipants} style={{ marginTop: "10px", backgroundColor: "blue", color: "white" }}>
+                            {showParticipants ? "Hide Participants" : "Show Participants"} 
+                        </button>
+                        { showParticipants && (
+                        <div>
                         <ul>
                             {participants.map(user => (
-                                <li key={user.uid}>{user.username}
+                                <li key={user.uid}>{user.username} &nbsp;&nbsp;&nbsp;&nbsp;
                                     {selectedChat && (userData.username === user.username )&& (
                                         <button className='btn' onClick={handleLeaveChat} style={{ marginTop: "10px", backgroundColor: "red", color: "white" }}>
                                             Leave Chat
@@ -80,6 +90,8 @@ export const ChatPage = () => {
                                 </li>
                             ))}
                         </ul>
+                        </div>
+                        )}
                     </div>
                 ) : (
                     <p>Select a chat to start messaging.</p>
