@@ -14,7 +14,7 @@ export const ChatPage = () => {
     const [participants, setParticipants] = useState([]);
 
     useEffect(() => {
-        if (!userData || chats) return;
+        if (!userData || !chats) return;
 
         const lastChatId = localStorage.getItem(`lastOpenedChat_${userData.uid}`);
 
