@@ -1,6 +1,5 @@
 import { useContext } from 'react';
 import { useNavigate } from 'react-router';
-import { useContext } from 'react';
 import { AppContext } from '../../store/app-context';
 import { auth } from '../../config/firebase-config';
 import { signOut } from 'firebase/auth';

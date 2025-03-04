@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { useUsers } from '../../hooks/useUsers';
+import { AppContext } from '../../store/app-context';
 
 // get all users, map users and create an <option> element for every user, inside of a <select> element
 // create a function that adds a user to the team when the user is selected. This is done by appending a user to the team.members array
@@ -12,6 +14,8 @@ export default function CreateTeam() {
     name: '',
     members: [],
   });
+  const { userData } = useContext(AppContext);
+  const { users } = useUsers(userData);
 
   const navigate = useNavigate();
 
