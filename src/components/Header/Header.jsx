@@ -1,10 +1,28 @@
 import { useContext } from 'react';
 import { useNavigate } from 'react-router';
+import { useContext } from 'react';
 import { AppContext } from '../../store/app-context';
+import { auth } from '../../config/firebase-config';
+import { signOut } from 'firebase/auth';
 
 export default function Header() {
   const { user } = useContext(AppContext);
   const navigate = useNavigate();
+  const { userData, setAppState } = useContext(AppContext);
+
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        setAppState({
+          user: null,
+          userData: null,
+        });
+        navigate('/login');
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  };
 
   if (!user) {
     return (
@@ -25,6 +43,9 @@ export default function Header() {
   return (
     <header className='flex items-center justify-between py-2 px-4 bg-blue-900'>
       <span className='text-4xl'>SMALL LOGO</span>
+      <button onClick={handleLogout} className='btn'>
+        Log Out
+      </button>
     </header>
   );
 }

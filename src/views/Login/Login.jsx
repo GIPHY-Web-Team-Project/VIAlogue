@@ -6,7 +6,7 @@ import { auth } from '../../config/firebase-config';
 
 export default function Login() {
   const { setAppState } = useContext(AppContext);
-  const [user, setUsers] = useState({
+  const [user, setUser] = useState({
     email: '',
     password: '',
   });
@@ -33,7 +33,7 @@ export default function Login() {
   };
 
   const updateUser = (prop) => (e) => {
-    setUsers({
+    setUser({
       ...user,
       [prop]: e.target.value,
     });
