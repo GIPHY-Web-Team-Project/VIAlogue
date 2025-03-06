@@ -32,8 +32,8 @@ export const ChatWindow = ({ selectedChat }) => {
   }
 
   return (
-    <div>
-      {selectedChat && <h1>{selectedChat.title.toUpperCase()}</h1>}
+    <div className="flex flex-col w-full h-screen bg-transparent m-4">
+      {selectedChat && <h1 className="text-xl font-bold text-center py-2 border-b">{selectedChat.title.toUpperCase()}</h1>}
       <br />
       {messages ? (
         messages.map((messageObj) => (
@@ -44,7 +44,7 @@ export const ChatWindow = ({ selectedChat }) => {
       ) : (
         <p>No messages yet. Start typing and send your first message.</p>
       )}
-      <MessageWindow chatId={finalChatId} sender={userData?.username || 'Unknown'} />
+      <MessageWindow chatId={finalChatId} sender={userData?.username || 'Unknown'}/>
     </div>
   );
 };

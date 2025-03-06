@@ -12,14 +12,13 @@ export const MessageWindow = ({ chatId, sender }) => {
     }
 
     return (
-        <div>
+        <div className="mt-4 border border-gray-500 flex flex-row justify-between p-2 rounded-lg">
             <input 
                 type="text" 
                 placeholder="Type a message..." 
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
             />
-            <br/>
             <button onClick={handleNewMessage}>Send</button>
         </div>
     )
