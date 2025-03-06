@@ -1,18 +1,26 @@
-import { onValue, push, ref, update } from 'firebase/database';
+import { equalTo, get, onValue, orderByChild, push, query, ref, update } from 'firebase/database';
 import { db } from '../config/firebase-config';
 
 export const createTeam = async (title, owner, members, callback) => {
-  const team = {
-    title,
-    owner,
-    members,
-    channels: [],
-  };
+  const teamsRef = ref(db, 'teams');
+  const teamsTitleQuery = query(teamsRef, orderByChild('title'), equalTo(title));
 
-  const result = await push(ref(db, 'teams'), team);
-  const id = result.key;
-  await update(ref(db, `teams/${id}`), { id });
-  return callback(id);
+  const snapshot = await get(teamsTitleQuery);
+  if (snapshot.exists()) {
+    throw new Error('Team with this title already exists!');
+  } else {
+    const team = {
+      title,
+      owner,
+      members,
+      avatar: '',
+    };
+
+    const result = await push(teamsRef, team);
+    const id = result.key;
+    await update(ref(db, `teams/${id}`), { id });
+    return callback(id);
+  }
 };
 
 export const getTeamsByUserId = async (userId, callback) => {
@@ -28,6 +36,21 @@ export const getTeamsByUserId = async (userId, callback) => {
       callback(filteredTeams);
     } else {
       callback([]);
+    }
+  });
+
+  return unsubscribe;
+};
+
+export const getTeamById = async (teamId, callback) => {
+  const teamRef = ref(db, `teams/${teamId}`);
+
+  const unsubscribe = onValue(teamRef, (snapshot) => {
+    if (snapshot.exists()) {
+      const team = snapshot.val();
+      callback(team);
+    } else {
+      callback(null);
     }
   });
 

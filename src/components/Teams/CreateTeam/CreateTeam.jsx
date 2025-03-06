@@ -4,6 +4,7 @@ import { AppContext } from '../../../store/app-context';
 import SelectUsers from '../../SelectUsers/SelectUsers';
 import { createTeam } from '../../../services/team.services';
 import Modal from '../../Modal/Modal';
+import { MAX_TEAM_TITLE_LENGTH, MIN_TEAM_TITLE_LENGTH } from '../../../common/constants';
 
 export default function CreateTeam({ setViewCreateWindow }) {
   const { userData } = useContext(AppContext);
@@ -29,6 +30,12 @@ export default function CreateTeam({ setViewCreateWindow }) {
 
     const teamTitle = document.getElementById('title').value;
 
+    if (teamTitle.trim().length < MIN_TEAM_TITLE_LENGTH || teamTitle.trim().length > MAX_TEAM_TITLE_LENGTH) {
+      setModalMessage('Team titles can only be between 3 and 40 symbols long!');
+      setShowModal(true);
+      return;
+    }
+
     try {
       await createTeam(teamTitle, userData.username, teamMembers, (teamId) => {
         // setSelectedTeam({ id: teamId, teamMembers });
@@ -36,6 +43,8 @@ export default function CreateTeam({ setViewCreateWindow }) {
       });
     } catch (error) {
       console.error(error.message);
+      setModalMessage(error.message);
+      setShowModal(true);
     }
   };
 

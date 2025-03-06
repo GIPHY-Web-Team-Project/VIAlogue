@@ -29,10 +29,9 @@ export default function TeamsList() {
         {teams.length !== 0 ? (
           <>
             {teams.map((team) => (
-              <li key={team.id} onClick={() => navigate(`/teams/${team.id}`)} className='border p-4'>
+              <li key={team.id} onClick={() => navigate(`/teams/${team.id}`)} className='flex flex-col border p-4'>
                 <h3>{team.title}</h3>
-                <p>Owner: {team.owner}</p>
-                <p>Members: {team.members.map((member) => member.username).join(', ')}</p>
+                <p>Members: {team.members.length}</p>
               </li>
             ))}
           </>
