@@ -16,7 +16,8 @@ export const createTeam = async (title, owner, members, callback) => {
 };
 
 export const getTeamsByUserId = async (userId, callback) => {
-  console.log('Fetching teams for user:', userId);
+  if (!userId) return;
+
   const teamsRef = ref(db, 'teams');
 
   const unsubscribe = onValue(teamsRef, (snapshot) => {

@@ -16,7 +16,9 @@ export default function TeamsList() {
     });
 
     return () => {
-      unsubscribe();
+      if (typeof unsubscribe === 'function') {
+        unsubscribe();
+      }
     };
   }, [userData]);
 
@@ -27,7 +29,7 @@ export default function TeamsList() {
         {teams.length !== 0 ? (
           <>
             {teams.map((team) => (
-              <li onClick={() => navigate(`/teams/${team.id}`)} key={team.id} className='border p-4'>
+              <li key={team.id} onClick={() => navigate(`/teams/${team.id}`)} className='border p-4'>
                 <h3>{team.title}</h3>
                 <p>Owner: {team.owner}</p>
                 <p>Members: {team.members.map((member) => member.username).join(', ')}</p>

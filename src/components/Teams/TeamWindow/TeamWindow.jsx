@@ -1,11 +1,11 @@
 import { useParams } from 'react-router';
 
 export default function TeamWindow() {
-  const { id } = useParams();
+  const { teamId } = useParams();
 
   return (
     <>
-      <h1>TEAM ID {id}</h1>
+      <h1>TEAM ID {teamId}</h1>
     </>
   );
 }
