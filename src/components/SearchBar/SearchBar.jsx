@@ -20,19 +20,18 @@ export default function SearchBar({ type, objects, objectList, setObjectList }) 
 
   return (
     <div>
-      <label htmlFor='search'>Find {type} </label>
-      <input type='text' id='search' placeholder='Search' />
       {type === 'users' && (
         <>
-          <span>by</span>
           <select onChange={(e) => setSelectedSearch(e.target.value)} className='search-select'>
-            <option value='username'>username</option>
-            <option value='email'>email</option>
+            <option value='username'>Username: </option>
+            <option value='email'>Email: </option>
           </select>
         </>
       )}
+      <label htmlFor='search'> </label>
+      <input type='text' id='search' placeholder={`Enter ${selectedSearch}`} />
       {/* <FilterSelect type={type} setSelectedSearch={setSelectedSearch} /> */}
-      <button onClick={handleSearch} className='btn'>
+      <button onClick={handleSearch} className='mt-4 w-full btn'>
         Search
       </button>
     </div>

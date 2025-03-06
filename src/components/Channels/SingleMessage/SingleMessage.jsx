@@ -44,8 +44,8 @@ export const SingleMessage = ({ msg }) => {
                                 </button>
                         {showOptions && (
                                     <div className="absolute right-0 bg-gray-400 shadow-md rounded-md p-2 flex flex-col">
-                                        <button className="text-gray-600 hover:text-gray-800 p-1 flex-row" onClick={handleEdit}>✏️ Edit</button>
-                                        <button className="text-red-600 hover:text-red-800 p-1 flex-row" onClick={() => deleteMessage(msg.chatId, msg.id)}>✖️ Delete</button>
+                                        <button className="text-gray-600 hover:text-gray-800 p-1 flex-row" onClick={handleEdit}>✏️Edit</button>
+                                        <button className="text-gray-600 hover:text-gray-800 p-1 flex-row" onClick={() => deleteMessage(msg.chatId, msg.id)}>✖️Delete</button>
                                     </div>
                                 )}
                             </div>)}

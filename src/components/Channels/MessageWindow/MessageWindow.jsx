@@ -5,19 +5,26 @@ export const MessageWindow = ({ chatId, sender }) => {
     const [message, setMessage] = useState('');
 
     const handleNewMessage = () => {
-        console.log(chatId);
-        console.log(message);
+        if (message.trim() === '') return;
         addMessage(chatId, message, sender);
         setMessage(''); 
     }
 
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleNewMessage();
+        }
+    };
+
     return (
         <div className="mt-4 border border-gray-500 flex flex-row justify-between p-2 rounded-lg">
-            <input 
-                type="text" 
-                placeholder="Type a message..." 
+            <textarea className="flex-1 p-2 mr-2 border-none rounded-lg resize-none focus:ring-2 focus:ring-blue-500"
+                rows="1"
+                placeholder="Type a message..."
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
+                onKeyDown={handleKeyDown}
             />
             <button onClick={handleNewMessage}>Send</button>
         </div>

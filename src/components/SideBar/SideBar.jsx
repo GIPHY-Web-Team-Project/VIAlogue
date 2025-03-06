@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router';
 import { ChatList } from '../Channels/ChatList/ChatList';
 
-export default function SideBar({ type, userId }) {
+export default function SideBar({ type, userId, handleNewChat }) {
   const navigate = useNavigate();
 
   if (type === 'menu') {
@@ -21,7 +21,7 @@ export default function SideBar({ type, userId }) {
       </div>
     );
   } else if (type === 'channels') {
-    return <ChatList userId={userId} />;
+    return <ChatList userId={userId} handleNewChat={handleNewChat}/>;
   } else if (type === 'users') {
     return (
       <div>

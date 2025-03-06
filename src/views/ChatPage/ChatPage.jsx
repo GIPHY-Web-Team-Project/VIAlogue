@@ -1,19 +1,17 @@
 import React, { useContext, useEffect } from 'react';
 import { ChatContext } from '../../store/chat.context';
 import { AppContext } from '../../store/app-context';
-import { ChatList } from '../../components/Channels/ChatList/ChatList';
 import { ChatWindow } from '../../components/Channels/ChatWindow/ChatWindow';
-import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { updateChat } from '../../services/chat.services';
 import SideBar from '../../components/SideBar/SideBar';
+import LandingPage from '../LandingPage/main/LandingPage';
+import CreateChat from '../../components/Channels/CreateChat/CreateChat';
 
 export const ChatPage = () => {
   const { userData } = useContext(AppContext);
   const { selectedChat, setSelectedChat, chats } = useContext(ChatContext);
-  const navigate = useNavigate();
   const [participants, setParticipants] = useState([]);
-  const [showParticipants, setShowParticipants] = useState(false);
+  const [ showNewChat, setShowNewChat] = useState(false);
 
   useEffect(() => {
     if (!userData || !chats) return;
@@ -25,6 +23,7 @@ export const ChatPage = () => {
       if (lastChat) {
         setSelectedChat(lastChat);
         setParticipants(lastChat.users);
+        setShowNewChat(false);
         return;
       }
     }
@@ -35,6 +34,7 @@ export const ChatPage = () => {
       setSelectedChat(userChats[0]);
       localStorage.setItem(`lastOpenedChat_${userData.uid}`, userChats[0].id);
       setParticipants(userChats[0].users);
+      setShowNewChat(false);
     }
   }, [chats, userData]);
 
@@ -42,66 +42,44 @@ export const ChatPage = () => {
     if (selectedChat && userData) {
       localStorage.setItem(`lastOpenedChat_${userData.uid}`, selectedChat.id);
       setParticipants(selectedChat.users);
+      setShowNewChat(false);
     }
   }, [selectedChat, userData]);
 
-  const handleLeaveChat = async () => {
-    if (!selectedChat || !userData) return;
-
-    const updatedUsers = selectedChat.users.filter((user) => user.uid !== userData.uid);
-    await updateChat(selectedChat.id, { users: updatedUsers });
-
-    if (updatedUsers.length === 0) {
-      await updateChat(selectedChat.id, { isDeleted: true });
-    }
-
+  const handleNewChat = () => {
+    console.log('Create button clicked!');
+    setShowNewChat(!showNewChat);
     setSelectedChat(null);
-    localStorage.removeItem(`lastOpenedChat_${userData.uid}`);
-    navigate('/chats');
-  };
+  }
 
-  const toggleShowParticipants = () => {
-    setShowParticipants(!showParticipants);
-  };
-  return (
-    <div className='flex flex-grow'>
-      <SideBar type='menu' />
-      <div className='flex flex-grow justify-between'>
-        <SideBar type='channels' userId={userData?.uid} />
-        {/* <ChatList userId={userData?.uid} /> */}
-
-        {selectedChat ? (
-          <>
-            <ChatWindow chatId={selectedChat.id} />
-            <div>
-              <h3>Participants</h3>
-              <button className='btn' onClick={toggleShowParticipants} style={{ marginTop: '10px', backgroundColor: 'blue', color: 'white' }}>
-                {showParticipants ? 'Hide Participants' : 'Show Participants'}
-              </button>
-              {showParticipants && (
-                <>
-                  <ul>
-                    {participants.map((user) => (
-                      <li key={user.uid}>
-                        {user.username} &nbsp;&nbsp;&nbsp;&nbsp;
-                        {selectedChat && userData.username === user.username && (
-                          <button className='btn' onClick={handleLeaveChat} style={{ marginTop: '10px', backgroundColor: 'red', color: 'white' }}>
-                            Leave Chat
-                          </button>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              )}
-            </div>
-          </>
-        ) : (
-          <p>Select a chat to start messaging.</p>
-        )}
+  if (!userData) {
+    return <LandingPage />;
+  }
+ 
+  if (userData) {
+    return (
+      <div className='flex flex-grow'>
+        <SideBar type='menu' />
+        <div className='flex flex-grow justify-between'>
+          <SideBar type='channels' userId={userData?.uid} handleNewChat={handleNewChat}/>
+          {showNewChat ? (
+                <CreateChat setShowNewChat={setShowNewChat} showNewChat={showNewChat}/>
+          ) : (
+            <>
+            {selectedChat ? (
+              <>
+                  <ChatWindow selectedChat={selectedChat} participants={participants} setSelectedChat={setSelectedChat}/>
+              </>
+            ) : (
+              <p>Select a chat to start messaging.</p>
+            )}
+            </>
+          )}
+          
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default ChatPage;

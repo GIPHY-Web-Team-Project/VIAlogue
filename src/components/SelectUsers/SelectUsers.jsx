@@ -28,12 +28,12 @@ export default function SelectUsers({ selectedUsers, setSelectedUsers }) {
       <SearchBar type='users' objects={users} objectList={userList} setObjectList={setUserList} />
       <br />
       <br />
-      <h3>Selected users</h3>
+      <h2 className="text-xl align-center pb-4">Selected so far:</h2>
       <ul>
         {selectedUsers.map((user) => (
           <div key={user.username}>
-            <li>
-              <span>
+            <li className="flex flex-row justify-between align-center">
+              <span className='flex-grow pt-2 pb-2'>
                 {user.username} ({user.email})
               </span>
               <button onClick={() => handleRemove(user)} className='btn'>
@@ -45,16 +45,16 @@ export default function SelectUsers({ selectedUsers, setSelectedUsers }) {
       </ul>
       <br />
       <br />
-      <h3>Users to choose from:</h3>
+      <h2 className="text-xl align-center pb-4">Users:</h2>
       <ul>
         {userList.map((user) => (
           <div key={user.uid}>
-            <li>
-              <span>
+            <li className="flex flex-row justify-between align-center">
+              <span className='flex-grow pt-2 pb-2'>
                 {user.username} ({user.email})
               </span>
               <button onClick={() => handleUserSelect(user)} className='btn'>
-                Select
+                Add
               </button>
             </li>
           </div>
