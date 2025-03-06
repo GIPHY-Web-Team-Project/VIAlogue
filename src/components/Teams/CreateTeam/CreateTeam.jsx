@@ -13,15 +13,21 @@ export default function CreateTeam({ setViewCreateWindow }) {
   const navigate = useNavigate();
 
   const handleCreateTeam = async () => {
-    const teamMembers = selectedUsers.map((user) => user.username);
+    const teamMembers = [...selectedUsers];
 
     if (teamMembers.length < 2) {
-      setModalMessage('Please select at least 2 users to create a chat');
+      setModalMessage('Please select at least 2 users to create a team.');
       setShowModal(true);
       return;
     }
 
-    const teamTitle = document.getElementById('title').value.toLowerCase();
+    if (!document.getElementById('title').value) {
+      setModalMessage('Please enter a title for the team.');
+      setShowModal(true);
+      return;
+    }
+
+    const teamTitle = document.getElementById('title').value;
 
     try {
       await createTeam(teamTitle, userData.username, teamMembers, (teamId) => {
@@ -38,7 +44,7 @@ export default function CreateTeam({ setViewCreateWindow }) {
   };
 
   return (
-    <div>
+    <div className='bg-gray-900 p-6 rounded-lg shadow-lg relative'>
       <h3>Create Team</h3>
       <label htmlFor='title'>Title: </label>
       <input type='text' name='title' id='title' />
@@ -50,7 +56,6 @@ export default function CreateTeam({ setViewCreateWindow }) {
           className='btn'
           onClick={() => {
             handleCreateTeam();
-            navigate(`/`);
           }}
         >
           Create Team

@@ -3,7 +3,7 @@ import { useState } from 'react';
 // import { useNavigate } from 'react-router';
 import SideBar from '../../components/SideBar/SideBar';
 import CreateTeam from '../../components/Teams/CreateTeam/CreateTeam';
-// import TeamsList from '../../components/Teams/TeamsList/TeamsList';
+import TeamsList from '../../components/Teams/TeamsList/TeamsList';
 // import { updateTeam } from '../../services/team.services';
 // import { ParticipantsTab } from '../../components/ParticipantsTab/ParticipantsTab';
 
@@ -20,12 +20,14 @@ export default function TeamsPage() {
     <div className='flex flex-grow'>
       <SideBar type='menu' />
       <div>
-        {!viewCreateWindow ? (
-          <button onClick={() => setViewCreateWindow(true)} className='btn'>
-            Create a Team
-          </button>
-        ) : (
-          <CreateTeam setViewCreateWindow={setViewCreateWindow} />
+        <TeamsList />
+        <button onClick={() => setViewCreateWindow(true)} className='btn'>
+          Create a Team
+        </button>
+        {viewCreateWindow && (
+          <div className='fixed inset-0 bg-black/70 flex items-center justify-center z-50'>
+            <CreateTeam setViewCreateWindow={setViewCreateWindow} />
+          </div>
         )}
       </div>
     </div>

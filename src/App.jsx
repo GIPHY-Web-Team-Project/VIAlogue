@@ -16,7 +16,8 @@ import CreateChat from './components/Channels/CreateChat/CreateChat';
 import './App.css';
 import Profile from './views/Profile/Profile';
 import TeamsPage from './views/TeamsPage/TeamsPage';
-// import TeamWindow from './components/Teams/TeamWindow/TeamWindow';
+import CreateTeam from './components/Teams/CreateTeam/CreateTeam';
+import TeamWindow from './components/Teams/TeamWindow/TeamWindow';
 
 export default function App() {
   const [appState, setAppState] = useState({
@@ -67,7 +68,8 @@ export default function App() {
               <Route path='/register' element={<Register />} />
               <Route path='/login' element={<Login />} />
               <Route path='/teams' element={<TeamsPage />} />
-              {/* <Route path='/teams/:teamId' element={<TeamWindow />} /> */}
+              <Route path='/teams/newteam' element={<CreateTeam />} />
+              <Route path='/teams/:teamId' element={<TeamWindow />} />
               <Route path='/profile' element={<Profile />} />
               <Route path='/chats' element={<ChatPage />} />
               <Route path='/chats/newchat' element={<CreateChat />} />
