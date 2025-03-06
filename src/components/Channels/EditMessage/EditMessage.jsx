@@ -1,21 +1,25 @@
 import React, { useState } from 'react';
 import { updateMessage } from '../../../services/message.services';
-import { useNavigate } from 'react-router-dom';
 
-export const EditMessage = ({ message }) => {
-    const [text, setText] = useState(message.text);
-    const navigate = useNavigate();
+export const EditMessage = ({ message, onCancel }) => {
+    const [text, setText] = useState(message.message);
 
-    const handleUpdate = () => {
-        updateMessage(message.chatId, message.id, text);
-        navigate(`/users/username/chats/${message.chatId}`);
+    const handleUpdate = async () => {
+        if (text.trim() !== "") {
+            await updateMessage(message.chatId, message.id, text);
+        }
+        onCancel();
     }
 
     return (
         <div>
-            <input value={text} onChange={e => setText(e.target.value)} />
+            <input 
+                value={text} 
+                onChange={e => setText(e.target.value)} 
+                autoFocus
+            />
             <button onClick={handleUpdate}>Save</button>
-            <button onClick={() => navigate(`/users/username/chats/${message.chatId}`)}>Cancel</button>
+            <button onClick={onCancel}>Cancel</button>
         </div>
     )
 }

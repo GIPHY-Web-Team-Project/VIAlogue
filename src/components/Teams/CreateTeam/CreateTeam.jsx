@@ -61,17 +61,13 @@ export default function CreateTeam({ setViewCreateWindow }) {
       <SelectUsers selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
       <br /> <br />
       <div className=''>
-        <button
-          className='btn'
+        <Button
           onClick={() => {
             handleCreateTeam();
           }}
         >
-          Create Team
-        </button>
-        <button onClick={() => setViewCreateWindow(false)} className='btn'>
-          Cancel
-        </button>
+          Create Post
+        </Button>
       </div>
       <Modal message={modalMessage} show={showModal} handleClose={handleCloseModal} />
     </div>

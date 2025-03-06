@@ -48,7 +48,12 @@ export const deleteMessage = async (chatId, messageId) => {
 }
 
 export const updateMessage = async (chatId, messageId, updatedMessage) => {
-    await update(ref(db, `messages/${messageId}`), updatedMessage);
-    await update(ref(db, `chats/${chatId}/messages/${messageId}`), updatedMessage);
-}
+    try {
+        await update(ref(db, `messages/${messageId}`), { message: updatedMessage });
+        await update(ref(db, `chats/${chatId}/messages/${messageId}`), { message: updatedMessage });
+        console.log("Message updated successfully!");
+    } catch (error) {
+        console.error("Error updating message:", error);
+    }
+};
 

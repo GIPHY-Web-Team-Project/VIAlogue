@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { deleteMessage } from '../../../services/message.services';
 import EditMessage from '../EditMessage/EditMessage';
 import { useState } from 'react';
@@ -7,13 +6,12 @@ import { useContext } from 'react';
 import { AppContext } from '../../../store/app-context';
 
 export const SingleMessage = ({ msg }) => {
-    const navigate = useNavigate();
     const [showEdit, setShowEdit] = useState(false);
+    const [showOptions, setShowOptions] = useState(false);
     const { userData } = useContext(AppContext);
 
     const handleEdit = () => {
         setShowEdit(true);
-        navigate('/chats/:chatId/messages/:messageId/edit')
     }
 
     const formatDate = (dateString) => {
@@ -23,29 +21,37 @@ export const SingleMessage = ({ msg }) => {
 
     return (
         <div className='message'>
-            {!showEdit &&
-                <div>
-                    {(userData.username === msg.sender) ? (
-                        <h3><strong>(You)</strong></h3>
-                    ) : (
-                        <h3><strong>{msg.sender}</strong></h3>
-                    )}
-                    <span>{formatDate(msg.createdOn)}</span>
-                    <br />
-                    <span>{msg.message} </span>
-                    {(userData.username === msg.sender) && (
-                        <div>
-                            <button onClick={handleEdit}>✏️</button>
-                            <button onClick={() => deleteMessage(msg.chatId, msg.id)}>✖️</button>
-                        </div>
-                    )}
-                    <br />
-                    <br />
+            {showEdit ? (
+                <EditMessage 
+                    message={msg} 
+                    onCancel={() => setShowEdit(false)}
+                />
+            ) : (
+                <div className="flex-1 flex-col pr-2 ">
+                    <div className="flex flex-row justify-between">
+                        <h3 className={(userData.username === msg.sender) ?  "text-blue-700" : "text-blue-300"}><strong>{(userData.username === msg.sender) ? "You" : (msg.sender)}</strong></h3>
+                        <label className="text-gray-500 text-xs items-center">{formatDate(msg.createdOn)}</label>
+                    </div>
+                    <div className="flex justify-between items-start mt-2">
+                        <span className="text-gray-200">{msg.message} </span>
+                        {(userData.username === msg.sender) && (
+                            <div className="relative">
+                                <button 
+                                    className="text-gray-500 hover:text-gray-700" 
+                                    onClick={() => setShowOptions(!showOptions)}
+                                >
+                                    ⋮
+                                </button>
+                        {showOptions && (
+                                    <div className="absolute right-0 bg-gray-400 shadow-md rounded-md p-2 flex flex-col">
+                                        <button className="text-gray-600 hover:text-gray-800 p-1 flex-row" onClick={handleEdit}>✏️ Edit</button>
+                                        <button className="text-red-600 hover:text-red-800 p-1 flex-row" onClick={() => deleteMessage(msg.chatId, msg.id)}>✖️ Delete</button>
+                                    </div>
+                                )}
+                            </div>)}
+                    </div>
                 </div>
-            }
-            {showEdit &&
-                <EditMessage message={msg} />
-            }
+            )}
         </div>
     )
 }
