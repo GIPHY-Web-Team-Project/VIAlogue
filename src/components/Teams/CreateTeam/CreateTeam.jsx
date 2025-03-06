@@ -4,7 +4,8 @@ import { AppContext } from '../../../store/app-context';
 import SelectUsers from '../../SelectUsers/SelectUsers';
 import { createTeam } from '../../../services/team.services';
 import Modal from '../../Modal/Modal';
-import { MAX_TEAM_TITLE_LENGTH, MIN_TEAM_TITLE_LENGTH } from '../../../common/constants';
+import Button from '../../Button/Button';
+import { MIN_TEAM_TITLE_LENGTH, MAX_TEAM_TITLE_LENGTH } from '../../../common/constants';
 
 export default function CreateTeam({ setViewCreateWindow }) {
   const { userData } = useContext(AppContext);
@@ -68,6 +69,7 @@ export default function CreateTeam({ setViewCreateWindow }) {
         >
           Create Post
         </Button>
+        <Button onClick={() => setViewCreateWindow(false)}>Cancel</Button>
       </div>
       <Modal message={modalMessage} show={showModal} handleClose={handleCloseModal} />
     </div>

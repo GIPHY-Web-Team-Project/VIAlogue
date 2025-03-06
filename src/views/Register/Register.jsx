@@ -43,7 +43,7 @@ export default function Register() {
     }
 
     if (!nameCheck(user.firstName) || !nameCheck(user.lastName)) {
-      throw new Error('First and last names must be between 4 and 32 characters and contain only letters');
+      throw new Error('First and last names must be between 5 and 35 characters and contain only letters');
     }
 
     console.log('Registering user: ', user.username);
