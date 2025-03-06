@@ -3,6 +3,8 @@ import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../config/firebase-config';
+import Button from '../../components/Button/Button';
+import { TEXT_BUTTON } from '../../common/enums';
 
 export default function Login() {
   const { setAppState } = useContext(AppContext);
@@ -40,7 +42,7 @@ export default function Login() {
   };
 
   return (
-    <div className='min-h-screen flex items-center justify-center bg-gray-900'>
+    <div className='flex flex-grow items-center justify-center bg-gray-900'>
       <div className='bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-sm'>
         <h2 className='text-2xl font-bold text-center mb-4'>Login</h2>
         <p className='text-gray-400 text-center mb-6'>Enter your credentials to log in</p>
@@ -52,15 +54,13 @@ export default function Login() {
           <button onClick={() => navigate('/')} className='bg-gray-600 px-4 py-2 rounded hover:bg-gray-700 cursor-pointer'>
             Cancel
           </button>
-          <button onClick={login} className='btn'>
-            Login
-          </button>
+          <Button onClick={login}>Login</Button>
         </div>
         <p className='text-gray-400 text-center mt-6'>
           Don't have an account?{' '}
-          <button onClick={() => navigate('/register')} className='text-blue-500 hover:underline'>
+          <Button type={TEXT_BUTTON} onClick={() => navigate('/register')}>
             Register
-          </button>
+          </Button>
         </p>
       </div>
     </div>

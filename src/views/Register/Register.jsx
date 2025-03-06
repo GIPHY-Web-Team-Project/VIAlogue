@@ -5,6 +5,8 @@ import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth } from '../../config/firebase-config';
 import { nameCheck } from '../../utils/nameUtils';
 import Modal from '../../components/Modal/Modal';
+import Button from '../../components/Button/Button';
+import { TEXT_BUTTON } from '../../common/enums';
 
 export default function Register() {
   const [user, setUser] = useState({
@@ -117,14 +119,14 @@ export default function Register() {
         <input className='w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' value={user.password} onChange={updateUser('password')} type='password' name='password' id='password' />
         <br />
         <br />
-        <button className='btn' onClick={register} id='btn-register-form'>
+        <Button onClick={register} id='btn-register-form'>
           Register
-        </button>
+        </Button>
         <p className='text-gray-400 text-center mt-6'>
           Already have an account?{' '}
-          <button onClick={() => navigate('/login')} className='text-blue-500 cursor-pointer hover:underline'>
+          <Button type={TEXT_BUTTON} onClick={() => navigate('/login')}>
             Login
-          </button>
+          </Button>
         </p>
       </div>
       <Modal show={showModal} handleClose={handleCloseModal} message={modalMessage} />

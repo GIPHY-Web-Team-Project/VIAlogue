@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import { ChatContext } from '../../../store/chat.context';
 import { getChatsByUserId } from '../../../services/chat.services';
 import { useNavigate } from 'react-router-dom';
+import Button from '../../Button/Button';
 
 export const ChatList = ({ userId }) => {
   const { chats, setChats, setSelectedChat } = useContext(ChatContext);
@@ -44,9 +45,7 @@ export const ChatList = ({ userId }) => {
         </div>
       )}
       <br />
-      <button onClick={handleNewChat} className='btn'>
-        Start a new chat
-      </button>
+      <Button onClick={handleNewChat}>Start a new chat</Button>
     </div>
   );
 };

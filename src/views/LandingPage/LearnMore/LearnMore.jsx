@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router';
+import Button from '../../../components/Button/Button';
 
 export default function LearnMore({ setLearnMore }) {
   const navigate = useNavigate();
@@ -17,9 +18,7 @@ export default function LearnMore({ setLearnMore }) {
         <li>If outside of a team, you can chat with other users via chats!</li>
         <li>Chats and teams are both great but there is an alternative - you can add several people when creating a chat!</li>
       </ul>
-      <button className='btn' onClick={handleClick}>
-        Start chatting!
-      </button>
+      <Button onClick={handleClick}>Start chatting!</Button>
     </div>
   );
 }

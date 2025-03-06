@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../store/app-context';
 import { useUsers } from '../../hooks/useUsers';
 import SearchBar from '../SearchBar/SearchBar';
+import Button from '../Button/Button';
 
 export default function SelectUsers({ selectedUsers, setSelectedUsers }) {
   const { userData } = useContext(AppContext);
@@ -36,9 +37,7 @@ export default function SelectUsers({ selectedUsers, setSelectedUsers }) {
               <span>
                 {user.username} ({user.email})
               </span>
-              <button onClick={() => handleRemove(user)} className='btn'>
-                Remove
-              </button>
+              <Button onClick={() => handleRemove(user)}>Remove</Button>
             </li>
           </div>
         ))}
@@ -53,9 +52,7 @@ export default function SelectUsers({ selectedUsers, setSelectedUsers }) {
               <span>
                 {user.username} ({user.email})
               </span>
-              <button onClick={() => handleUserSelect(user)} className='btn'>
-                Select
-              </button>
+              <Button onClick={() => handleUserSelect(user)}>Select</Button>
             </li>
           </div>
         ))}

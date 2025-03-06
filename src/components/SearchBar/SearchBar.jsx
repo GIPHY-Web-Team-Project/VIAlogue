@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Button from '../Button/Button';
 
 export default function SearchBar({ type, objects, objectList, setObjectList }) {
   const [selectedSearch, setSelectedSearch] = useState('username');
@@ -32,9 +33,7 @@ export default function SearchBar({ type, objects, objectList, setObjectList }) 
         </>
       )}
       {/* <FilterSelect type={type} setSelectedSearch={setSelectedSearch} /> */}
-      <button onClick={handleSearch} className='btn'>
-        Search
-      </button>
+      <Button onClick={handleSearch}>Search</Button>
     </div>
   );
 }
