@@ -20,19 +20,23 @@ export default function SearchBar({ type, objects, objectList, setObjectList }) 
   };
 
   return (
-    <div>
-      {type === 'users' && (
-        <>
-          <select onChange={(e) => setSelectedSearch(e.target.value)} className='search-select'>
-            <option value='username'>Username: </option>
-            <option value='email'>Email: </option>
-          </select>
-        </>
-      )}
-      <label htmlFor='search'> </label>
-      <input type='text' id='search' placeholder={`Enter ${selectedSearch}`} />
-      {/* <FilterSelect type={type} setSelectedSearch={setSelectedSearch} /> */}
-      <Button onClick={handleSearch}>Search</Button>
+    <div className="flex flex-row justify-between pb-2 mr-2">
+      <div className="flex flex-row">
+        {type === 'users' && (
+          <>
+            <select onChange={(e) => setSelectedSearch(e.target.value)} className='search-select'>
+              <option value='username'>Username: </option>
+              <option value='email'>Email: </option>
+            </select>
+          </>
+        )}
+        <label htmlFor='search'> </label>
+        <input className="w-full pl-1" type='text' id='search' placeholder={`Search by ${selectedSearch}`} />
+        {/* <FilterSelect type={type} setSelectedSearch={setSelectedSearch} /> */}
+        </div>
+        <div>      
+          <Button onClick={handleSearch}>Search</Button>
+        </div>
     </div>
   );
 }

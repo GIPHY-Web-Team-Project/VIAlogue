@@ -22,7 +22,7 @@ export const ChatList = ({ userId, handleNewChat }) => {
   };
 
   return (
-    <div className='bg-gray-800 p-4'>
+    <div className='bg-gray-800 p-4 overflow-y-auto'>
       <h3 className="flex flex-row border-b-2 mb-2 pb-3">Chat
         <button onClick={() => handleNewChat()}>
           <img src="/images/newchat.jpg" alt="New chat" className="w-7 h-7 ml-2"/>
