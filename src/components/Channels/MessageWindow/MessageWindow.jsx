@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { addMessage } from '../../../services/message.services';
 import Button from '../../Button/Button';
+import EmojiPicker from 'emoji-picker-react';
 
 export const MessageWindow = ({ chatId, sender }) => {
-  const [message, setMessage] = useState('');
+    const [message, setMessage] = useState('');
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
     const handleNewMessage = () => {
         if (message.trim() === '') return;
         addMessage(chatId, message, sender);
-        setMessage(''); 
+        setMessage('');
     }
 
     const handleKeyDown = (e) => {
@@ -16,6 +18,11 @@ export const MessageWindow = ({ chatId, sender }) => {
             e.preventDefault();
             handleNewMessage();
         }
+    };
+
+    const handleEmojiClick = (emojiObject) => {
+        setMessage((prevInput) => prevInput + emojiObject.emoji);
+        setShowEmojiPicker(!showEmojiPicker);
     };
 
     return (
@@ -27,6 +34,13 @@ export const MessageWindow = ({ chatId, sender }) => {
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyDown={handleKeyDown}
             />
+
+            <button className="mr-4" onClick={() => setShowEmojiPicker(!showEmojiPicker)}>😀</button>
+            {showEmojiPicker && (
+                <div className="absolute bottom-20 right-10 z-10">
+                    <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark"/>
+                </div>
+            )}
             <Button onClick={handleNewMessage}>Send</Button>
         </div>
     )

@@ -4,6 +4,7 @@ import EditMessage from '../EditMessage/EditMessage';
 import { useState } from 'react';
 import { useContext } from 'react';
 import { AppContext } from '../../../store/app-context';
+import EmojiPicker from 'emoji-picker-react';
 
 export const SingleMessage = ({ msg }) => {
     const [showEdit, setShowEdit] = useState(false);
@@ -40,12 +41,13 @@ export const SingleMessage = ({ msg }) => {
                                     className="text-gray-500 hover:text-gray-700" 
                                     onClick={() => setShowOptions(!showOptions)}
                                 >
-                                    ⋮
+                                    ...
                                 </button>
                         {showOptions && (
-                                    <div className="absolute right-0 bg-gray-400 shadow-md rounded-md p-2 flex flex-col">
-                                        <button className="text-gray-600 hover:text-gray-800 p-1 flex-row" onClick={handleEdit}>✏️Edit</button>
-                                        <button className="text-gray-600 hover:text-gray-800 p-1 flex-row" onClick={() => deleteMessage(msg.chatId, msg.id)}>✖️Delete</button>
+                                    <div className="absolute right-0 bg-gray-400 shadow-md rounded-md p-2 flex flex-row">
+                                        <EmojiPicker />
+                                        <button className="text-gray-600 hover:text-gray-800 p-1 flex-row" onClick={handleEdit}>✏️</button>
+                                        <button className="text-gray-600 hover:text-gray-800 p-1 flex-row" onClick={() => deleteMessage(msg.chatId, msg.id)}>✖️</button>
                                     </div>
                                 )}
                             </div>)}
