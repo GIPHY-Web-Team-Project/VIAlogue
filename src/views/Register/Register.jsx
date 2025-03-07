@@ -21,56 +21,48 @@ export default function Register() {
   const [modalMessage, setModalMessage] = useState('');
   const navigate = useNavigate();
 
-  /**
-   * Registers a new user with the provided email and password.
-   *
-   * This function performs the following steps:
-   * 1. Checks if the email and password are provided.
-   * 2. Logs the registration attempt.
-   * 3. Checks if a user with the provided email already exists.
-   * 4. Validates the first and last names.
-   * 5. Creates a new user with the provided email and password.
-   * 6. Creates a user handle with the provided or derived username.
-   * 7. Signs out the user and shows a success modal.
-   *
-   * @throws {Error} If the email or password is not provided.
-   * @throws {Error} If a user with the provided email already exists.
-   * @throws {Error} If the first or last names are invalid.
-   */
-  const register = () => {
-    if (!user.email || !user.password || !user.username) {
-      return alert('Please fill all empty sections.');
+ 
+  const register = async () => {
+    try {
+      if (!user.email || !user.password || !user.username) {
+        return alert('Please fill all empty sections.');
+      }
+
+      if (!nameCheck(user.firstName) || !nameCheck(user.lastName)) {
+        throw new Error('First and last names must be between 4 and 32 characters and contain only letters');
+      }
+
+      console.log('Registering user: ', user.username);
+
+      const validateUsername = (username) => {
+        const usernameRegex = /^[a-zA-Z0-9_.-]{4,32}$/;
+        return usernameRegex.test(username);
+      };
+    
+      if (!validateUsername(user.username)) {
+        alert('Username must be between 4 and 32 characters and can only contain letters, numbers, underscores (_), dots (.), and hyphens (-).');
+        return;
+      }
+      
+      const userFromDBByUsername = await getUserByUsername(user.username);
+      if (userFromDBByUsername) {
+        throw new Error(`User with username ${user.username} already exists`);
+      }
+
+      const userFromDBByEmail = await getUserByEmail(user.email);
+      if (userFromDBByEmail) {
+        throw new Error(`User with email ${user.email} already exists`);
+      }
+
+      const userCredential = await createUserWithEmailAndPassword(auth, user.email, user.password);
+      await createUserHandle(user.username, user.firstName, user.lastName, userCredential.user.uid, user.email);
+
+      await signOut(auth);
+      setModalMessage('Registration successful! Please log in.');
+      setShowModal(true);
+    } catch (error) {
+      alert(error.message);
     }
-
-    if (!nameCheck(user.firstName) || !nameCheck(user.lastName)) {
-      throw new Error('First and last names must be between 4 and 32 characters and contain only letters');
-    }
-
-    console.log('Registering user: ', user.username);
-    getUserByUsername(user.username)
-      .then((userFromDB) => {
-        if (userFromDB) {
-          throw new Error(`User with username ${user.username} already exists`);
-        }
-
-        getUserByEmail(user.email).then((userFromDB) => {
-          if (userFromDB) {
-            throw new Error(`User with email ${user.email} already exists`);
-          }
-        });
-
-        return createUserWithEmailAndPassword(auth, user.email, user.password);
-      })
-      .then((userCredential) => {
-        return createUserHandle(user.username, user.firstName, user.lastName, userCredential.user.uid, user.email).then(() => {
-          signOut(auth);
-          setModalMessage('Registration successful! Please log in.');
-          setShowModal(true);
-        });
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
   };
 
   const updateUser = (prop) => (e) => {
