@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { addMessage } from '../../../services/message.services';
+import Button from '../../Button/Button';
 
 export const MessageWindow = ({ chatId, sender }) => {
-    const [message, setMessage] = useState('');
+  const [message, setMessage] = useState('');
 
     const handleNewMessage = () => {
         if (message.trim() === '') return;
@@ -26,7 +27,7 @@ export const MessageWindow = ({ chatId, sender }) => {
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyDown={handleKeyDown}
             />
-            <button onClick={handleNewMessage}>Send</button>
+            <Button onClick={handleNewMessage}>Send</Button>
         </div>
     )
 }

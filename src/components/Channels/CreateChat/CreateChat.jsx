@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Modal from '../../Modal/Modal';
 import SearchBar from '../../SearchBar/SearchBar';
 import SelectUsers from '../../SelectUsers/SelectUsers';
+import Button from '../../Button/Button';
 import { titleCheck } from '../../../utils/chatUtils';
 
 export const CreateChat = ( setShowNewChat, showNewChat) => {
@@ -69,12 +70,12 @@ export const CreateChat = ( setShowNewChat, showNewChat) => {
           <SelectUsers selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
         </div>
 
-        <button 
+        <Button 
           onClick={handleCreateChat} 
-          className="mt-4 w-full btn"
+          className="mt-4 w-full"
         >
           Create Chat
-        </button>
+        </Button>
       </div>
 
       {showModal && (

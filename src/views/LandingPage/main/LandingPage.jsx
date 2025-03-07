@@ -2,6 +2,8 @@ import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { AppContext } from '../../../store/app-context';
 import LearnMore from '../LearnMore/LearnMore';
+import { GET_STARTED, TEXT_BUTTON } from '../../../common/enums';
+import Button from '../../../components/Button/Button';
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -22,10 +24,12 @@ export default function LandingPage() {
               <>
                 <h1 className='text-6xl font-bold'>Communication is key - start chatting now!</h1>
                 <div className='flex flex-col items-center mt-40 mr-60'>
-                  <button className='m-1 text-2xl p-6 bg-dark-blue rounded-lg hover:bg-blue hover:text-black hover:cursor-pointer transition'>Get Started</button>
-                  <button onClick={() => setLearnMore(true)} className='text-blue-500 cursor-pointer hover:underline'>
+                  <Button type={GET_STARTED} onClick={() => navigate('/register')}>
+                    Get Started
+                  </Button>
+                  <Button type={TEXT_BUTTON} onClick={() => setLearnMore(true)}>
                     Learn more
-                  </button>
+                  </Button>
                 </div>
               </>
             )}
@@ -39,9 +43,7 @@ export default function LandingPage() {
               <span>numOfUsers</span>
               <span>numOfTeams</span>
             </div>
-            <button onClick={() => navigate('/register')} className='p-10 btn'>
-              Join now!
-            </button>
+            <Button onClick={() => navigate('/register')}>Join now!</Button>
           </section>
         </div>
       )}

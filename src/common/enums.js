@@ -1,2 +1,3 @@
-export const MIN_CHAT_TITLE_LENGTH = 3;
-export const MAX_CHAT_TITLE_LENGTH = 40;
+export const LOGIN = 'login';
+export const TEXT_BUTTON = 'text-button';
+export const GET_STARTED = 'get-started';

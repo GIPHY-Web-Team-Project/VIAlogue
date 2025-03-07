@@ -24,9 +24,9 @@ export const ChatList = ({ userId, handleNewChat }) => {
   return (
     <div className='bg-gray-800 p-4'>
       <h3 className="flex flex-row border-b-2 mb-2 pb-3">Chat
-      <button onClick={() => handleNewChat()}>
-        <img src="/images/newchat.jpg" alt="New chat" className="w-7 h-7 ml-2"/>
-      </button>
+        <button onClick={() => handleNewChat()}>
+          <img src="/images/newchat.jpg" alt="New chat" className="w-7 h-7 ml-2"/>
+        </button>
       </h3>
       {chats && chats.length > 0 ? (
         chats.map((chat) => (
