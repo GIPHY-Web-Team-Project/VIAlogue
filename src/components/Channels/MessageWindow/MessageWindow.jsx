@@ -26,7 +26,7 @@ export const MessageWindow = ({ chatId, sender }) => {
     };
 
     return (
-        <div className="mt-4 border border-gray-500 flex flex-row justify-between p-2 rounded-lg">
+        <div className="mt-4 border border-gray-500 flex flex-row justify-between p-2 rounded-lg sticky bottom-0">
             <textarea className="flex-1 p-2 mr-2 border-none rounded-lg resize-none focus:ring-2 focus:ring-blue-500"
                 rows="1"
                 placeholder="Type a message..."

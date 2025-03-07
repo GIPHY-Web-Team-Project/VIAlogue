@@ -6,7 +6,7 @@ export const EditMessage = ({ message, onCancel }) => {
 
     const handleUpdate = async () => {
         if (text.trim() !== "") {
-            await updateMessage(message.chatId, message.id, text);
+            await updateMessage(message.chatId, message.id, text, "message");
         }
         onCancel();
     }
