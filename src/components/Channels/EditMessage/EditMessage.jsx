@@ -18,8 +18,8 @@ export const EditMessage = ({ message, onCancel }) => {
                 onChange={e => setText(e.target.value)} 
                 autoFocus
             />
-            <button onClick={handleUpdate}>Save</button>
-            <button onClick={onCancel}>Cancel</button>
+            <button className="ml-2 mr-2" onClick={handleUpdate}>✔️</button>
+            <button className="ml-2 mr-2" onClick={onCancel}>✖️</button>
         </div>
     )
 }

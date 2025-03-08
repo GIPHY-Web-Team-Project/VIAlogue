@@ -49,8 +49,8 @@ export const SingleMessage = ({ msg, isFirstFromSender }) => {
                             </div>
                         )}
                     </div>
-                    <div className="flex flex-row justify-between mt-2">
-                        <div>
+                    <div className="flex flex-row justify-between">
+                        <div className="mt-2">
                             <span className="text-gray-200">{msg.message} </span>
                         </div>
                         <div className="relative">
