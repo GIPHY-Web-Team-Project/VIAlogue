@@ -64,7 +64,8 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
 
   if (selectedChat) {
     return (
-      <div className="flex flex-col w-full min-h-[90vh] bg-transparent m-4">
+      <div className="flex flex-col w-full bg-transparent justify-between m-4">
+        <div>
         {selectedChat && <h1 className="flex flex-row justify-between text-2xl border-b-2 mb-4 pb-2 border-black shadow-2xl">{selectedChat.title}
           <div>
             <img src="/images/members.jpg" alt="Members" className="w-8 h-8 pr-2" onClick={toggleShowParticipants} />
@@ -85,6 +86,7 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
           ) : (
             <p>No messages yet. Start typing and send your first message.</p>
           )}
+        </div>
         </div>
         <MessageWindow chatId={selectedChat.id} sender={userData?.username || 'Unknown'} />
       </div>
