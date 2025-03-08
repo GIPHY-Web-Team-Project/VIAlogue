@@ -33,7 +33,7 @@ export default function SelectUsers({ selectedUsers, setSelectedUsers }) {
       <ul>
         {selectedUsers.map((user) => (
           <div key={user.username}>
-            <li>
+            <li className='flex items-center justify-between'>
               <span>
                 {user.username} ({user.email})
               </span>
@@ -48,7 +48,7 @@ export default function SelectUsers({ selectedUsers, setSelectedUsers }) {
       <ul>
         {userList.map((user) => (
           <div key={user.uid}>
-            <li>
+            <li className='flex items-center justify-between'>
               <span>
                 {user.username} ({user.email})
               </span>

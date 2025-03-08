@@ -7,7 +7,7 @@ export default function SideBar({ type, userId }) {
 
   if (type === 'menu') {
     return (
-      <div className='flex flex-col justify-between h-full w-64 bg-gray-700 flex-col p-4'>
+      <div className='flex flex-col justify-between h-full w-32 bg-gray-700 flex-col p-4'>
         <div className='flex flex-col gap-4'>
           <Button onClick={() => navigate('/teams')}>Teams</Button>
           <Button onClick={() => navigate('/chats')}>Chats</Button>

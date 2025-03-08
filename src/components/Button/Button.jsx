@@ -14,6 +14,9 @@ export default function Button(props) {
       case 'get-started':
         setVariant('m-1 text-2xl p-6 bg-dark-blue rounded-lg hover:bg-blue hover:text-black hover:cursor-pointer transition');
         break;
+      case 'create-team':
+        setVariant('fixed right-10 bottom-10 self-end py-4 px-8 text-white text-2xl bg-dark-blue rounded-lg cursor-pointer transition hover:bg-blue hover:text-black');
+        break;
     }
   }, [props.type]);
 

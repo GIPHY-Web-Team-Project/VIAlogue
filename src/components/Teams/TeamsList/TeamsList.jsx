@@ -1,12 +1,11 @@
 import { useContext, useEffect, useState } from 'react';
 import { getTeamsByUserId } from '../../../services/team.services';
 import { AppContext } from '../../../store/app-context';
-import { useNavigate } from 'react-router';
+import Team from '../Team/Team';
 
 export default function TeamsList() {
   const [teams, setTeams] = useState([]);
   const { userData } = useContext(AppContext);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (!userData) return;
@@ -23,16 +22,12 @@ export default function TeamsList() {
   }, [userData]);
 
   return (
-    <div>
-      <h3>Teams</h3>
-      <ul className='grid grid-cols-3 gap-4'>
+    <div className=''>
+      <ul className='grid grid-cols-3 gap-32 my-10'>
         {teams.length !== 0 ? (
           <>
             {teams.map((team) => (
-              <li key={team.id} onClick={() => navigate(`/teams/${team.id}`)} className='flex flex-col border p-4'>
-                <h3>{team.title}</h3>
-                <p>Members: {team.members.length}</p>
-              </li>
+              <Team key={team.id} team={team} />
             ))}
           </>
         ) : (

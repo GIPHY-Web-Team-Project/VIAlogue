@@ -6,6 +6,7 @@ import { createTeam } from '../../../services/team.services';
 import Modal from '../../Modal/Modal';
 import Button from '../../Button/Button';
 import { MIN_TEAM_TITLE_LENGTH, MAX_TEAM_TITLE_LENGTH } from '../../../common/constants';
+import TitleInput from '../../TitleInput/TitleInput';
 
 export default function CreateTeam({ setViewCreateWindow }) {
   const { userData } = useContext(AppContext);
@@ -55,9 +56,8 @@ export default function CreateTeam({ setViewCreateWindow }) {
 
   return (
     <div className='bg-gray-900 p-6 rounded-lg shadow-lg relative'>
-      <h3>Create Team</h3>
-      <label htmlFor='title'>Title: </label>
-      <input type='text' name='title' id='title' />
+      <h3 className='text-2xl'>Create chat</h3>
+      <TitleInput />
       <br /> <br />
       <SelectUsers selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
       <br /> <br />
@@ -67,7 +67,7 @@ export default function CreateTeam({ setViewCreateWindow }) {
             handleCreateTeam();
           }}
         >
-          Create Post
+          Create Team
         </Button>
         <Button onClick={() => setViewCreateWindow(false)}>Cancel</Button>
       </div>

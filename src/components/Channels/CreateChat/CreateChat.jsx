@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Modal from '../../Modal/Modal';
 import SelectUsers from '../../SelectUsers/SelectUsers';
 import Button from '../../Button/Button';
+import TitleInput from '../../TitleInput/TitleInput';
 
 export const CreateChat = () => {
   const { userData } = useContext(AppContext);
@@ -41,14 +42,14 @@ export const CreateChat = () => {
   };
 
   return (
-    <div>
-      <h2>Start a new chat</h2>
+    <div className='bg-gray-900 p-6 rounded-lg shadow-lg relative'>
+      <h3 className='text-2xl'>Create chat</h3>
+      <TitleInput />
       <label htmlFor='title'>Title </label>
       <input type='text' id='title' placeholder='Enter title' />
-      <br />
-      <br />
+      <br /> <br />
       <SelectUsers selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
-      <br />
+      <br /> <br />
       <Button onClick={handleCreateChat}>Create Chat</Button>
       <Modal message={modalMessage} show={showModal} handleClose={handleCloseModal} />
     </div>

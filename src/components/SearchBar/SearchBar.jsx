@@ -20,7 +20,7 @@ export default function SearchBar({ type, objects, objectList, setObjectList }) 
   };
 
   return (
-    <div>
+    <div className='flex gap-3 items-center'>
       <label htmlFor='search'>Find {type} </label>
       <input type='text' id='search' placeholder='Search' />
       {type === 'users' && (
