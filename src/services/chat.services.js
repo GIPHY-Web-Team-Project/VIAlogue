@@ -1,13 +1,13 @@
 import { db } from '../config/firebase-config';
 import { ref, push, onValue, update } from 'firebase/database';
 
-export const getChatsByUserId = async (userId, callback) => {
+export const getChatsByUsername = async (username, callback) => {
     const chatsRef = ref(db, 'chats');
     const unsubscribe = onValue(chatsRef, (snapshot) => {
         if (snapshot.exists()) {
             const chats = snapshot.val();
             const filteredChats = Object.values(chats).filter(chat =>
-                chat.users.some(user => user.uid === userId) && !chat.isDeleted
+                chat.users.some(user => user === username) && !chat.isDeleted
             );
 
             callback(filteredChats);
@@ -31,6 +31,9 @@ export const getChatById = async (chatId, callback) => {
 }
 
 export const createChat = async (users, title = '', callback) => {
+    console.log('Users: ' + users);
+    console.log('title: ' + title);
+
     const chat = {
         users,
         title,
@@ -39,6 +42,7 @@ export const createChat = async (users, title = '', callback) => {
 
     const result = await push(ref(db, 'chats'), chat);
     const id = result.key;
+    console.log('Chat ID: ' + id);
     await update(ref(db, `chats/${id}`), { id });
     return callback(id);
 }

@@ -17,7 +17,6 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
 
   useEffect(() => {
     if (!selectedChat?.id) {
-      console.warn('Chat ID is undefined!');
       return;
     }
     const unsubscribe = getMessagesByChatId(selectedChat?.id, setMessages);
@@ -33,7 +32,7 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
   };
 
   const handleLeaveChat = async () => {
-    const updatedUsers = selectedChat.users.filter((user) => user.uid !== userData.uid);
+    const updatedUsers = selectedChat.users.filter((user) => user !== userData.username);
     await updateChat(selectedChat.id, { users: updatedUsers });
 
     if (updatedUsers.length === 0) {
@@ -45,12 +44,12 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
     navigate('/chats');
   };
 
-  const handleUserClick = (userUID) => {
-    if (userData.uid === userUID) {
+  const handleUserClick = (username) => {
+    if (userData.username === username) {
       setShowLeave(!showLeave);
     }
-    if (userData.uid !== userUID) {
-      navigate(`/users/${userUID}`);
+    if (userData.username !== username) {
+      navigate(`/users/${username}`);
     }
   }
 

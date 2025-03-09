@@ -14,7 +14,7 @@ export const CreateChat = ( setShowNewChat, showNewChat) => {
   const { setSelectedChat } = useContext(ChatContext);
   const navigate = useNavigate();
   const [modalMessage, setModalMessage] = useState('');
-  const [selectedUsers, setSelectedUsers] = useState([userData]);
+  const [selectedUsers, setSelectedUsers] = useState([userData.username]);
   const [showModal, setShowModal] = useState(false);
 
   const handleCreateChat = async () => {
