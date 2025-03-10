@@ -1,9 +1,7 @@
-import React, { useEffect, useContext } from 'react';
-import { ChatContext } from '../../../store/chat.context';
+import React, { useEffect } from 'react';
 import { getChatsByUsername } from '../../../services/chat.services';
 
-export const ChatList = ({ username, handleNewChat }) => {
-  const { chats, setChats, setSelectedChat } = useContext(ChatContext);
+export const ChatList = ({ username, handleNewChat, chats, setChats, setSelectedChat }) => {
 
   useEffect(() => {
     const unsubscribe = getChatsByUsername(username, (chats) => {

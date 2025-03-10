@@ -1,17 +1,13 @@
 import React, { useContext, useState } from 'react';
 import { AppContext } from '../../../store/app-context';
-import { ChatContext } from '../../../store/chat.context';
 import { createChat } from '../../../services/chat.services';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../Modal/Modal';
-import SearchBar from '../../SearchBar/SearchBar';
 import SelectUsers from '../../SelectUsers/SelectUsers';
-import Button from '../../Button/Button';
 import { titleCheck } from '../../../utils/chatUtils';
 
-export const CreateChat = ( setShowNewChat, showNewChat) => {
+export const CreateChat = ( setShowNewChat, showNewChat, setSelectedChat) => {
   const { userData } = useContext(AppContext);
-  const { setSelectedChat } = useContext(ChatContext);
   const navigate = useNavigate();
   const [modalMessage, setModalMessage] = useState('');
   const [selectedUsers, setSelectedUsers] = useState([userData.username]);

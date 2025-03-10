@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from 'react';
-import { ChatContext } from '../../store/chat.context';
 import { AppContext } from '../../store/app-context';
 import { ChatWindow } from '../../components/Channels/ChatWindow/ChatWindow';
 import { useState } from 'react';
@@ -9,9 +8,10 @@ import CreateChat from '../../components/Channels/CreateChat/CreateChat';
 
 export const ChatPage = () => {
   const { userData } = useContext(AppContext);
-  const { selectedChat, setSelectedChat, chats } = useContext(ChatContext);
-  const [participants, setParticipants] = useState([]);
-  const [ showNewChat, setShowNewChat] = useState(false);
+  const [ selectedChat, setSelectedChat ] = useState(null);
+  const [ chats, setChats ] = useState(null);
+  const [ participants, setParticipants ] = useState([]);
+  const [ showNewChat, setShowNewChat ] = useState(false);
 
   useEffect(() => {
     if (!userData || !chats) return;
@@ -61,9 +61,9 @@ export const ChatPage = () => {
       <div className='flex flex-grow'>
         <SideBar type='menu' />
         <div className='flex flex-grow justify-between'>
-          <SideBar type='channels' username={userData?.username} handleNewChat={handleNewChat}/>
+          <SideBar type='channels' username={userData?.username} handleNewChat={handleNewChat} chats={chats} setChats={setChats} setSelectedChat={setSelectedChat}/>
           {showNewChat ? (
-                <CreateChat setShowNewChat={setShowNewChat} showNewChat={showNewChat}/>
+                <CreateChat setShowNewChat={setShowNewChat} showNewChat={showNewChat} setSelectedChat={setSelectedChat}/>
           ) : (
             <>
             {selectedChat ? (
