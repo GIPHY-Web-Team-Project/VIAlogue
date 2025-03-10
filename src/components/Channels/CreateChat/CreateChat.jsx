@@ -6,9 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import Modal from '../../Modal/Modal';
 import SelectUsers from '../../SelectUsers/SelectUsers';
 import Button from '../../Button/Button';
+import { titleCheck } from '../../../utils/chatUtils';
 import TitleInput from '../../TitleInput/TitleInput';
 
-export const CreateChat = () => {
+export const CreateChat = (setShowNewChat, showNewChat) => {
   const { userData } = useContext(AppContext);
   const { setSelectedChat } = useContext(ChatContext);
   const navigate = useNavigate();
@@ -27,10 +28,19 @@ export const CreateChat = () => {
 
     const chatTitle = document.getElementById('title').value.toLowerCase();
 
+    if (chatTitle === '') {
+      setModalMessage('Please enter a chat title.');
+      setShowModal(true);
+      return;
+    }
+
+    titleCheck(chatTitle);
+
     try {
       await createChat(chatUsers, chatTitle, (chatId) => {
         setSelectedChat({ id: chatId, chatUsers });
-        navigate(`/chats/${chatId}`);
+        setShowNewChat(!showNewChat);
+        navigate(`/chats`);
       });
     } catch {
       console.error('Error creating chat');
@@ -42,16 +52,23 @@ export const CreateChat = () => {
   };
 
   return (
-    <div className='bg-gray-900 p-6 rounded-lg shadow-lg relative'>
-      <h3 className='text-2xl'>Create chat</h3>
-      <TitleInput />
-      <label htmlFor='title'>Title </label>
-      <input type='text' id='title' placeholder='Enter title' />
-      <br /> <br />
-      <SelectUsers selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
-      <br /> <br />
-      <Button onClick={handleCreateChat}>Create Chat</Button>
-      <Modal message={modalMessage} show={showModal} handleClose={handleCloseModal} />
+    <div className='flex justify-between w-full h-full flex-col'>
+      <div className='shadow-lg rounded-lg p-6 w-full'>
+        <div>
+          <label htmlFor='title'> </label>
+          <input type='text' id='title' placeholder='Enter chat title' className='mt-1 w-full pb-2 border-b focus:ring-2 focus:ring-blue-500 outline-none' />
+        </div>
+
+        <div className='mt-8'>
+          <SelectUsers selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
+        </div>
+
+        <button onClick={handleCreateChat} className='mt-4 w-full'>
+          Create Chat
+        </button>
+      </div>
+
+      {showModal && <Modal message={modalMessage} show={showModal} handleClose={handleCloseModal} />}
     </div>
   );
 };
