@@ -20,6 +20,7 @@ export default function CreateComp({ setViewCreateWindow, type, team }) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (type !== CHANNEL) return;
     setMembers(Object.values(team.members));
   }, [team]);
 

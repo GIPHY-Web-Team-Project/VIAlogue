@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { getTeamById } from '../../../services/team.services';
 import ChannelList from '../Channels/ChannelList/ChannelList';
 import Loading from '../../Loading/Loading';
-import Channel from '../Channels/Channel/Channel';
+import Channel from '../Channel/Channel';
 
 export default function TeamWindow() {
   const { teamId } = useParams();
@@ -39,7 +39,7 @@ export default function TeamWindow() {
           <>
             <ChannelList team={team} setViewChannel={setViewChannel} />
             {viewChannel[0] === true ? (
-              <Channel channel={viewChannel[1]} />
+              <Channel channel={viewChannel[1]} setViewChannel={setViewChannel} />
             ) : (
               <>
                 <div className=''>
@@ -49,7 +49,7 @@ export default function TeamWindow() {
                 </div>
               </>
             )}
-            {team && (
+            {team && !viewChannel[0] && (
               <div>
                 <h3>Team Members:</h3>
                 <p>{team.members.map((member) => member).join(', ')}</p>

@@ -45,4 +45,6 @@ export const createChannel = async (title, teamId, members, owner) => {
   await update(ref(db, `teams/${teamId}/channels/${id}`), { id });
 };
 
-export const getChannelById = async (channelId, callback) => {};
+export const updateChannel = async (teamId, channelId, updatedChannel) => {
+  await update(ref(db, `teams/${teamId}/channels/${channelId}`), updatedChannel);
+};

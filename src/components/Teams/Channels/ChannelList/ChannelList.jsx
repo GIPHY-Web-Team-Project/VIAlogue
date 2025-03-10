@@ -1,17 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Button from '../../../Button/Button';
 import { CHANNEL, CREATE_CHANNEL } from '../../../../common/enums';
 import CreateComp from '../../../CreateComp/CreateComp';
+import { AppContext } from '../../../../store/app-context';
 
 export default function ChannelList({ team, setViewChannel }) {
   const [channels, setChannels] = useState([]);
   const [viewCreateWindow, setViewCreateWindow] = useState(false);
+  const { userData } = useContext(AppContext);
 
   useEffect(() => {
-    if (!team) return;
+    if (!team || !userData) return;
 
-    setChannels(Object.values(team.channels));
-  }, [team]);
+    const currChannels = Object.values(team.channels);
+
+    const existingChannels = currChannels.filter((channel) => !channel.isDeleted);
+
+    const filteredChannels = existingChannels.filter((channel) => channel.members.includes(userData.username));
+
+    setChannels(filteredChannels);
+  }, [team, userData]);
 
   console.log(channels);
   return (
