@@ -3,7 +3,7 @@ import Button from '../../../Button/Button';
 import { CHANNEL, CREATE_CHANNEL } from '../../../../common/enums';
 import CreateComp from '../../../CreateComp/CreateComp';
 
-export default function ChannelList({ team }) {
+export default function ChannelList({ team, setViewChannel }) {
   const [channels, setChannels] = useState([]);
   const [viewCreateWindow, setViewCreateWindow] = useState(false);
 
@@ -24,7 +24,15 @@ export default function ChannelList({ team }) {
           <CreateComp setViewCreateWindow={setViewCreateWindow} type={CHANNEL} team={team} />
         </div>
       )}
-      <ul className='flex flex-col'>{channels && channels.length > 0 && channels.map((channel) => <li key={channel.id}>{channel.title}</li>)}</ul>
+      <ul className='flex flex-col'>
+        {channels &&
+          channels.length > 0 &&
+          channels.map((channel) => (
+            <li onClick={() => setViewChannel([true, channel])} key={channel.id}>
+              {channel.title}
+            </li>
+          ))}
+      </ul>
     </div>
   );
 }
