@@ -1,22 +1,24 @@
 import { useState } from 'react';
 import Button from '../Button/Button';
 
-export default function SearchBar({ type, objects, objectList, setObjectList }) {
+export default function SearchBar({ type, objects, objectList, setObjectList, selectedUsers }) {
   const [selectedSearch, setSelectedSearch] = useState('username');
 
   const handleSearch = () => {
     if (type !== 'users') setSelectedSearch('title');
+
     const searchData = document.getElementById('search').value.toLowerCase();
+
     if (!searchData) {
-      if (objectList.length !== objects.length) setObjectList(objects);
+      setObjectList(objects.filter(user => !selectedUsers.includes(user.username)));
       return;
     }
 
-    const filteredData = objects.filter((object) => object[selectedSearch]?.toLowerCase().includes(searchData));
+    const filteredData = objects
+      .filter(user => !selectedUsers.includes(user.username))
+      .filter((object) => object[selectedSearch]?.toLowerCase().includes(searchData));
 
-    if (JSON.stringify(objectList) !== JSON.stringify(filteredData)) {
-      setObjectList(filteredData);
-    }
+    setObjectList(filteredData);
   };
 
   return (
@@ -32,11 +34,10 @@ export default function SearchBar({ type, objects, objectList, setObjectList }) 
         )}
         <label htmlFor='search'> </label>
         <input className="w-full pl-1" type='text' id='search' placeholder={`Search by ${selectedSearch}`} />
-        {/* <FilterSelect type={type} setSelectedSearch={setSelectedSearch} /> */}
-        </div>
-        <div>      
-          <Button onClick={handleSearch}>Search</Button>
-        </div>
+      </div>
+      <div>
+        <Button onClick={handleSearch}>Search</Button>
+      </div>
     </div>
   );
 }

@@ -44,15 +44,6 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
     navigate('/chats');
   };
 
-  const handleUserClick = (username) => {
-    if (userData.username === username) {
-      setShowLeave(!showLeave);
-    }
-    if (userData.username !== username) {
-      navigate(`/users/${username}`);
-    }
-  }
-
   if (!userData) {
     return <p>Loading...</p>;
   }

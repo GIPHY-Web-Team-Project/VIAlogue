@@ -47,7 +47,6 @@ export const ChatPage = () => {
   }, [selectedChat, userData]);
 
   const handleNewChat = () => {
-    console.log('Create button clicked!');
     setShowNewChat(!showNewChat);
     setSelectedChat(null);
   }
