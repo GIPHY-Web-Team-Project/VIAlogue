@@ -9,9 +9,9 @@ export const ChatParticipants = ({ participants, handleLeaveChat, handleUserClic
     <>
       <ul>
         {participants.map((user) => (
-          <li key={user.uid} className='text-xs'>
-            <span onClick={() => handleUserClick(user.uid)}>{user.username}</span>
-            {userData.username === user.username && showLeave && <button onClick={handleLeaveChat}>Leave</button>}
+          <li key={user} className='text-xs'>
+            <span onClick={() => handleUserClick(user)}>{user}</span>
+            {userData.username === user && showLeave && <button onClick={handleLeaveChat}>Leave</button>}
           </li>
         ))}
       </ul>

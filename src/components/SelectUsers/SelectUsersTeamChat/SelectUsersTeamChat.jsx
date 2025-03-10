@@ -17,13 +17,14 @@ export default function SelectUsersTeamChat({ selectedUsers, setSelectedUsers })
   }, [users]);
 
   const handleUserSelect = (user) => {
-    setSelectedUsers((prevSelected) => [...prevSelected, user]);
+    setSelectedUsers((prevSelected) => [...prevSelected, user.username]);
     setUserList((prevList) => prevList.filter((u) => u.username !== user.username));
   };
 
   const handleRemove = (user) => {
-    setSelectedUsers(selectedUsers.filter((selectedUser) => selectedUser.username !== user.username));
+    setSelectedUsers(selectedUsers.filter((selectedUser) => selectedUser !== user));
   };
+
   return (
     <div className='flex flex-row justify-between'>
       <div className='flex flex-col w-full h-full'>
@@ -48,11 +49,9 @@ export default function SelectUsersTeamChat({ selectedUsers, setSelectedUsers })
         <ul>
           <div className='p-2'>
             {selectedUsers.map((user) => (
-              <div key={user.username}>
+              <div key={user}>
                 <li className='flex flex-row justify-between align-center pb-2'>
-                  <span className='flex-grow pt-2 pb-2'>
-                    {user.username} ({user.email})
-                  </span>
+                  <span className='flex-grow pt-2 pb-2'>{user}</span>
                   <Button onClick={() => handleRemove(user)}>Remove</Button>
                 </li>
               </div>

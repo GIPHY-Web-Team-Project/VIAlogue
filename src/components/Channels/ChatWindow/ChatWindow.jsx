@@ -17,7 +17,6 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
 
   useEffect(() => {
     if (!selectedChat?.id) {
-      console.warn('Chat ID is undefined!');
       return;
     }
     const unsubscribe = getMessagesByChatId(selectedChat?.id, setMessages);
@@ -33,7 +32,7 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
   };
 
   const handleLeaveChat = async () => {
-    const updatedUsers = selectedChat.users.filter((user) => user.uid !== userData.uid);
+    const updatedUsers = selectedChat.users.filter((user) => user !== userData.username);
     await updateChat(selectedChat.id, { users: updatedUsers });
 
     if (updatedUsers.length === 0) {
@@ -45,12 +44,12 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
     navigate('/chats');
   };
 
-  const handleUserClick = (userUID) => {
-    if (userData.uid === userUID) {
+  const handleUserClick = (username) => {
+    if (userData.username === username) {
       setShowLeave(!showLeave);
     }
-    if (userData.uid !== userUID) {
-      navigate(`/users/${userUID}`);
+    if (userData.username !== username) {
+      navigate(`/users/${username}`);
     }
   }
 
@@ -66,14 +65,19 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
     return (
       <div className="flex flex-col w-full bg-transparent justify-between m-4">
         <div>
-        {selectedChat && <h1 className="flex flex-row justify-between text-2xl border-b-2 mb-4 pb-2 border-black shadow-2xl">{selectedChat.title}
-          <div>
-            <img src="/images/members.jpg" alt="Members" className="w-8 h-8 pr-2" onClick={toggleShowParticipants} />
-            {showParticipants && (
-              <ChatParticipants participants={participants} handleLeaveChat={handleLeaveChat} handleUserClick={handleUserClick} showLeave={showLeave} />
-            )}
+        {selectedChat && (
+          <div className="flex flex-row justify-between">
+            <div className="w-full">
+            <h1 className="text-2xl border-b-2 mb-4 pb-2 border-black shadow-2xl">{selectedChat.title}</h1>
+            </div>
+            <div className="flex flex-col overflow-x-auto">
+              <img src="/images/members.jpg" alt="Members" className="w-8 h-8 pr-2" onClick={toggleShowParticipants} />
+              {showParticipants && (
+                <ChatParticipants participants={participants} handleLeaveChat={handleLeaveChat} handleUserClick={handleUserClick} showLeave={showLeave} />
+              )}
+            </div>
           </div>
-        </h1>}
+        )}
         <div className="flex flex-col overflow-y-auto">
           {messages ? (
             messages.map((messageObj, index) => {

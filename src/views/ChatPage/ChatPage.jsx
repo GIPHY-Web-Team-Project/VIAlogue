@@ -30,7 +30,7 @@ export const ChatPage = () => {
       }
     }
 
-    const userChats = chats.filter((chat) => chat.users.some((user) => user.uid === userData.uid));
+    const userChats = chats.filter((chat) => chat.users.some((user) => user === userData.username));
 
     if (userChats.length > 0) {
       setSelectedChat(userChats[0]);
@@ -63,7 +63,7 @@ export const ChatPage = () => {
       <div className='flex flex-grow'>
         <SideBar type='menu' />
         <div className='flex flex-grow justify-between'>
-          <SideBar type='channels' userId={userData?.uid} handleNewChat={handleNewChat} />
+          <SideBar type='channels' username={userData?.username} handleNewChat={handleNewChat} />
           {showNewChat ? (
             <CreateChat setShowNewChat={setShowNewChat} showNewChat={showNewChat} />
           ) : (

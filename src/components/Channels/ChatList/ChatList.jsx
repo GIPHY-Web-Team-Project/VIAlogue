@@ -1,12 +1,12 @@
 import React, { useEffect, useContext } from 'react';
 import { ChatContext } from '../../../store/chat.context';
-import { getChatsByUserId } from '../../../services/chat.services';
+import { getChatsByUsername } from '../../../services/chat.services';
 
-export const ChatList = ({ userId, handleNewChat }) => {
+export const ChatList = ({ username, handleNewChat }) => {
   const { chats, setChats, setSelectedChat } = useContext(ChatContext);
 
   useEffect(() => {
-    const unsubscribe = getChatsByUserId(userId, (chats) => {
+    const unsubscribe = getChatsByUsername(username, (chats) => {
       setChats(chats);
     });
 
@@ -15,7 +15,7 @@ export const ChatList = ({ userId, handleNewChat }) => {
         unsubscribe();
       }
     };
-  }, [userId]);
+  }, [username]);
 
   const handleChatClick = (chat) => {
     setSelectedChat(chat);
