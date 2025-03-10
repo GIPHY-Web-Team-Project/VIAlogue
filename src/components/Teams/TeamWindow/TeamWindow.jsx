@@ -49,7 +49,12 @@ export default function TeamWindow() {
                 </div>
               </>
             )}
-            {team && <p>Team Members: {team.members.map((member) => member).join(', ')}</p>}
+            {team && (
+              <div>
+                <h3>Team Members:</h3>
+                <p>{team.members.map((member) => member).join(', ')}</p>
+              </div>
+            )}
           </>
         )}
       </div>

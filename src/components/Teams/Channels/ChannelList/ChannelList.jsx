@@ -28,7 +28,7 @@ export default function ChannelList({ team, setViewChannel }) {
         {channels &&
           channels.length > 0 &&
           channels.map((channel) => (
-            <li onClick={() => setViewChannel([true, channel])} key={channel.id}>
+            <li className='cursor-pointer hover:underline active:no-underline' onClick={() => setViewChannel([true, channel])} key={channel.id}>
               {channel.title}
             </li>
           ))}
