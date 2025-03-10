@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { getTeamsByUserId } from '../../../services/team.services';
+import { getTeamsByUsername } from '../../../services/team.services';
 import { AppContext } from '../../../store/app-context';
 import Team from '../Team/Team';
 
@@ -10,7 +10,7 @@ export default function TeamsList() {
   useEffect(() => {
     if (!userData) return;
 
-    const unsubscribe = getTeamsByUserId(userData?.uid, (teams) => {
+    const unsubscribe = getTeamsByUsername(userData?.username, (teams) => {
       setTeams(teams);
     });
 

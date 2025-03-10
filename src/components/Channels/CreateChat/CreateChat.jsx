@@ -4,10 +4,10 @@ import { ChatContext } from '../../../store/chat.context';
 import { createChat } from '../../../services/chat.services';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../Modal/Modal';
-import SelectUsers from '../../SelectUsers/SelectUsers';
 import Button from '../../Button/Button';
 import { titleCheck } from '../../../utils/chatUtils';
 import TitleInput from '../../TitleInput/TitleInput';
+import SelectUsersTeamChat from '../../SelectUsers/SelectUsersTeamChat/SelectUsersTeamChat';
 
 export const CreateChat = (setShowNewChat, showNewChat) => {
   const { userData } = useContext(AppContext);
@@ -60,7 +60,7 @@ export const CreateChat = (setShowNewChat, showNewChat) => {
         </div>
 
         <div className='mt-8'>
-          <SelectUsers selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
+          <SelectUsersTeamChat selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
         </div>
 
         <button onClick={handleCreateChat} className='mt-4 w-full'>

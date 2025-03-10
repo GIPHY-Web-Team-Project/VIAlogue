@@ -7,7 +7,7 @@ import { useState } from 'react';
 import SideBar from '../../components/SideBar/SideBar';
 import LandingPage from '../LandingPage/main/LandingPage';
 import CreateChat from '../../components/Channels/CreateChat/CreateChat';
-import { ParticipantsTab } from '../../components/ParticipantsTab/ParticipantsTab';
+// import { ParticipantsTab } from '../../components/ParticipantsTab/ParticipantsTab';
 
 export const ChatPage = () => {
   const { userData } = useContext(AppContext);

@@ -8,9 +8,9 @@ import Button from '../../../components/Button/Button';
 export default function LandingPage() {
   const navigate = useNavigate();
   const [learnMore, setLearnMore] = useState(false);
-  const { user, userData } = useContext(AppContext);
+  const { userData } = useContext(AppContext);
 
-  if (user) {
+  if (userData) {
     navigate('/teams');
   }
 

@@ -1,5 +1,6 @@
 import { equalTo, get, onValue, orderByChild, push, query, ref, update } from 'firebase/database';
 import { db } from '../config/firebase-config';
+import { createChannel } from './channel.services';
 
 export const createTeam = async (title, owner, members, callback) => {
   const teamsRef = ref(db, 'teams');
@@ -19,19 +20,20 @@ export const createTeam = async (title, owner, members, callback) => {
     const result = await push(teamsRef, team);
     const id = result.key;
     await update(ref(db, `teams/${id}`), { id });
+    await createChannel('general', id, members, owner);
     return callback(id);
   }
 };
 
-export const getTeamsByUserId = async (userId, callback) => {
-  if (!userId) return;
+export const getTeamsByUsername = async (username, callback) => {
+  if (!username) return;
 
   const teamsRef = ref(db, 'teams');
 
   const unsubscribe = onValue(teamsRef, (snapshot) => {
     if (snapshot.exists()) {
       const teams = snapshot.val();
-      const filteredTeams = Object.values(teams).filter((team) => team.members.some((member) => member.uid === userId));
+      const filteredTeams = Object.values(teams).filter((team) => team.members.some((member) => member === username));
 
       callback(filteredTeams);
     } else {

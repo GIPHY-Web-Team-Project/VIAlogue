@@ -12,11 +12,9 @@ import Login from './views/Login/Login';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from './config/firebase-config';
 import { getUserData } from './services/user.service';
-import CreateChat from './components/Channels/CreateChat/CreateChat';
 import './App.css';
 import Profile from './views/Profile/Profile';
 import TeamsPage from './views/TeamsPage/TeamsPage';
-import CreateTeam from './components/Teams/CreateTeam/CreateTeam';
 import TeamWindow from './components/Teams/TeamWindow/TeamWindow';
 
 export default function App() {
@@ -68,11 +66,9 @@ export default function App() {
               <Route path='/register' element={<Register />} />
               <Route path='/login' element={<Login />} />
               <Route path='/teams' element={<TeamsPage />} />
-              <Route path='/teams/newteam' element={<CreateTeam />} />
               <Route path='/teams/:teamId' element={<TeamWindow />} />
               <Route path='/profile' element={<Profile />} />
               <Route path='/chats' element={<ChatPage />} />
-              <Route path='/chats/newchat' element={<CreateChat />} />
               <Route path='/chats/:chatId' element={<ChatWindow />} />
               <Route path='/chats/:chatId/messages/:messageId/edit' element={<EditMessage />} />
               <Route path='*' element={<h1>404 Not Found</h1>} />
