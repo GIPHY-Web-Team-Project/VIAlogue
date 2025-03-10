@@ -13,7 +13,7 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
   const [messages, setMessages] = useState(null);
   const [showParticipants, setShowParticipants] = useState(false);
   const navigate = useNavigate();
-  const [showLeave, setShowLeave] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
     if (!selectedChat?.id) {
@@ -64,7 +64,7 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
             <div className="flex flex-col overflow-x-auto">
               <img src="/images/members.jpg" alt="Members" className="w-8 h-8 pr-2" onClick={toggleShowParticipants} />
               {showParticipants && (
-                <ChatParticipants participants={participants} handleLeaveChat={handleLeaveChat} handleUserClick={handleUserClick} showLeave={showLeave} />
+                <ChatParticipants participants={participants} handleLeaveChat={handleLeaveChat} selectedUser={selectedUser} setSelectedUser={setSelectedUser}/>
               )}
             </div>
           </div>
