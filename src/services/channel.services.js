@@ -41,8 +41,8 @@ export const createChannel = async (title, teamId, members, owner) => {
   };
 
   const result = await push(ref(db, `teams/${teamId}/channels`), newChannel);
-  const channelId = result.key;
-  await update(ref(db, `teams/${teamId}/channels/${channelId}`), { id: channelId });
+  const id = result.key;
+  await update(ref(db, `teams/${teamId}/channels/${id}`), { id });
 };
 
 export const getChannelById = async (channelId, callback) => {};

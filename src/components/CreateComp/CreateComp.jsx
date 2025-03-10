@@ -1,8 +1,7 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../store/app-context';
 import { useNavigate } from 'react-router';
 import { MAX_TEAM_TITLE_LENGTH, MIN_TEAM_TITLE_LENGTH } from '../../common/constants';
-import SelectUsers from '../SelectUsers/SelectUsersTeamChat/SelectUsersTeamChat';
 import { CHANNEL, TEAM } from '../../common/enums';
 import { createTeam } from '../../services/team.services';
 import { createChannel } from '../../services/channel.services';
@@ -10,25 +9,31 @@ import TitleInput from '../TitleInput/TitleInput';
 import Button from '../Button/Button';
 import Modal from '../Modal/Modal';
 import SelectUsersTeamChat from '../SelectUsers/SelectUsersTeamChat/SelectUsersTeamChat';
+import SelectUsersChannel from '../SelectUsers/SelectUsersChannel/SelectUsersChannel';
 
-export default function CreateComp({ setViewCreateWindow, type, teamIdForChannel }) {
+export default function CreateComp({ setViewCreateWindow, type, team }) {
   const { userData } = useContext(AppContext);
-  const [selectedUsers, setSelectedUsers] = useState([userData]);
+  const [selectedUsers, setSelectedUsers] = useState([userData?.username]);
   const [modalMessage, setModalMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [members, setMembers] = useState(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    setMembers(Object.values(team.members));
+  }, [team]);
+
   const handleCreate = async () => {
-    const members = selectedUsers.map((user) => user.username);
+    const members = selectedUsers.map((user) => user);
 
     if (members.length < 2) {
-      setModalMessage('Please select at least 2 users to create a team.');
+      setModalMessage('Please select at least 2 users.');
       setShowModal(true);
       return;
     }
 
     if (!document.getElementById('title').value) {
-      setModalMessage('Please enter a title for the team.');
+      setModalMessage('Please enter a title.');
       setShowModal(true);
       return;
     }
@@ -36,7 +41,7 @@ export default function CreateComp({ setViewCreateWindow, type, teamIdForChannel
     const title = document.getElementById('title').value;
 
     if (title.trim().length < MIN_TEAM_TITLE_LENGTH || title.trim().length > MAX_TEAM_TITLE_LENGTH) {
-      setModalMessage('Team titles can only be between 3 and 40 symbols long!');
+      setModalMessage('Title can only be between 3 and 40 symbols long!');
       setShowModal(true);
       return;
     }
@@ -47,7 +52,7 @@ export default function CreateComp({ setViewCreateWindow, type, teamIdForChannel
           navigate(`/teams/${teamId}`);
         });
       } else if (type === CHANNEL) {
-        await createChannel(title, teamIdForChannel, members, userData.username);
+        await createChannel(title, team.id, members, userData.username);
       }
     } catch (error) {
       console.error(error.message);
@@ -62,10 +67,11 @@ export default function CreateComp({ setViewCreateWindow, type, teamIdForChannel
 
   return (
     <div className='bg-gray-900 p-6 rounded-lg shadow-lg relative'>
-      <h3 className='text-2xl'>Create chat</h3>
+      <h3 className='text-2xl'>Create {type}</h3>
       <TitleInput />
       <br /> <br />
-      <SelectUsersTeamChat selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
+      {type === CHANNEL && members && <SelectUsersChannel selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} teamMembers={members} type={type} />}
+      {type === TEAM && <SelectUsersTeamChat selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />}
       <br /> <br />
       <div className=''>
         <Button
@@ -73,7 +79,7 @@ export default function CreateComp({ setViewCreateWindow, type, teamIdForChannel
             handleCreate();
           }}
         >
-          Create Team
+          Create {type}
         </Button>
         <Button onClick={() => setViewCreateWindow(false)}>Cancel</Button>
       </div>
