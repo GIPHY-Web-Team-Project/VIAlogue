@@ -33,7 +33,7 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
 
   const handleLeaveChat = async () => {
     const updatedUsers = selectedChat.users.filter((user) => user !== userData.username);
-    await updateChat(selectedChat.id, { users: updatedUsers });
+    await updateChat(selectedChat.id, updatedUsers, "users");
 
     if (updatedUsers.length === 0) {
       await updateChat(selectedChat.id, { isDeleted: true });
@@ -64,7 +64,7 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
             <div className="flex flex-col overflow-x-auto">
               <img src="/images/members.jpg" alt="Members" className="w-8 h-8 pr-2" onClick={toggleShowParticipants} />
               {showParticipants && (
-                <ChatParticipants participants={participants} handleLeaveChat={handleLeaveChat} selectedUser={selectedUser} setSelectedUser={setSelectedUser}/>
+                <ChatParticipants participants={participants} handleLeaveChat={handleLeaveChat} selectedUser={selectedUser} setSelectedUser={setSelectedUser} chatId={selectedChat.id}/>
               )}
             </div>
           </div>

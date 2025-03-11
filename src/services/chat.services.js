@@ -47,8 +47,8 @@ export const createChat = async (users, title = '', callback) => {
     return callback(id);
 }
 
-export const updateChat = async (chatId, updatedChat) => {
-    await update(ref(db, `chats/${chatId}`), updatedChat);
+export const updateChat = async (chatId, updatedChat, element) => {
+    await update(ref(db, `chats/${chatId}`), { [element]: updatedChat });
 }
 
 export const deleteChat = async (chatId) => {

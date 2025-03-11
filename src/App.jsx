@@ -48,7 +48,7 @@ export default function App() {
     <BrowserRouter>
       <AppContext.Provider value={{ ...appState, setAppState }}>
           <div className='font-medium flex flex-col w-screen h-screen bg-gray-900 text-white'>
-            <Header />
+            { !user && <Header />}
           <Routes>
             <Route path='/' element={<LandingPage />} />
             <Route path='/register' element={<Register />} />
