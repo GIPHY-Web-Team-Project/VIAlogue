@@ -4,8 +4,8 @@ import { createUserHandle, getUserByUsername, getUserByEmail } from '../../servi
 import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth } from '../../config/firebase-config';
 import { nameCheck } from '../../utils/nameUtils';
-import Modal from '../../components/Modal/Modal';
-import Button from '../../components/Button/Button';
+import Modal from '../../components/UI/Modal/Modal';
+import Button from '../../components/UI/Button/Button';
 import { TEXT_BUTTON } from '../../common/enums';
 
 export default function Register() {
@@ -110,7 +110,7 @@ export default function Register() {
 
         <p className='text-gray-400 text-center mt-6'>
           Already have an account?{' '}
-          <Button type={TEXT_BUTTON} onClick={() => navigate('/login')} className='text-blue-500 underline'>
+          <Button btnStyle={TEXT_BUTTON} onClick={() => navigate('/login')} className='text-blue-500 underline'>
             Login
           </Button>
         </p>

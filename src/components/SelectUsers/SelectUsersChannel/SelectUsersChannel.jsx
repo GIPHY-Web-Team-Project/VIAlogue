@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../../store/app-context';
-import Button from '../../Button/Button';
-import SearchBar from '../../SearchBar/SearchBar';
+import Button from '../../UI/Button/Button';
+import SearchBar from '../../UI/SearchBar/SearchBar';
 import { MEMBERS, USERS } from '../../../common/enums';
 
 export default function SelectUsersChannel({ selectedUsers, setSelectedUsers, teamMembers }) {

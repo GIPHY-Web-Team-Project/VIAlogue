@@ -11,8 +11,8 @@ import { auth } from './config/firebase-config';
 import { getUserData } from './services/user.service';
 import './App.css';
 import Profile from './views/Profile/Profile';
-import TeamsPage from './views/TeamsPage/TeamsPage';
-import TeamWindow from './components/Teams/TeamWindow/TeamWindow';
+import TeamsPage from './views/Teams/TeamsPage/TeamsPage';
+import TeamWindow from './views/Teams/TeamWindow/TeamWindow';
 
 export default function App() {
   const [appState, setAppState] = useState({

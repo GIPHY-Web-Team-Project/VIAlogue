@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import { AppContext } from '../../../store/app-context';
 import { getUserByUsername } from '../../../services/user.service';
 import { useNavigate } from 'react-router-dom';
+import Button from '../../UI/Button/Button';
+import { CHAT_PARTICIPANTS_BTNS } from '../../../common/enums';
 
 export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, setSelectedUser }) => {
   const { userData } = useContext(AppContext);
@@ -51,15 +53,15 @@ export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, 
                 {user.username}
               </span>
               {userData.username === user.username && showLeave && (
-                <button onClick={handleLeaveChat} className='text-gray-500 text-xs'>
+                <Button btnStyle={CHAT_PARTICIPANTS_BTNS} onClick={handleLeaveChat}>
                   Leave
-                </button>
+                </Button>
               )}
               {selectedUser === user.username && selectedUser !== userData.username && showProfile && (
                 <>
-                  <button onClick={() => handleProfileView(user)} className='text-gray-500 text-xs'>
+                  <Button btnStyle={CHAT_PARTICIPANTS_BTNS} onClick={() => handleProfileView(user)}>
                     View profile
-                  </button>
+                  </Button>
                 </>
               )}
             </div>

@@ -2,10 +2,11 @@ import React, { useContext, useState } from 'react';
 import { AppContext } from '../../../store/app-context';
 import { createChat } from '../../../services/chat.services';
 import { useNavigate } from 'react-router-dom';
-import Modal from '../../Modal/Modal';
+import Modal from '../../UI/Modal/Modal';
 import { titleCheck } from '../../../utils/chatUtils';
-import TitleInput from '../../TitleInput/TitleInput';
+import TitleInput from '../../UI/TitleInput/TitleInput';
 import SelectUsersTeamChat from '../../SelectUsers/SelectUsersTeamChat/SelectUsersTeamChat';
+import Button from '../../UI/Button/Button';
 
 export const CreateChat = (setShowNewChat, showNewChat, setSelectedChat) => {
   const { userData } = useContext(AppContext);
@@ -60,9 +61,7 @@ export const CreateChat = (setShowNewChat, showNewChat, setSelectedChat) => {
           <SelectUsersTeamChat selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
         </div>
 
-        <button onClick={handleCreateChat} className='mt-4 w-full'>
-          Create Chat
-        </button>
+        <Button onClick={handleCreateChat}>Create Chat</Button>
       </div>
 
       {showModal && <Modal message={modalMessage} show={showModal} handleClose={handleCloseModal} />}

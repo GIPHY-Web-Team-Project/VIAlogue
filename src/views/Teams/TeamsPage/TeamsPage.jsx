@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import SideBar from '../../components/SideBar/SideBar';
-import TeamsList from '../../components/Teams/TeamsList/TeamsList';
-import Button from '../../components/Button/Button';
-import { CREATE_TEAM, TEAM } from '../../common/enums';
-import CreateComp from '../../components/CreateComp/CreateComp';
+import SideBar from '../../../components/UI/SideBar/SideBar';
+import TeamsList from '../../../components/Teams/TeamsList/TeamsList';
+import Button from '../../../components/UI/Button/Button';
+import { CREATE_TEAM, TEAM } from '../../../common/enums';
+import CreateComp from '../../../components/CreateComp/CreateComp';
 
 export default function TeamsPage() {
   const [viewCreateWindow, setViewCreateWindow] = useState(false);
@@ -13,7 +13,7 @@ export default function TeamsPage() {
       <SideBar type='menu' />
       <div className='flex flex-grow justify-center'>
         <TeamsList />
-        <Button type={CREATE_TEAM} onClick={() => setViewCreateWindow(true)}>
+        <Button btnStyle={CREATE_TEAM} onClick={() => setViewCreateWindow(true)}>
           Create a Team
         </Button>
         {viewCreateWindow && (

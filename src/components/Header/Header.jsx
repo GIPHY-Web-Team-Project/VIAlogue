@@ -4,7 +4,7 @@ import { AppContext } from '../../store/app-context';
 import { auth } from '../../config/firebase-config';
 import { signOut } from 'firebase/auth';
 import { LOGIN } from '../../common/enums';
-import Button from '../Button/Button';
+import Button from '../UI/Button/Button';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ export default function Header() {
       <header className='flex items-center justify-between py-2 px-4 bg-blue-900'>
         <span className='text-6xl'>LOGO</span>
         <div className='flex gap-4 mr-8'>
-          <Button type={LOGIN} onClick={() => navigate('/login')}>
+          <Button btnStyle={LOGIN} onClick={() => navigate('/login')}>
             Log In
           </Button>
           <Button onClick={() => navigate('/register')}>Sign Up</Button>

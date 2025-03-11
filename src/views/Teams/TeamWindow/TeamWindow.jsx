@@ -1,10 +1,10 @@
 import { useParams } from 'react-router';
-import SideBar from '../../SideBar/SideBar';
+import SideBar from '../../../components/UI/SideBar/SideBar';
 import { useEffect, useState } from 'react';
 import { getTeamById } from '../../../services/team.services';
-import ChannelList from '../Channels/ChannelList/ChannelList';
-import Loading from '../../Loading/Loading';
-import Channel from '../Channel/Channel';
+import ChannelList from '../../../components/Teams/Channels/ChannelList/ChannelList';
+import Loading from '../../../components/UI/Loading/Loading';
+import Channel from '../../../components/Teams/Channel/Channel';
 
 export default function TeamWindow() {
   const { teamId } = useParams();

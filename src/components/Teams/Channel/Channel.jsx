@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Button from '../../Button/Button';
+import Button from '../../UI/Button/Button';
 import ChannelInfo from '../Channels/ChannelInfo/ChannelInfo';
 
 export default function Channel({ channel, setViewChannel }) {

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import Button from '../../../components/Button/Button';
+import Button from '../../../components/UI/Button/Button';
 
 export default function LearnMore({ setLearnMore }) {
   const navigate = useNavigate();

@@ -5,9 +5,9 @@ import { MAX_TEAM_TITLE_LENGTH, MIN_TEAM_TITLE_LENGTH } from '../../common/const
 import { CHANNEL, TEAM } from '../../common/enums';
 import { createTeam } from '../../services/team.services';
 import { createChannel } from '../../services/channel.services';
-import TitleInput from '../TitleInput/TitleInput';
-import Button from '../Button/Button';
-import Modal from '../Modal/Modal';
+import TitleInput from '../UI/TitleInput/TitleInput';
+import Button from '../UI/Button/Button';
+import Modal from '../UI/Modal/Modal';
 import SelectUsersTeamChat from '../SelectUsers/SelectUsersTeamChat/SelectUsersTeamChat';
 import SelectUsersChannel from '../SelectUsers/SelectUsersChannel/SelectUsersChannel';
 

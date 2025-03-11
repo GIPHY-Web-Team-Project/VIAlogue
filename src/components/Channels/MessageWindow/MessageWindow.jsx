@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { addMessage } from '../../../services/message.services';
-import Button from '../../Button/Button';
+import Button from '../../UI/Button/Button';
 import EmojiPicker from 'emoji-picker-react';
 
 export const MessageWindow = ({ chatId, sender }) => {

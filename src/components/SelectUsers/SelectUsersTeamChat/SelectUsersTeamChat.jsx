@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../../store/app-context';
 import { useUsers } from '../../../hooks/useUsers';
-import SearchBar from '../../SearchBar/SearchBar';
-import Button from '../../Button/Button';
+import SearchBar from '../../UI/SearchBar/SearchBar';
+import Button from '../../UI/Button/Button';
 
 export default function SelectUsersTeamChat({ selectedUsers, setSelectedUsers }) {
   const { userData } = useContext(AppContext);

@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react';
-import Button from '../../../Button/Button';
+import Button from '../../../UI/Button/Button';
 import { AppContext } from '../../../../store/app-context';
-import AreYouSure from '../../../AreYouSure/AreYouSure';
 import { updateChannel } from '../../../../services/channel.services';
 import { useParams } from 'react-router';
+import AreYouSure from '../../../UI/AreYouSure/AreYouSure';
 
 export default function ChannelInfo({ channel, setShowChannelInfo }) {
   const [showSure, setShowSure] = useState(false);

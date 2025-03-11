@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import { ChatList } from '../Channels/ChatList/ChatList';
+import { ChatList } from '../../Channels/ChatList/ChatList';
 import Button from '../Button/Button';
 
 export default function SideBar({ type, username, handleNewChat, chats, setChats, setSelectedChat }) {
@@ -17,12 +17,5 @@ export default function SideBar({ type, username, handleNewChat, chats, setChats
     );
   } else if (type === 'channels') {
     return <ChatList username={username} handleNewChat={handleNewChat} chats={chats} setChats={setChats} setSelectedChat={setSelectedChat} />;
-  } else if (type === 'users') {
-    return (
-      <div>
-        <button>Participants</button>
-        {/* {participants && <ChatParticipatns/>} */}
-      </div>
-    );
   }
 }

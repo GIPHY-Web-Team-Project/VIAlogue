@@ -3,7 +3,7 @@ import { AppContext } from '../../store/app-context';
 // import { ChatList } from '../../components/Channels/ChatList/ChatList';
 import { ChatWindow } from '../../components/Channels/ChatWindow/ChatWindow';
 import { useState } from 'react';
-import SideBar from '../../components/SideBar/SideBar';
+import SideBar from '../../components/UI/SideBar/SideBar';
 import LandingPage from '../LandingPage/main/LandingPage';
 import CreateChat from '../../components/Channels/CreateChat/CreateChat';
 // import { ParticipantsTab } from '../../components/ParticipantsTab/ParticipantsTab';

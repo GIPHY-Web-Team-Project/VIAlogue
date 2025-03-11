@@ -1,8 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
-import Button from '../../../Button/Button';
-import { CHANNEL, CREATE_CHANNEL } from '../../../../common/enums';
+import Button from '../../../UI/Button/Button';
+import { CHANNEL } from '../../../../common/enums';
 import CreateComp from '../../../CreateComp/CreateComp';
 import { AppContext } from '../../../../store/app-context';
+import { variant } from '../../../../common/button-const';
 
 export default function ChannelList({ team, setViewChannel }) {
   const [channels, setChannels] = useState([]);
@@ -24,9 +25,7 @@ export default function ChannelList({ team, setViewChannel }) {
   console.log(channels);
   return (
     <div className='flex flex-col bg-gray-800 p-4 overflow-y-auto'>
-      <Button type={CREATE_CHANNEL} onClick={() => setViewCreateWindow(true)}>
-        Create a Channel
-      </Button>
+      <Button onClick={() => setViewCreateWindow(true)}>Create a Channel</Button>
       {viewCreateWindow && (
         <div className='fixed inset-0 bg-black/70 flex items-center justify-center z-50'>
           <CreateComp setViewCreateWindow={setViewCreateWindow} type={CHANNEL} team={team} />
@@ -36,7 +35,7 @@ export default function ChannelList({ team, setViewChannel }) {
         {channels &&
           channels.length > 0 &&
           channels.map((channel) => (
-            <li className='cursor-pointer hover:underline active:no-underline' onClick={() => setViewChannel([true, channel])} key={channel.id}>
+            <li className={variant.chatTeamListItem} onClick={() => setViewChannel([true, channel])} key={channel.id}>
               {channel.title}
             </li>
           ))}

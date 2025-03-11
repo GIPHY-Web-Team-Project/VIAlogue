@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Button from '../Button/Button';
-import { MEMBERS, USERS } from '../../common/enums';
+import { MEMBERS, USERS } from '../../../common/enums';
 
 export default function SearchBar({ type, objects, objectList, setObjectList, selectedUsers }) {
   const [selectedSearch, setSelectedSearch] = useState('username');
