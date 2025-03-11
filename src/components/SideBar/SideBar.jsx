@@ -16,7 +16,7 @@ export default function SideBar({ type, username, handleNewChat, chats, setChats
       </div>
     );
   } else if (type === 'channels') {
-    return <ChatList username={username} handleNewChat={handleNewChat} chats={chats} setChats={setChats} setSelectedChat={setSelectedChat}/>;
+    return <ChatList username={username} handleNewChat={handleNewChat} chats={chats} setChats={setChats} setSelectedChat={setSelectedChat} />;
   } else if (type === 'users') {
     return (
       <div>

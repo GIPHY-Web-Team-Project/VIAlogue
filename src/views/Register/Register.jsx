@@ -21,7 +21,6 @@ export default function Register() {
   const [modalMessage, setModalMessage] = useState('');
   const navigate = useNavigate();
 
-  
   const register = async () => {
     try {
       if (!user.email || !user.password || !user.username) {
@@ -36,7 +35,7 @@ export default function Register() {
         const usernameRegex = /^[a-zA-Z0-9_.-]{4,32}$/;
         return usernameRegex.test(username);
       };
-    
+
       if (!validateUsername(user.username)) {
         alert('Username must be between 4 and 32 characters and can only contain letters, numbers, underscores (_), dots (.), and hyphens (-).');
         return;

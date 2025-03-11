@@ -5,8 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import Modal from '../../Modal/Modal';
 import SelectUsers from '../../SelectUsers/SelectUsers';
 import { titleCheck } from '../../../utils/chatUtils';
+import TitleInput from '../../TitleInput/TitleInput';
+import SelectUsersTeamChat from '../../SelectUsers/SelectUsersTeamChat/SelectUsersTeamChat';
 
-export const CreateChat = ( setShowNewChat, showNewChat, setSelectedChat) => {
+export const CreateChat = (setShowNewChat, showNewChat, setSelectedChat) => {
   const { userData } = useContext(AppContext);
   const navigate = useNavigate();
   const [modalMessage, setModalMessage] = useState('');
@@ -39,7 +41,7 @@ export const CreateChat = ( setShowNewChat, showNewChat, setSelectedChat) => {
         navigate(`/chats`);
       });
     } catch {
-      console.log('Error creating chat');
+      console.error('Error creating chat');
     }
   };
 
@@ -48,33 +50,23 @@ export const CreateChat = ( setShowNewChat, showNewChat, setSelectedChat) => {
   };
 
   return (
-    <div className="flex justify-between w-full h-full flex-col">
-      <div className="shadow-lg rounded-lg p-6 w-full">
+    <div className='flex justify-between w-full h-full flex-col'>
+      <div className='shadow-lg rounded-lg p-6 w-full'>
         <div>
-          <label htmlFor="title"> </label>
-          <input 
-            type="text" 
-            id="title" 
-            placeholder="Enter chat title" 
-            className="mt-1 w-full pb-2 border-b focus:ring-2 focus:ring-blue-500 outline-none"
-          />
+          <label htmlFor='title'> </label>
+          <input type='text' id='title' placeholder='Enter chat title' className='mt-1 w-full pb-2 border-b focus:ring-2 focus:ring-blue-500 outline-none' />
         </div>
 
-        <div className="mt-8">
-          <SelectUsers selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
+        <div className='mt-8'>
+          <SelectUsersTeamChat selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
         </div>
 
-        <button 
-          onClick={handleCreateChat} 
-          className="mt-4 w-full"
-        >
+        <button onClick={handleCreateChat} className='mt-4 w-full'>
           Create Chat
         </button>
       </div>
 
-      {showModal && (
-        <Modal message={modalMessage} show={showModal} handleClose={handleCloseModal} />
-      )}
+      {showModal && <Modal message={modalMessage} show={showModal} handleClose={handleCloseModal} />}
     </div>
   );
 };
