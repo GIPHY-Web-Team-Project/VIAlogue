@@ -3,7 +3,6 @@ import { AppContext } from '../../../store/app-context';
 import { createChat } from '../../../services/chat.services';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../Modal/Modal';
-import SelectUsers from '../../SelectUsers/SelectUsers';
 import { titleCheck } from '../../../utils/chatUtils';
 import TitleInput from '../../TitleInput/TitleInput';
 import SelectUsersTeamChat from '../../SelectUsers/SelectUsersTeamChat/SelectUsersTeamChat';
