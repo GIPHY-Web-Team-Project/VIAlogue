@@ -6,8 +6,7 @@ import Button from '../../UI/Button/Button';
 import { CHAT_PARTICIPANTS_BTNS } from '../../../common/enums';
 import { useUsers } from '../../../hooks/useUsers';
 import { updateChat } from '../../../services/chat.services';
-import SelectUsersTeamChat from '../../../components/SelectUsers/SelectUsersTeamsChat/SelectUsersTeamsChat';
-
+import SelectUsersTeamChat from '../../SelectUsers/SelectUsersTeamChat/SelectUsersTeamChat';
 export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, setSelectedUser, chatId }) => {
     const { userData } = useContext(AppContext);
     const [users, setUsers] = useState([]);
