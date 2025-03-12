@@ -7,8 +7,9 @@ import SingleMessage from '../SingleMessage/SingleMessage';
 import { useNavigate } from 'react-router-dom';
 import { updateChat } from '../../../services/chat.services';
 import ChatParticipants from '../ChatParticipants/ChatParticipants';
+import { CHANNEL } from '../../../common/enums';
 
-export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
+export const ChatWindow = ({ selectedChat, participants, setSelectedChat, type }) => {
   const { userData } = useContext(AppContext);
   const [messages, setMessages] = useState(null);
   const [showParticipants, setShowParticipants] = useState(false);
@@ -19,7 +20,7 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
     if (!selectedChat?.id) {
       return;
     }
-    const unsubscribe = getMessagesByChatId(selectedChat?.id, setMessages);
+    const unsubscribe = getMessagesByChatId(selectedChat, setMessages, type);
     return () => {
       if (typeof unsubscribe === 'function') {
         unsubscribe();
@@ -61,10 +62,12 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
               <div className='w-full'>
                 <h1 className='text-2xl border-b-2 mb-4 pb-2 border-black shadow-2xl'>{selectedChat.title}</h1>
               </div>
-              <div className='flex flex-col overflow-x-auto'>
-                <img src='/images/members.jpg' alt='Members' className='w-8 h-8 pr-2' onClick={toggleShowParticipants} />
-                {showParticipants && <ChatParticipants participants={participants} handleLeaveChat={handleLeaveChat} selectedUser={selectedUser} setSelectedUser={setSelectedUser} />}
-              </div>
+              {type !== CHANNEL && (
+                <div className='flex flex-col overflow-x-auto'>
+                  <img src='/images/members.jpg' alt='Members' className='w-8 h-8 pr-2' onClick={toggleShowParticipants} />
+                  {showParticipants && <ChatParticipants participants={participants} handleLeaveChat={handleLeaveChat} selectedUser={selectedUser} setSelectedUser={setSelectedUser} />}
+                </div>
+              )}
             </div>
           )}
           <div className='flex flex-col overflow-y-auto'>
@@ -82,7 +85,7 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
             )}
           </div>
         </div>
-        <MessageWindow chatId={selectedChat.id} sender={userData?.username || 'Unknown'} />
+        <MessageWindow chat={selectedChat} sender={userData?.username || 'Unknown'} type={type} />
       </div>
     );
   }

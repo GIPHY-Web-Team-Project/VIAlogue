@@ -3,13 +3,14 @@ import { addMessage } from '../../../services/message.services';
 import Button from '../../UI/Button/Button';
 import EmojiPicker from 'emoji-picker-react';
 
-export const MessageWindow = ({ chatId, sender }) => {
+export const MessageWindow = ({ chat, sender, type }) => {
   const [message, setMessage] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const handleNewMessage = () => {
     if (message.trim() === '') return;
-    addMessage(chatId, message, sender);
+
+    addMessage(chat, message, sender, type);
     setMessage('');
   };
 

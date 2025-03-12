@@ -1,26 +1,35 @@
 import { useState } from 'react';
 import Button from '../../../UI/Button/Button';
 import ChannelInfo from '../ChannelInfo/ChannelInfo';
+import { CHANNEL } from '../../../../common/enums';
+import ChatWindow from '../../../Channels/ChatWindow/ChatWindow';
 
 export default function Channel({ channel, setViewChannel }) {
   const [chatVisible, setChatVisible] = useState(false);
   const [showChannelInfo, setShowChannelInfo] = useState(false);
 
+  // console.log(Object.values(channel.chat)[0].id);
   return (
     <div className='flex flex-grow flex-col items-center'>
       <Button onClick={() => setViewChannel([false, null])}>Home</Button>
       <h1 className='text-4xl cursor-pointer hover:underline' onClick={() => setShowChannelInfo(true)}>
         {channel.title}
       </h1>
-      <section>
+      <section className='flex flex-grow flex-col items-center'>
         {showChannelInfo ? (
           <ChannelInfo channel={channel} setShowChannelInfo={setShowChannelInfo} />
         ) : (
           <>
             <Button onClick={() => setChatVisible(!chatVisible)}>{chatVisible ? 'Posts' : 'Chats'}</Button>
 
-            {chatVisible ? <h1>Chat</h1> : <h1>Posts</h1>}
-            {/* <ChatWindow selectedChat={channel.}, participants, setSelectedChat /> */}
+            {chatVisible ? (
+              <>
+                <h1>Chat</h1>
+                <ChatWindow selectedChat={channel} type={CHANNEL} />
+              </>
+            ) : (
+              <h1>Posts</h1>
+            )}
           </>
         )}
       </section>

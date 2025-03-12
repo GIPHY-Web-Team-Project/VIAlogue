@@ -38,6 +38,7 @@ export const createChannel = async (title, teamId, members, owner) => {
     title,
     members,
     owner,
+    teamId,
   };
 
   const result = await push(ref(db, `teams/${teamId}/channels`), newChannel);
