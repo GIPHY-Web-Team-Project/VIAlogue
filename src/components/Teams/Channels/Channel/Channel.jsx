@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import Button from '../../UI/Button/Button';
-import ChannelInfo from '../Channels/ChannelInfo/ChannelInfo';
+import Button from '../../../UI/Button/Button';
+import ChannelInfo from '../ChannelInfo/ChannelInfo';
 
 export default function Channel({ channel, setViewChannel }) {
   const [chatVisible, setChatVisible] = useState(false);
@@ -20,11 +20,10 @@ export default function Channel({ channel, setViewChannel }) {
             <Button onClick={() => setChatVisible(!chatVisible)}>{chatVisible ? 'Posts' : 'Chats'}</Button>
 
             {chatVisible ? <h1>Chat</h1> : <h1>Posts</h1>}
-            {/* <ChatWindow channel={channel} /> */}
+            {/* <ChatWindow selectedChat={channel.}, participants, setSelectedChat /> */}
           </>
         )}
       </section>
-      {/* <Modal show={showModal} handleClose={() => setShowModal(false)} message={message} /> */}
     </div>
   );
 }

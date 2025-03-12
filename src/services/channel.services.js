@@ -43,8 +43,23 @@ export const createChannel = async (title, teamId, members, owner) => {
   const result = await push(ref(db, `teams/${teamId}/channels`), newChannel);
   const id = result.key;
   await update(ref(db, `teams/${teamId}/channels/${id}`), { id });
+  await createChannelChat(teamId, id, members);
 };
 
 export const updateChannel = async (teamId, channelId, updatedChannel) => {
   await update(ref(db, `teams/${teamId}/channels/${channelId}`), updatedChannel);
+};
+
+// CHANNEL CHATS
+
+export const createChannelChat = async (teamId, channelId, users) => {
+  const channelChat = {
+    users,
+    messages: [],
+  };
+
+  const result = await push(ref(db, `teams/${teamId}/channels/${channelId}/chat`), channelChat);
+  const id = result.key;
+
+  await update(ref(db, `teams/${teamId}/channels/${channelId}/chat/${id}`), { id });
 };

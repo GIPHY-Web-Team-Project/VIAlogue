@@ -57,6 +57,8 @@ export const ChatPage = () => {
     return <LandingPage />;
   }
 
+  console.log(selectedChat);
+
   if (userData) {
     return (
       <div className='flex flex-grow'>

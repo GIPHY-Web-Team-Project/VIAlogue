@@ -22,7 +22,6 @@ export default function ChannelList({ team, setViewChannel }) {
     setChannels(filteredChannels);
   }, [team, userData]);
 
-  console.log(channels);
   return (
     <div className='flex flex-col bg-gray-800 p-4 overflow-y-auto'>
       <Button onClick={() => setViewCreateWindow(true)}>Create a Channel</Button>

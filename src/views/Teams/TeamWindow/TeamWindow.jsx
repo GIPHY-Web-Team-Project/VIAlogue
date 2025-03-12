@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { getTeamById } from '../../../services/team.services';
 import ChannelList from '../../../components/Teams/Channels/ChannelList/ChannelList';
 import Loading from '../../../components/UI/Loading/Loading';
-import Channel from '../../../components/Teams/Channel/Channel';
+import Channel from '../../../components/Teams/Channels/Channel/Channel';
 
 export default function TeamWindow() {
   const { teamId } = useParams();
