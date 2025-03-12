@@ -9,4 +9,5 @@ export const variant = {
   getStarted: 'm-1 text-2xl p-6 bg-dark-blue rounded-lg hover:bg-blue hover:text-black hover:cursor-pointer transition',
   chatParticipantsBtns: 'text-gray-500 text-xs',
   cancel: 'bg-gray-600 px-4 py-2 rounded-lg hover:bg-gray-700 cursor-pointer',
+  home: 'text-white bg-transparent rounded-lg hover:bg-blue cursor-pointer active:bg-blue py-2 px-2 transition duration-200 active:scale-90',
 };

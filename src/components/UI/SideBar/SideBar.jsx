@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { NavLink } from 'react-router';
 import { ChatList } from '../../Channels/ChatList/ChatList';
 import { variant } from '../../../common/button-const';
 
@@ -7,16 +7,20 @@ export default function SideBar({ type, username, handleNewChat, chats, setChats
     return (
       <div className='flex flex-col justify-between h-full bg-gray-700 p-2'>
         <div className='flex flex-col gap-4'>
-          <Link className={variant.default} to={'/teams'}>
+          <NavLink className={({ isActive }) => 
+            `${variant.home} ${isActive && "border-b-blue"} px-3 py-2 rounded-md`
+          } to={'/teams'}>
             <img src="/images/teams.png" className="h-13 w-13 flex justify-self-center"/>
-          </Link>
-          <Link className={variant.default} to={'/chats'}>
+            <span className='flex justify-center'>Teams</span>
+          </NavLink>
+          <NavLink className={variant.home} to={'/chats'}>
             <img src="/images/updated-short-dark.png" className="h-15 w-15 flex justify-self-center"/>
-          </Link>
+            <span className='flex justify-center'>Chats</span>
+          </NavLink>
         </div>
-        <Link className={variant.default} to={'/profile'}>
+        <NavLink className={variant.home} to={'/profile'}>
           Profile
-        </Link>
+        </NavLink>
       </div>
     );
   } else if (type === 'channels') {

@@ -4,7 +4,7 @@ import { useUsers } from '../../../hooks/useUsers';
 import SearchBar from '../../UI/SearchBar/SearchBar';
 import Button from '../../UI/Button/Button';
 
-export default function SelectUsersTeamChat({ selectedUsers, setSelectedUsers, userList, setUserList }) {
+export default function SelectUsersTeamChat({ selectedUsers, setSelectedUsers, userList = [], setUserList = () => {} }) {
   const { userData } = useContext(AppContext);
   const { users } = useUsers(userData);
 
