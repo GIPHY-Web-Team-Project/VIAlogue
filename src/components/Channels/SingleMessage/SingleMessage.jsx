@@ -51,7 +51,9 @@ export const SingleMessage = ({ msg, isFirstFromSender }) => {
                     </div>
                     <div className="flex flex-row justify-between">
                         <div className="mt-2">
-                            <span className="text-gray-200 whitespace-pre-wrap w-full overflow-hidden [overflow-wrap:anywhere]">{msg.message} </span>
+                            <span className="text-gray-200 whitespace-pre-wrap w-full overflow-hidden [overflow-wrap:anywhere]">
+                                {msg.message && msg.message} </span>
+                                {msg.gifUrl && <img src={msg.gifUrl} alt="GIF" className="w-40 h-auto rounded-lg" />}
                         </div>
                         <div className="relative">
                             {showOptions && (

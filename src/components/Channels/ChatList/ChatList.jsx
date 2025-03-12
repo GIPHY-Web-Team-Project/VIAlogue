@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { getChatsByUsername } from '../../../services/chat.services';
+import { AppContext } from '../../../store/app-context';
 
 export const ChatList = ({ username, handleNewChat, chats, setChats, setSelectedChat }) => {
+  const { userData } = useContext(AppContext); 
 
   useEffect(() => {
     const unsubscribe = getChatsByUsername(username, (chats) => {
@@ -33,8 +35,8 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
             <div key={chat.id} onClick={() => handleChatClick(chat)} >
               <button>{chat.title}</button>
               {chat.latestMessage ? (
-                <p className="text-sm text-gray-400 overflow-ellipsis overflow-hidden">
-                  <strong>{chat.latestMessage.sender}:</strong> {chat.latestMessage.message}
+                <p className="text-sm text-gray-400 overflow-ellipsis overflow-hidden flex flex-row">
+                  <strong>{(chat.latestMessage.sender !== userData.username) ? (chat.latestMessage.sender) : "You"}: </strong> &nbsp;{chat.latestMessage.message}
                 </p>
               ) : (
                 <p className="text-sm text-gray-500 italic">No messages yet</p>
