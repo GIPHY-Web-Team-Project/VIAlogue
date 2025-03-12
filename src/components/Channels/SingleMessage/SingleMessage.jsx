@@ -27,7 +27,7 @@ export const SingleMessage = ({ msg, isFirstFromSender }) => {
   };
 
     return (
-        <div className='message'
+        <div className='message p-2 bg-transparent'
             onMouseEnter={() => setShowOptions(true)}
             onMouseLeave={() => setShowOptions(false)}>
             {showEdit ? (
@@ -55,11 +55,13 @@ export const SingleMessage = ({ msg, isFirstFromSender }) => {
                         </div>
                         <div className="relative">
                             {showOptions && (
-                                <div className="absolute right-0 bg-gray-700 shadow-md rounded-md p-1 flex flex-row align-center">
+                                <div className="absolute right-0 bg-gray-700 shadow-md rounded-md p-1 flex flex-row align-center h-10">
                                     <EmojiList message={msg} />
                                     {userData.username === msg.sender && (
                                         <div className="flex flex-row">
-                                            <button className="text-gray-600 hover:text-gray-800 p-1 flex-row" onClick={handleEdit}>✏️</button>
+                                            <button className="text-gray-600 hover:text-gray-800 p-1 flex flex-row bg-transparent w-7 h-8 justify-center" onClick={handleEdit}>
+                                                <img src="/images/edit.png" alt="Edit" className="h-6 w-6"/>
+                                            </button>
                                             <button className="text-gray-600 hover:text-gray-800 p-1 flex-row" onClick={() => deleteMessage(msg.chatId, msg.id)}>✖️</button>
                                         </div>
                                     )}
