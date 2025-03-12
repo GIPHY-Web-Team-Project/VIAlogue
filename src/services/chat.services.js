@@ -1,20 +1,43 @@
 import { db } from '../config/firebase-config';
-import { ref, push, onValue, update } from 'firebase/database';
+import { ref, push, onValue, update, get } from 'firebase/database';
 
 export const getChatsByUsername = async (username, callback) => {
     const chatsRef = ref(db, 'chats');
-    const unsubscribe = onValue(chatsRef, (snapshot) => {
-        if (snapshot.exists()) {
-            const chats = snapshot.val();
-            const filteredChats = Object.values(chats).filter(chat =>
-                chat.users.some(user => user === username) && !chat.isDeleted
-            );
 
-            callback(filteredChats);
-        } else {
+    const unsubscribe = onValue(chatsRef, async (snapshot) => {
+        if (!snapshot.exists()) {
             callback([]);
+            return;
         }
+
+        const chatsData = snapshot.val();
+        const filteredChats = Object.values(chatsData).filter(chat =>
+            chat.users.includes(username) && !chat.isDeleted
+        );
+
+        const chatPromises = filteredChats.map(async (chat) => {
+            if (chat.messages && Object.keys(chat.messages).length > 0) {
+                const messageIds = Object.keys(chat.messages);
+                const latestMessageId = messageIds[messageIds.length - 1];
+
+                const messageRef = ref(db, `messages/${latestMessageId}`);
+                const messageSnapshot = await get(messageRef);
+
+                if (messageSnapshot.exists()) {
+                    chat.latestMessage = messageSnapshot.val();
+                } else {
+                    chat.latestMessage = null;
+                }
+            } else {
+                chat.latestMessage = null;
+            }
+            return chat;
+        });
+
+        const updatedChats = await Promise.all(chatPromises);
+        callback(updatedChats);
     });
+
     return unsubscribe;
 }
 
