@@ -31,10 +31,10 @@ export const MessageWindow = ({ chatId, sender }) => {
     const handleGifClick = async (gifObject) => {
         try {
             await addMessage(chatId, "", sender, gifObject.url);
-            setShowGifPicker(!showGifPicker);
         } catch (error) {
             console.error(error);
         }
+        setShowGifPicker(!showGifPicker);
     };
 
   return (
@@ -47,7 +47,7 @@ export const MessageWindow = ({ chatId, sender }) => {
                     <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark"/>
                 </div>
             )}
-            <button className="mr-4" onClick={() => setShowGifPicker(!showEmojiPicker)}>GIF</button>
+            <button className="mr-4" onClick={() => setShowGifPicker(!showGifPicker)}>GIF</button>
             {showGifPicker && (
                 <div className="absolute bottom-20 right-15 z-10">
                     <GifPicker tenorApiKey={API_KEY} onGifClick={handleGifClick} theme="dark"/>
