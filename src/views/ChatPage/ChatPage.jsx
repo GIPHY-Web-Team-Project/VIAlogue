@@ -1,17 +1,19 @@
 import React, { useContext, useEffect } from 'react';
 import { AppContext } from '../../store/app-context';
+// import { ChatList } from '../../components/Channels/ChatList/ChatList';
 import { ChatWindow } from '../../components/Channels/ChatWindow/ChatWindow';
 import { useState } from 'react';
-import SideBar from '../../components/SideBar/SideBar';
+import SideBar from '../../components/UI/SideBar/SideBar';
 import LandingPage from '../LandingPage/main/LandingPage';
 import CreateChat from '../../components/Channels/CreateChat/CreateChat';
+// import { ParticipantsTab } from '../../components/ParticipantsTab/ParticipantsTab';
 
 export const ChatPage = () => {
   const { userData } = useContext(AppContext);
-  const [ selectedChat, setSelectedChat ] = useState(null);
-  const [ chats, setChats ] = useState(null);
-  const [ participants, setParticipants ] = useState([]);
-  const [ showNewChat, setShowNewChat ] = useState(false);
+  const [selectedChat, setSelectedChat] = useState(null);
+  const [chats, setChats] = useState(null);
+  const [participants, setParticipants] = useState([]);
+  const [showNewChat, setShowNewChat] = useState(false);
 
   useEffect(() => {
     if (!userData || !chats) return;
@@ -49,32 +51,31 @@ export const ChatPage = () => {
   const handleNewChat = () => {
     setShowNewChat(!showNewChat);
     setSelectedChat(null);
-  }
+  };
 
   if (!userData) {
     return <LandingPage />;
   }
- 
+
   if (userData) {
     return (
       <div className='flex flex-grow'>
         <SideBar type='menu' />
         <div className='flex flex-grow justify-between'>
-          <SideBar type='channels' username={userData?.username} handleNewChat={handleNewChat} chats={chats} setChats={setChats} setSelectedChat={setSelectedChat}/>
+          <SideBar type='channels' username={userData?.username} handleNewChat={handleNewChat} chats={chats} setChats={setChats} setSelectedChat={setSelectedChat} />
           {showNewChat ? (
-                <CreateChat setShowNewChat={setShowNewChat} showNewChat={showNewChat} setSelectedChat={setSelectedChat}/>
+            <CreateChat setShowNewChat={setShowNewChat} showNewChat={showNewChat} setSelectedChat={setSelectedChat} />
           ) : (
             <>
-            {selectedChat ? (
-              <>
-                  <ChatWindow selectedChat={selectedChat} participants={participants} setSelectedChat={setSelectedChat}/>
-              </>
-            ) : (
-              <p>Select a chat to start messaging.</p>
-            )}
+              {selectedChat ? (
+                <>
+                  <ChatWindow selectedChat={selectedChat} participants={participants} setSelectedChat={setSelectedChat} />
+                </>
+              ) : (
+                <p>Select a chat to start messaging.</p>
+              )}
             </>
           )}
-          
         </div>
       </div>
     );

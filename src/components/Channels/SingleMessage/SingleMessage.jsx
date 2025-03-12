@@ -7,26 +7,24 @@ import { AppContext } from '../../../store/app-context';
 import EmojiList from '../EmojiList/EmojiList';
 
 export const SingleMessage = ({ msg, isFirstFromSender }) => {
-    const [showEdit, setShowEdit] = useState(false);
-    const [showOptions, setShowOptions] = useState(false);
-    const { userData } = useContext(AppContext);
-    const [showUsers, setShowUsers] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [showOptions, setShowOptions] = useState(false);
+  const { userData } = useContext(AppContext);
+  const [showUsers, setShowUsers] = useState(false);
 
-    const handleEdit = () => {
-        setShowEdit(true);
-    }
+  const handleEdit = () => {
+    setShowEdit(true);
+  };
 
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        const today = new Date();
-        const isToday = date.toDateString() === today.toDateString();
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const today = new Date();
+    const isToday = date.toDateString() === today.toDateString();
 
-        const options = isToday
-            ? { hour: '2-digit', minute: '2-digit' }
-            : { hour: '2-digit', minute: '2-digit', weekday: 'short', day: 'numeric', month: 'numeric', year: 'numeric' };
+    const options = isToday ? { hour: '2-digit', minute: '2-digit' } : { hour: '2-digit', minute: '2-digit', weekday: 'short', day: 'numeric', month: 'numeric', year: 'numeric' };
 
-        return date.toLocaleString(undefined, options);
-    };
+    return date.toLocaleString(undefined, options);
+  };
 
     return (
         <div className='message'

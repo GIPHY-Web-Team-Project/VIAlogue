@@ -1,7 +1,7 @@
-import { NavLink, useNavigate } from 'react-router';
-import { ChatList } from '../Channels/ChatList/ChatList';
+import { useNavigate } from 'react-router';
+import { ChatList } from '../../Channels/ChatList/ChatList';
 import Button from '../Button/Button';
-
+import { NavLink } from 'react-router-dom';
 export default function SideBar({ type, username, handleNewChat, chats, setChats, setSelectedChat }) {
   const navigate = useNavigate();
 
@@ -17,6 +17,6 @@ export default function SideBar({ type, username, handleNewChat, chats, setChats
       </div>
     );
   } else if (type === 'channels') {
-    return <ChatList username={username} handleNewChat={handleNewChat} chats={chats} setChats={setChats} setSelectedChat={setSelectedChat}/>;
+    return <ChatList username={username} handleNewChat={handleNewChat} chats={chats} setChats={setChats} setSelectedChat={setSelectedChat} />;
   }
 }

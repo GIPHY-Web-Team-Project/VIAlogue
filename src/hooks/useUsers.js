@@ -10,25 +10,25 @@ import { getAllUsers } from '../services/user.service';
  *
  */
 export const useUsers = (userData) => {
-    const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([]);
 
-    useEffect(() => {
-        let unsubscribe = () => {}; 
+  useEffect(() => {
+    let unsubscribe = () => {};
 
-        const fetchAllUsers = async () => {
-            unsubscribe = await getAllUsers((fetchedUsers) => {
-                setUsers(fetchedUsers || []); // ✅ Ensure users is never undefined
-            });
-        };
+    const fetchAllUsers = async () => {
+      unsubscribe = await getAllUsers((fetchedUsers) => {
+        setUsers(fetchedUsers || []); // ✅ Ensure users is never undefined
+      });
+    };
 
-        fetchAllUsers();
+    fetchAllUsers();
 
-        return () => {
-            if (typeof unsubscribe === 'function') {
-                unsubscribe();
-            }
-        };
-    }, [userData]);
+    return () => {
+      if (typeof unsubscribe === 'function') {
+        unsubscribe();
+      }
+    };
+  }, [userData]);
 
-    return { users: users || [] };
-}
+  return { users: users || [] };
+};

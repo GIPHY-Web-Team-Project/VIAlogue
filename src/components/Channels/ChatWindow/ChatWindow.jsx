@@ -54,7 +54,7 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
 
   if (selectedChat) {
     return (
-      <div className="flex flex-col w-full bg-transparent justify-between m-4">
+      <div className='flex flex-col w-full bg-transparent justify-between m-4'>
         <div>
         {selectedChat && (
           <div className="flex flex-row justify-between">

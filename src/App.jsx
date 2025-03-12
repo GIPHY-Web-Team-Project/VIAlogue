@@ -6,12 +6,13 @@ import Header from './components/Header/Header';
 import ChatPage from './views/ChatPage/ChatPage';
 import Register from './views/Register/Register';
 import Login from './views/Login/Login';
-import TeamsTab from './views/TeamsTab/TeamsTab';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from './config/firebase-config';
 import { getUserData } from './services/user.service';
 import './App.css';
 import Profile from './views/Profile/Profile';
+import TeamsPage from './views/Teams/TeamsPage/TeamsPage';
+import TeamWindow from './views/Teams/TeamWindow/TeamWindow';
 
 export default function App() {
   const [appState, setAppState] = useState({
@@ -53,7 +54,8 @@ export default function App() {
             <Route path='/' element={<LandingPage />} />
             <Route path='/register' element={<Register />} />
             <Route path='/login' element={<Login />} />
-            <Route path='/teams' element={<TeamsTab />} />
+            <Route path='/teams' element={<TeamsPage />} />
+            <Route path='/teams/:teamId' element={<TeamWindow />} />
             <Route path='/profile' element={<Profile />} />
             <Route path='/chats' element={<ChatPage />} />
             <Route path='*' element={<h1>404 Not Found</h1>} />

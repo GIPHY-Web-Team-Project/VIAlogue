@@ -4,7 +4,7 @@ import { ref, update, onValue } from 'firebase/database';
 import { AppContext } from '../../store/app-context';
 import { auth, db } from '../../config/firebase-config';
 import { signOut } from 'firebase/auth';
-import SideBar from '../../components/SideBar/SideBar';
+import SideBar from '../../components/UI/SideBar/SideBar';
 import defaultProfilePicture from '../../../public/images/123.jpg';
 
 export default function Profile() {
@@ -112,12 +112,7 @@ export default function Profile() {
       <div className='bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md mx-auto'>
         <h2 className='text-2xl font-bold text-center mb-6'>User Profile</h2>
         <div className='flex flex-col items-center'>
-          <img
-            src={profilePicture || defaultProfilePicture}
-            alt='Profile'
-            className='w-24 h-24 rounded-full cursor-pointer'
-            onClick={() => fileInputRef.current.click()}
-          />
+          <img src={profilePicture || defaultProfilePicture} alt='Profile' className='w-24 h-24 rounded-full cursor-pointer' onClick={() => fileInputRef.current.click()} />
           <input type='file' ref={fileInputRef} className='hidden' onChange={handleProfilePictureChange} />
         </div>
 
@@ -134,63 +129,31 @@ export default function Profile() {
           {/* First Name */}
           <div>
             <label className='text-gray-400'>First Name:</label>
-            <input
-              type='text'
-              name='firstName'
-              value={formData.firstName}
-              onChange={handleChange}
-              disabled={!isEditing}
-              className='bg-gray-700 p-2 rounded w-full'
-            />
+            <input type='text' name='firstName' value={formData.firstName} onChange={handleChange} disabled={!isEditing} className='bg-gray-700 p-2 rounded w-full' />
           </div>
 
           {/* Last Name */}
           <div>
             <label className='text-gray-400'>Last Name:</label>
-            <input
-              type='text'
-              name='lastName'
-              value={formData.lastName}
-              onChange={handleChange}
-              disabled={!isEditing}
-              className='bg-gray-700 p-2 rounded w-full'
-            />
+            <input type='text' name='lastName' value={formData.lastName} onChange={handleChange} disabled={!isEditing} className='bg-gray-700 p-2 rounded w-full' />
           </div>
 
           {/* Age */}
           <div>
             <label className='text-gray-400'>Age:</label>
-            <input
-              type='text'
-              value={calculateAge(formData.birthdate)}
-              disabled
-              className='bg-gray-700 p-2 rounded w-full'
-            />
+            <input type='text' value={calculateAge(formData.birthdate)} disabled className='bg-gray-700 p-2 rounded w-full' />
           </div>
 
           {/* Phone */}
           <div>
             <label className='text-gray-400'>Phone:</label>
-            <input
-              type='text'
-              name='phone'
-              value={formData.phone}
-              onChange={handleChange}
-              disabled={!isEditing}
-              className='bg-gray-700 p-2 rounded w-full'
-            />
+            <input type='text' name='phone' value={formData.phone} onChange={handleChange} disabled={!isEditing} className='bg-gray-700 p-2 rounded w-full' />
           </div>
 
           {/* Gender */}
           <div>
             <label className='text-gray-400'>Gender:</label>
-            <select
-              name='gender'
-              value={formData.gender}
-              onChange={handleChange}
-              disabled={!isEditing}
-              className='bg-gray-700 p-2 rounded w-full'
-            >
+            <select name='gender' value={formData.gender} onChange={handleChange} disabled={!isEditing} className='bg-gray-700 p-2 rounded w-full'>
               <option value='male'>Male</option>
               <option value='female'>Female</option>
               <option value='other'>Other</option>
@@ -201,66 +164,30 @@ export default function Profile() {
           <div>
             <label className='text-gray-400'>Birthdate:</label>
             <div className='flex space-x-2'>
-              <input
-                type='number'
-                name='day'
-                value={formData.birthdate.day}
-                onChange={handleChange}
-                placeholder='Day'
-                disabled={!isEditing}
-                className='bg-gray-700 p-2 rounded w-16'
-              />
-              <input
-                type='number'
-                name='month'
-                value={formData.birthdate.month}
-                onChange={handleChange}
-                placeholder='Month'
-                disabled={!isEditing}
-                className='bg-gray-700 p-2 rounded w-16'
-              />
-              <input
-                type='number'
-                name='year'
-                value={formData.birthdate.year}
-                onChange={handleChange}
-                placeholder='Year'
-                disabled={!isEditing}
-                className='bg-gray-700 p-2 rounded w-24'
-              />
+              <input type='number' name='day' value={formData.birthdate.day} onChange={handleChange} placeholder='Day' disabled={!isEditing} className='bg-gray-700 p-2 rounded w-16' />
+              <input type='number' name='month' value={formData.birthdate.month} onChange={handleChange} placeholder='Month' disabled={!isEditing} className='bg-gray-700 p-2 rounded w-16' />
+              <input type='number' name='year' value={formData.birthdate.year} onChange={handleChange} placeholder='Year' disabled={!isEditing} className='bg-gray-700 p-2 rounded w-24' />
             </div>
           </div>
 
           {/* Bio */}
           <div>
             <label className='text-gray-400'>Bio:</label>
-            <textarea
-              name='bio'
-              value={formData.bio}
-              onChange={handleChange}
-              disabled={!isEditing}
-              className='bg-gray-700 p-2 rounded w-full'
-            />
+            <textarea name='bio' value={formData.bio} onChange={handleChange} disabled={!isEditing} className='bg-gray-700 p-2 rounded w-full' />
           </div>
         </div>
 
         <div className='mt-6 text-center'>
           {isEditing ? (
-            <button
-              onClick={handleSaveProfile}
-              className='bg-green-600 text-white py-2 px-4 rounded hover:bg-green-500 transition mr-2'>
+            <button onClick={handleSaveProfile} className='bg-green-600 text-white py-2 px-4 rounded hover:bg-green-500 transition mr-2'>
               Save Profile
             </button>
           ) : (
-            <button
-              onClick={() => setIsEditing(true)}
-              className='bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-500 transition mr-2'>
+            <button onClick={() => setIsEditing(true)} className='bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-500 transition mr-2'>
               Edit Profile
             </button>
           )}
-          <button
-            onClick={handleLogout}
-            className='bg-red-600 text-white py-2 px-4 rounded hover:bg-red-500 transition'>
+          <button onClick={handleLogout} className='bg-red-600 text-white py-2 px-4 rounded hover:bg-red-500 transition'>
             Logout
           </button>
         </div>

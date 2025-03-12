@@ -2,9 +2,11 @@ import React, { useState, useEffect, useContext } from 'react';
 import { AppContext } from '../../../store/app-context';
 import { getUserByUsername } from '../../../services/user.service';
 import { useNavigate } from 'react-router-dom';
-import SelectUsers from '../../SelectUsers/SelectUsers';
+import Button from '../../UI/Button/Button';
+import { CHAT_PARTICIPANTS_BTNS } from '../../../common/enums';
 import { useUsers } from '../../../hooks/useUsers';
 import { updateChat } from '../../../services/chat.services';
+import SelectUsersTeamChat from '../../../components/SelectUsers/SelectUsersTeamsChat/SelectUsersTeamsChat';
 
 export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, setSelectedUser, chatId }) => {
     const { userData } = useContext(AppContext);
@@ -17,13 +19,15 @@ export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, 
     const { users: allUsers } = useUsers(userData); 
     const [ selectedUsers, setSelectedUsers ] = useState([]);
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-            const userList = await Promise.all(participants.map(async (username) => {
-                return await getUserByUsername(username);
-            }));
-            setUsers(userList);
-        };
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const userList = await Promise.all(
+        participants.map(async (username) => {
+          return await getUserByUsername(username);
+        })
+      );
+      setUsers(userList);
+    };
 
         fetchUsers();
 
@@ -39,20 +43,20 @@ export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, 
         fetchUsersNotInChat();
     }, [participants, userData, allUsers]);
 
-    const handleProfileView = (user) => {
-        navigate(`/${user.username}`);
-    }
+  const handleProfileView = (user) => {
+    navigate(`/${user.username}`);
+  };
 
-    const handleUserClick = (user) => {
-        if (user === userData.username) {
-            setShowLeave(!showLeave);
-            setShowProfile(false);
-        } else {
-            setSelectedUser(user);
-            setShowProfile(!showProfile);
-            setShowLeave(false);
-        }
+  const handleUserClick = (user) => {
+    if (user === userData.username) {
+      setShowLeave(!showLeave);
+      setShowProfile(false);
+    } else {
+      setSelectedUser(user);
+      setShowProfile(!showProfile);
+      setShowLeave(false);
     }
+  };
 
     const toggleSelectUsers = () => {
         setShowSelectUsers(!showSelectUsers);
@@ -82,15 +86,15 @@ export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, 
                             </span>
                             <span onClick={() => handleUserClick(user.username)} className="mr-2">{user.username}</span>
                             {(userData.username === user.username) && showLeave && (
-                                <button onClick={handleLeaveChat} className="text-gray-500 text-xs cursor-pointer">
+                                <Button btnStyle={CHAT_PARTICIPANTS_BTNS} onClick={handleLeaveChat}>
                                     Leave
-                                </button>
+                                </Button>
                             )}
                             {(selectedUser === user.username) && (selectedUser !== userData.username) && showProfile && (
                                 <>
-                                    <button onClick={() => handleProfileView(user)} className="text-gray-500 text-xs cursor-pointer">
+                                    <Button btnStyle={CHAT_PARTICIPANTS_BTNS} onClick={() => handleProfileView(user)}>
                                         View profile
-                                    </button>
+                                    </Button>
                                 </>
                             )}
                         </div>
@@ -100,7 +104,7 @@ export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, 
             <button className="text-s flex flex-wrap place-content-center p-2 cursor-pointer border-t-2 border-gray-700 w-full" onClick={toggleSelectUsers}>Add people &nbsp; <img src="/images/add-people.png" className="h-5 w-5 flex justify-self-center align-center"/></button>
             { showSelectUsers && (
                 <div className="mt-4">
-                    <SelectUsers selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} userList={usersNotInChat} setUserList={setUsersNotInChat}/>
+                    <SelectUsersTeamChat selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} userList={usersNotInChat} setUserList={setUsersNotInChat}/>
                     <button 
                         onClick={handleNewUsers} 
                         className="mt-2 w-full mb-2 border-t-2 border-gray-700 p-2"
