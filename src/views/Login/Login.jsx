@@ -1,10 +1,11 @@
 import { AppContext } from '../../store/app-context';
 import { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../config/firebase-config';
 import Button from '../../components/UI/Button/Button';
-import { CANCEL, TEXT_BUTTON } from '../../common/enums';
+import { CANCEL } from '../../common/enums';
+import { variant } from '../../common/button-const';
 
 export default function Login() {
   const { setAppState } = useContext(AppContext);
@@ -51,16 +52,16 @@ export default function Login() {
           <input type='password' placeholder='Password' value={user.password} onChange={updateUser('password')} className='w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' />
         </div>
         <div className='flex justify-end space-x-4 mt-6'>
-          <Button btnStyle={CANCEL} onClick={() => navigate('/')} className='bg-gray-600 px-4 py-2 rounded-lg hover:bg-gray-700 cursor-pointer'>
+          <Button btnStyle={CANCEL} onClick={() => navigate('/')}>
             Cancel
           </Button>
           <Button onClick={login}>Login</Button>
         </div>
         <p className='text-gray-400 text-center mt-6'>
           Don't have an account?{' '}
-          <Button btnStyle={TEXT_BUTTON} onClick={() => navigate('/register')}>
+          <Link className={variant.textButton} to={'/register'}>
             Register
-          </Button>
+          </Link>
         </p>
       </div>
     </div>

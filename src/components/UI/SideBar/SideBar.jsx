@@ -1,18 +1,22 @@
-import { useNavigate } from 'react-router';
+import { Link } from 'react-router';
 import { ChatList } from '../../Channels/ChatList/ChatList';
-import Button from '../Button/Button';
+import { variant } from '../../../common/button-const';
 
 export default function SideBar({ type, username, handleNewChat, chats, setChats, setSelectedChat }) {
-  const navigate = useNavigate();
-
   if (type === 'menu') {
     return (
       <div className='flex flex-col justify-between h-full bg-gray-700 p-4'>
         <div className='flex flex-col gap-4'>
-          <Button onClick={() => navigate('/teams')}>Teams</Button>
-          <Button onClick={() => navigate('/chats')}>Chats</Button>
+          <Link className={variant.default} to={'/teams'}>
+            Teams
+          </Link>
+          <Link className={variant.default} to={'/chats'}>
+            Chats
+          </Link>
         </div>
-        <Button onClick={() => navigate('/profile')}>Profile</Button>
+        <Link className={variant.default} to={'/profile'}>
+          Profile
+        </Link>
       </div>
     );
   } else if (type === 'channels') {
