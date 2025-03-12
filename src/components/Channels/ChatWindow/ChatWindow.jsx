@@ -33,7 +33,7 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
 
   const handleLeaveChat = async () => {
     const updatedUsers = selectedChat.users.filter((user) => user !== userData.username);
-    await updateChat(selectedChat.id, { users: updatedUsers });
+    await updateChat(selectedChat.id, updatedUsers, "users");
 
     if (updatedUsers.length === 0) {
       await updateChat(selectedChat.id, { isDeleted: true });
@@ -56,31 +56,32 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
     return (
       <div className='flex flex-col w-full bg-transparent justify-between m-4'>
         <div>
-          {selectedChat && (
-            <div className='flex flex-row justify-between'>
-              <div className='w-full'>
-                <h1 className='text-2xl border-b-2 mb-4 pb-2 border-black shadow-2xl'>{selectedChat.title}</h1>
-              </div>
-              <div className='flex flex-col overflow-x-auto'>
-                <img src='/images/members.jpg' alt='Members' className='w-8 h-8 pr-2' onClick={toggleShowParticipants} />
-                {showParticipants && <ChatParticipants participants={participants} handleLeaveChat={handleLeaveChat} selectedUser={selectedUser} setSelectedUser={setSelectedUser} />}
-              </div>
+        {selectedChat && (
+          <div className="flex flex-row justify-between">
+            <div className="w-full">
+            <h1 className="text-2xl border-b-2 mb-4 pb-2 border-black shadow-2xl">{selectedChat.title}</h1>
             </div>
-          )}
-          <div className='flex flex-col overflow-y-auto'>
-            {messages ? (
-              messages.map((messageObj, index) => {
-                const isFirstFromSender = index === 0 || messages[index - 1].sender !== messageObj.sender;
-                return (
-                  <div key={messageObj.id}>
-                    <SingleMessage key={messageObj.id} msg={messageObj} isFirstFromSender={isFirstFromSender} />
-                  </div>
-                );
-              })
-            ) : (
-              <p>No messages yet. Start typing and send your first message.</p>
-            )}
+            <div className="flex flex-col overflow-x-auto">
+              <img src="/images/members.jpg" alt="Members" className="w-8 h-8 pr-2" onClick={toggleShowParticipants} />
+              {showParticipants && (
+                <ChatParticipants participants={participants} handleLeaveChat={handleLeaveChat} selectedUser={selectedUser} setSelectedUser={setSelectedUser} chatId={selectedChat.id}/>
+              )}
+            </div>
           </div>
+        )}
+        <div className="flex flex-col overflow-y-auto">
+          {messages ? (
+            messages.map((messageObj, index) => {
+              const isFirstFromSender = index === 0 || messages[index - 1].sender !== messageObj.sender;
+              return (
+              <div key={messageObj.id}>
+                <SingleMessage key={messageObj.id} msg={messageObj} isFirstFromSender={isFirstFromSender}/>
+              </div>
+            )})
+          ) : (
+            <p>No messages yet. Start typing and send your first message.</p>
+          )}
+        </div>
         </div>
         <MessageWindow chatId={selectedChat.id} sender={userData?.username || 'Unknown'} />
       </div>
