@@ -3,15 +3,21 @@ import Button from '../../../UI/Button/Button';
 import ChannelInfo from '../ChannelInfo/ChannelInfo';
 import { CHANNEL } from '../../../../common/enums';
 import ChatWindow from '../../../Channels/ChatWindow/ChatWindow';
+import PostWindow from '../../Posts/PostWIndow/PostWindow';
 
-export default function Channel({ channel, setViewChannel }) {
+export default function Channel({ channel, setViewChannel, setCurrChannel }) {
   const [chatVisible, setChatVisible] = useState(false);
   const [showChannelInfo, setShowChannelInfo] = useState(false);
 
   // console.log(Object.values(channel.chat)[0].id);
+  const handleHome = () => {
+    setViewChannel(false);
+    setCurrChannel(null);
+  };
+
   return (
     <div className='flex flex-grow flex-col items-center'>
-      <Button onClick={() => setViewChannel([false, null])}>Home</Button>
+      <Button onClick={() => handleHome()}>Home</Button>
       <h1 className='text-4xl cursor-pointer hover:underline' onClick={() => setShowChannelInfo(true)}>
         {channel.title}
       </h1>
@@ -28,7 +34,10 @@ export default function Channel({ channel, setViewChannel }) {
                 <ChatWindow selectedChat={channel} type={CHANNEL} />
               </>
             ) : (
-              <h1>Posts</h1>
+              <>
+                <h1>Posts</h1>
+                <PostWindow channel={channel} />
+              </>
             )}
           </>
         )}

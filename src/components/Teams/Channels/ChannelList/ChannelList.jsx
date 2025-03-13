@@ -5,7 +5,7 @@ import CreateComp from '../../../CreateComp/CreateComp';
 import { AppContext } from '../../../../store/app-context';
 import { variant } from '../../../../common/button-const';
 
-export default function ChannelList({ team, setViewChannel }) {
+export default function ChannelList({ team, setViewChannel, setCurrChannel }) {
   const [channels, setChannels] = useState([]);
   const [viewCreateWindow, setViewCreateWindow] = useState(false);
   const { userData } = useContext(AppContext);
@@ -22,6 +22,12 @@ export default function ChannelList({ team, setViewChannel }) {
     setChannels(filteredChannels);
   }, [team, userData]);
 
+  const changeChannel = (channel) => {
+    setViewChannel(false);
+    setCurrChannel(channel);
+    setViewChannel(true);
+  };
+
   return (
     <div className='flex flex-col bg-gray-800 p-4 overflow-y-auto'>
       <Button onClick={() => setViewCreateWindow(true)}>Create a Channel</Button>
@@ -34,7 +40,7 @@ export default function ChannelList({ team, setViewChannel }) {
         {channels &&
           channels.length > 0 &&
           channels.map((channel) => (
-            <li className={variant.chatTeamListItem} onClick={() => setViewChannel([true, channel])} key={channel.id}>
+            <li className={variant.chatTeamListItem} onClick={() => changeChannel(channel)} key={channel.id}>
               {channel.title}
             </li>
           ))}

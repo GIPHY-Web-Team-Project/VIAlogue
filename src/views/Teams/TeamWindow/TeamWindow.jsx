@@ -10,7 +10,8 @@ export default function TeamWindow() {
   const { teamId } = useParams();
   const [team, setTeam] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [viewChannel, setViewChannel] = useState([false, null]);
+  const [viewChannel, setViewChannel] = useState(false);
+  const [currChannel, setCurrChannel] = useState(null);
   // const [selectedChannel, setSelectedChannel] = useState(null);
 
   useEffect(() => {
@@ -37,9 +38,9 @@ export default function TeamWindow() {
           <Loading />
         ) : (
           <>
-            <ChannelList team={team} setViewChannel={setViewChannel} />
-            {viewChannel[0] === true ? (
-              <Channel channel={viewChannel[1]} setViewChannel={setViewChannel} />
+            <ChannelList team={team} setViewChannel={setViewChannel} setCurrChannel={setCurrChannel} />
+            {viewChannel === true ? (
+              <Channel channel={currChannel} setViewChannel={setViewChannel} setCurrChannel={setCurrChannel} />
             ) : (
               <>
                 <div className=''>
@@ -49,7 +50,7 @@ export default function TeamWindow() {
                 </div>
               </>
             )}
-            {team && !viewChannel[0] && (
+            {team && !viewChannel && (
               <div>
                 <h3>Team Members:</h3>
                 <p>{team.members.map((member) => member).join(', ')}</p>
