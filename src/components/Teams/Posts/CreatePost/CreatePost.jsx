@@ -6,11 +6,13 @@ import ContentInput from '../../../UI/ContentInput/ContentInput';
 import Button from '../../../UI/Button/Button';
 import { useParams } from 'react-router';
 
-export default function CreatePost({ channelId }) {
+export default function CreatePost({ channelId, setViewCreatePost }) {
   const { userData } = useContext(AppContext);
   const { teamId } = useParams();
 
   const handleCreatePost = async () => {
+    if (!userData) return;
+
     const title = document.getElementById('title').value;
     const content = document.getElementById('content').value;
 
@@ -19,15 +21,15 @@ export default function CreatePost({ channelId }) {
       return;
     }
 
-    if (title.trim().length < 16 || title.trim().length > 64) {
-      alert('Title must be between 16 and 64 characters');
-      return;
-    }
+    // if (title.trim().length < 16 || title.trim().length > 64) {
+    //   alert('Title must be between 16 and 64 characters');
+    //   return;
+    // }
 
-    if (content.trim().length < 32 || content.trim().length > 8192) {
-      alert('Content must be between 32 and 8192 characters');
-      return;
-    }
+    // if (content.trim().length < 32 || content.trim().length > 8192) {
+    //   alert('Content must be between 32 and 8192 characters');
+    //   return;
+    // }
 
     try {
       await uploadPost(userData.username, title, content, channelId, teamId);
@@ -35,6 +37,8 @@ export default function CreatePost({ channelId }) {
       console.error(error);
       alert('Failed to upload post!');
     }
+
+    setViewCreatePost(false);
   };
 
   return (
@@ -44,6 +48,7 @@ export default function CreatePost({ channelId }) {
         <TitleInput />
         <ContentInput />
         <Button onClick={() => handleCreatePost()}>Submit</Button>
+        <Button onClick={() => setViewCreatePost(false)}>Cancel</Button>
       </section>
     </div>
   );

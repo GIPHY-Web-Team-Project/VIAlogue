@@ -1,14 +1,25 @@
 import { useEffect, useState } from 'react';
 import Button from '../../../UI/Button/Button';
 import CreatePost from '../CreatePost/CreatePost';
+import { getChannelPosts } from '../../../../services/posts.services';
 
 export default function PostWindow({ channel }) {
-  const [posts, setPosts] = useState([]);
   const [viewCreatePost, setViewCreatePost] = useState(false);
+  const [posts, setPosts] = useState([]);
 
-  const handleCreatePost = () => {};
+  useEffect(() => {
+    if (!channel) return;
 
-  useEffect(() => {}, []);
+    const unsubscribe = getChannelPosts(channel.id, channel.teamId, setPosts);
+
+    return () => {
+      if (typeof unsubscribe === 'function') {
+        unsubscribe();
+      }
+    };
+  }, [channel]);
+
+  console.log(posts);
 
   return (
     <div>
@@ -18,14 +29,14 @@ export default function PostWindow({ channel }) {
         posts.map((post) => (
           <div key={post.id}>
             <p>{post.title}</p>
-            <p>{post.body}</p>
+            <p>{post.content}</p>
           </div>
         ))
       ) : (
         <p>No posts available.</p>
       )}
       <Button onClick={() => setViewCreatePost(true)}>Upload a Post</Button>
-      {viewCreatePost && <CreatePost channelId={channel.id} />}
+      {viewCreatePost && <CreatePost channelId={channel.id} setViewCreatePost={setViewCreatePost} />}
     </div>
   );
 }
