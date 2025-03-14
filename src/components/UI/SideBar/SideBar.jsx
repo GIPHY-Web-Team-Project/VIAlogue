@@ -3,6 +3,8 @@ import { ChatList } from '../../Channels/ChatList/ChatList';
 import Button from '../Button/Button';
 import { useContext } from 'react';
 import { AppContext } from '../../../store/app-context';
+import { NavLink } from 'react-router-dom';
+import { variant } from '../../../common/button-const';
 
 export default function SideBar({ type, username, handleNewChat, chats, setChats, setSelectedChat }) {
   const navigate = useNavigate();
