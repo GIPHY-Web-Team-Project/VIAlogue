@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { createUserHandle, getUserByUsername, getUserByEmail } from '../../services/user.service';
 import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth } from '../../config/firebase-config';
 import { nameCheck } from '../../utils/nameUtils';
 import Modal from '../../components/UI/Modal/Modal';
 import Button from '../../components/UI/Button/Button';
-import { TEXT_BUTTON } from '../../common/enums';
+import { variant } from '../../common/button-const';
 
 export default function Register() {
   const [user, setUser] = useState({
@@ -110,9 +110,9 @@ export default function Register() {
 
         <p className='text-gray-400 text-center mt-6'>
           Already have an account?{' '}
-          <Button btnStyle={TEXT_BUTTON} onClick={() => navigate('/login')} className='text-blue-500 underline'>
+          <Link className={variant.textButton} to={'/login'}>
             Login
-          </Button>
+          </Link>
         </p>
       </div>
       <Modal show={showModal} handleClose={handleCloseModal} message={modalMessage} />

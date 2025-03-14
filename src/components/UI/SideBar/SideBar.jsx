@@ -10,10 +10,18 @@ export default function SideBar({ type, username, handleNewChat, chats, setChats
 
   if (type === 'menu') {
     return (
-      <div className='flex flex-col justify-between h-full bg-gray-700 p-4'>
+      <div className='flex flex-col justify-between h-full bg-gray-700 p-2'>
         <div className='flex flex-col gap-4'>
-          <Button onClick={() => navigate('/teams')}>Teams</Button>
-          <Button onClick={() => navigate('/chats')}>Chats</Button>
+          <NavLink className={({ isActive }) => 
+            `${variant.home} ${isActive && "border-b-blue"} px-3 py-2 rounded-md`
+          } to={'/teams'}>
+            <img src="/images/teams.png" className="h-13 w-13 flex justify-self-center"/>
+            <span className='flex justify-center'>Teams</span>
+          </NavLink>
+          <NavLink className={variant.home} to={'/chats'}>
+            <img src="/images/updated-short-dark.png" className="h-15 w-15 flex justify-self-center"/>
+            <span className='flex justify-center'>Chats</span>
+          </NavLink>
         </div>
         <Button onClick={() => navigate(`/profile/${userData.username}`)}>Profile</Button>
       </div>

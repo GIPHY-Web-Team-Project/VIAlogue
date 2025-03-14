@@ -29,12 +29,13 @@ export const getMessagesByChatId = async (chatId, callback) => {
     });
 };
 
-export const addMessage = async (chatId, message, sender) => {
+export const addMessage = async (chatId, message, sender, gifUrl = "") => {
     const newMessage = {
         chatId,
         message,
         createdOn: new Date().toString(),
         sender,
+        gifUrl,
         reactions: {},
     }
     const result = await push(ref(db, `messages`), newMessage);

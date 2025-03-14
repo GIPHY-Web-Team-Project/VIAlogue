@@ -10,6 +10,7 @@ import Button from '../UI/Button/Button';
 import Modal from '../UI/Modal/Modal';
 import SelectUsersTeamChat from '../SelectUsers/SelectUsersTeamChat/SelectUsersTeamChat';
 import SelectUsersChannel from '../SelectUsers/SelectUsersChannel/SelectUsersChannel';
+import { useUsers } from '../../hooks/useUsers';
 
 export default function CreateComp({ setViewCreateWindow, type, team }) {
   const { userData } = useContext(AppContext);
@@ -18,6 +19,17 @@ export default function CreateComp({ setViewCreateWindow, type, team }) {
   const [showModal, setShowModal] = useState(false);
   const [members, setMembers] = useState(null);
   const navigate = useNavigate();
+  const { users } = useUsers(userData);
+  const [userList, setUserList] = useState([]);
+
+  useEffect(() => {
+    if (users) {
+      const availableUsers = users
+        .filter((user) => user.username !== userData.username)
+        .filter((user) => !selectedUsers.includes(user.username));
+      setUserList(availableUsers);
+    }
+  }, [users, selectedUsers]);
 
   useEffect(() => {
     if (type !== CHANNEL) return;
@@ -72,7 +84,7 @@ export default function CreateComp({ setViewCreateWindow, type, team }) {
       <TitleInput />
       <br /> <br />
       {type === CHANNEL && members && <SelectUsersChannel selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} teamMembers={members} type={type} />}
-      {type === TEAM && <SelectUsersTeamChat selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />}
+      {type === TEAM && <SelectUsersTeamChat selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} userList={userList} setUserList={setUserList}/>}
       <br /> <br />
       <div className=''>
         <Button

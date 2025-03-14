@@ -1,12 +1,12 @@
 import { useContext, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { Link } from 'react-router';
 import { AppContext } from '../../../store/app-context';
 import LearnMore from '../LearnMore/LearnMore';
-import { GET_STARTED, TEXT_BUTTON } from '../../../common/enums';
+import { TEXT_BUTTON } from '../../../common/enums';
 import Button from '../../../components/UI/Button/Button';
+import { variant } from '../../../common/button-const';
 
 export default function LandingPage() {
-  const navigate = useNavigate();
   const [learnMore, setLearnMore] = useState(false);
   const { userData } = useContext(AppContext);
 
@@ -24,9 +24,9 @@ export default function LandingPage() {
               <>
                 <h1 className='text-6xl font-bold'>Communication is key - start chatting now!</h1>
                 <div className='flex flex-col items-center mt-40 mr-60'>
-                  <Button btnStyle={GET_STARTED} onClick={() => navigate('/register')}>
+                  <Link className={variant.getStarted} to={'/register'}>
                     Get Started
-                  </Button>
+                  </Link>
                   <Button btnStyle={TEXT_BUTTON} onClick={() => setLearnMore(true)}>
                     Learn more
                   </Button>
@@ -43,7 +43,9 @@ export default function LandingPage() {
               <span>numOfUsers</span>
               <span>numOfTeams</span>
             </div>
-            <Button onClick={() => navigate('/register')}>Join now!</Button>
+            <Link className={variant.default} to={'/register'}>
+              Join now!
+            </Link>
           </section>
         </div>
       )}
@@ -52,9 +54,9 @@ export default function LandingPage() {
           <section className='flex justify-between pl-16 w-full mt-30'>
             <h1 className='text-6xl font-bold'>Welcome, {userData.firstName}!</h1>
             <div className='flex flex-col items-center mt-40 mr-60'>
-              <Button btnStyle={GET_STARTED} onClick={() => navigate('chats')}>
+              <Link className={variant.getStarted} to={'chats'}>
                 Start Chatting
-              </Button>
+              </Link>
             </div>
           </section>
         </div>
