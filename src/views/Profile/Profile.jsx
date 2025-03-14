@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ref, update, onValue } from 'firebase/database';
 import { AppContext } from '../../store/app-context';
 import { auth, db } from '../../config/firebase-config';
@@ -11,6 +11,7 @@ export default function Profile() {
   const { userData } = useContext(AppContext);
   const fileInputRef = useRef(null);
   const [profilePicture, setProfilePicture] = useState('');
+  const { username } = useParams();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -19,14 +20,16 @@ export default function Profile() {
     gender: '',
     birthdate: { day: '', month: '', year: '' },
     bio: '',
+    username: '',
+    email: '',
   });
   const navigate = useNavigate();
 
   const [isEditing, setIsEditing] = useState(false);
+  
 
   useEffect(() => {
-    if (userData) {
-      const userRef = ref(db, `users/${userData.username}`);
+      const userRef = ref(db, `users/${username}`);
       const unsubscribe = onValue(userRef, (snapshot) => {
         const data = snapshot.val();
         setFormData({
@@ -36,13 +39,18 @@ export default function Profile() {
           gender: data?.gender || '',
           birthdate: data?.birthdate || { day: '', month: '', year: '' },
           bio: data?.bio || '',
+          username: data.username,
+          email: data.email,
         });
         setProfilePicture(data?.profilePicture || '');
       });
 
       return () => unsubscribe();
-    }
-  }, [userData]);
+
+  }, [username]);
+    if (!userData) {
+    return null;
+  }
 
   const handleLogout = async () => {
     try {
@@ -119,11 +127,11 @@ export default function Profile() {
         <div className='mt-6 space-y-4'>
           <div>
             <label className='text-gray-400'>Username:</label>
-            <div className='bg-gray-700 p-2 rounded'>{userData?.username}</div>
+            <div className='bg-gray-700 p-2 rounded'>{formData.username}</div>
           </div>
           <div>
             <label className='text-gray-400'>Email:</label>
-            <div className='bg-gray-700 p-2 rounded'>{userData?.email}</div>
+            <div className='bg-gray-700 p-2 rounded'>{formData.email}</div>
           </div>
 
           {/* First Name */}
@@ -183,13 +191,15 @@ export default function Profile() {
               Save Profile
             </button>
           ) : (
-            <button onClick={() => setIsEditing(true)} className='bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-500 transition mr-2'>
+            userData.username === username && <button onClick={() => setIsEditing(true)} className='bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-500 transition mr-2'>
               Edit Profile
             </button>
           )}
-          <button onClick={handleLogout} className='bg-red-600 text-white py-2 px-4 rounded hover:bg-red-500 transition'>
-            Logout
-          </button>
+          {userData.username === username && (
+            <button onClick={handleLogout} className='bg-red-600 text-white py-2 px-4 rounded hover:bg-red-500 transition'>
+              Logout
+            </button>
+          )}
         </div>
       </div>
     </div>

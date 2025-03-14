@@ -5,12 +5,14 @@ import { useState } from 'react';
 import { useContext } from 'react';
 import { AppContext } from '../../../store/app-context';
 import EmojiList from '../EmojiList/EmojiList';
+import { useNavigate } from 'react-router';
 
 export const SingleMessage = ({ msg, isFirstFromSender }) => {
   const [showEdit, setShowEdit] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const { userData } = useContext(AppContext);
   const [showUsers, setShowUsers] = useState(false);
+  const navigate = useNavigate();
 
   const handleEdit = () => {
     setShowEdit(true);
@@ -34,7 +36,7 @@ export const SingleMessage = ({ msg, isFirstFromSender }) => {
         <div className='flex-1 flex-col pr-2 '>
           <div className='flex flex-row justify-between'>
             {isFirstFromSender && (
-              <div className='pt-4 flex flex-row justify-between w-full'>
+             <div className='pt-4 flex flex-row justify-between w-full cursor-pointer' onClick={() => navigate(`/profile/${msg.sender}`)}>
                 <h3 className={userData.username === msg.sender ? 'text-blue-700' : 'text-blue-300'}>
                   <strong>{userData.username === msg.sender ? 'You' : msg.sender}</strong>
                 </h3>

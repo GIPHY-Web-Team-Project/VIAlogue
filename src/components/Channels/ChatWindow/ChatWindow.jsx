@@ -30,7 +30,6 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
   const toggleShowParticipants = () => {
     setShowParticipants(!showParticipants);
   };
-
   const handleLeaveChat = async () => {
     const updatedUsers = selectedChat.users.filter((user) => user !== userData.username);
     await updateChat(selectedChat.id, { users: updatedUsers });

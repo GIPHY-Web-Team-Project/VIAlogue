@@ -1,9 +1,12 @@
 import { useNavigate } from 'react-router';
 import { ChatList } from '../../Channels/ChatList/ChatList';
 import Button from '../Button/Button';
+import { useContext } from 'react';
+import { AppContext } from '../../../store/app-context';
 
 export default function SideBar({ type, username, handleNewChat, chats, setChats, setSelectedChat }) {
   const navigate = useNavigate();
+  const { userData } = useContext(AppContext);
 
   if (type === 'menu') {
     return (
@@ -12,7 +15,7 @@ export default function SideBar({ type, username, handleNewChat, chats, setChats
           <Button onClick={() => navigate('/teams')}>Teams</Button>
           <Button onClick={() => navigate('/chats')}>Chats</Button>
         </div>
-        <Button onClick={() => navigate('/profile')}>Profile</Button>
+        <Button onClick={() => navigate(`/profile/${userData.username}`)}>Profile</Button>
       </div>
     );
   } else if (type === 'channels') {
