@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { AppContext } from '../../../store/app-context';
 import { NavLink } from 'react-router-dom';
 import { variant } from '../../../common/button-const';
+import ViewStatus from '../../../views/ViewStatus/ViewStatus';
 
 export default function SideBar({ type, username, handleNewChat, chats, setChats, setSelectedChat }) {
 
@@ -23,10 +24,13 @@ export default function SideBar({ type, username, handleNewChat, chats, setChats
             <span className='flex justify-center'>Chats</span>
           </NavLink>
         </div>
+        <div>
         <NavLink to={`/profile/${userData.username}`}>
           <img src={userData.profilePicture || '/images/123.jpg'} className="h-13 w-13 flex justify-self-center rounded-full"/>
           <span className='flex justify-center'>Profile</span>
         </NavLink>
+        <ViewStatus username={userData.username} />
+      </div>
       </div>
     );
   } else if (type === 'channels') {

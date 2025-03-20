@@ -13,6 +13,8 @@ import './App.css';
 import Profile from './views/Profile/Profile';
 import TeamsPage from './views/Teams/TeamsPage/TeamsPage';
 import TeamWindow from './views/Teams/TeamWindow/TeamWindow';
+import UserStatus from './components/UserStatus/UserStatus';
+
 
 export default function App() {
   const [appState, setAppState] = useState({
@@ -50,6 +52,7 @@ export default function App() {
       <AppContext.Provider value={{ ...appState, setAppState }}>
           <div className='font-medium flex flex-col w-screen h-screen bg-gray-900 text-white'>
             { !user && <Header />}
+            <UserStatus /> 
           <Routes>
             <Route path='/' element={<LandingPage />} />
             <Route path='/register' element={<Register />} />

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ref, update, onValue } from 'firebase/database';
+import { ref, update, onValue, onDisconnect, set } from 'firebase/database';
 import { AppContext } from '../../store/app-context';
 import { auth, db } from '../../config/firebase-config';
 import { signOut } from 'firebase/auth';
@@ -51,9 +51,17 @@ export default function Profile() {
     return null;
   }
 
+  const updateUserStatus = (username, status) => {
+      const userStatusRef = ref(db, 'status/' + username);
+      set(userStatusRef, { status: status });
+      onDisconnect(userStatusRef).set({ status: 'offline' });
+    };
+
   const handleLogout = async () => {
     try {
       await signOut(auth);
+      
+      updateUserStatus(userData.username, 'offline');
       navigate('/login');
     } catch (error) {
       console.error('Error logging out:', error);
@@ -69,7 +77,6 @@ export default function Profile() {
 
       const userRef = ref(db, `users/${userData.username}`);
       await update(userRef, updatedData);
-
       setIsEditing(false);
     } catch (error) {
       console.error('Error updating profile:', error);
