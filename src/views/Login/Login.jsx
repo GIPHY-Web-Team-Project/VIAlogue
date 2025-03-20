@@ -2,28 +2,19 @@ import { AppContext } from '../../store/app-context';
 import { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { ref, set, onDisconnect } from 'firebase/database';
 import { auth } from '../../config/firebase-config';
-import { db } from '../../config/firebase-config';
 import Button from '../../components/UI/Button/Button';
 import { CANCEL } from '../../common/enums';
 import { variant } from '../../common/button-const';
 
 
 export default function Login() {
-  const { setAppState, userData } = useContext(AppContext);
+  const { setAppState } = useContext(AppContext);
   const [user, setUser] = useState({
     email: '',
     password: '',
   });
   const navigate = useNavigate();
-
-  const updateUserStatus = (username, status) => {
-    const userStatusRef = ref(db, 'status/' + username);
-    set(userStatusRef, { status: status });
-
-    onDisconnect(userStatusRef).set({ status: 'offline' });
-  };
 
   const login = () => {
     if (!user.email || !user.password) {
@@ -38,8 +29,6 @@ export default function Login() {
           user: loggedInUser,
           userData: null,
         });
-
-        updateUserStatus(userData.username, 'online');
 
         navigate('/chats');
       })

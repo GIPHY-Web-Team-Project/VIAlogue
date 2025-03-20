@@ -13,7 +13,6 @@ export default function UserStatus() {
       const connectedRef = ref(db, '.info/connected');
       onValue(connectedRef, (snapshot) => {
         if (snapshot.val() === true) {
-          // Потребителят е онлайн
           set(statusRef, { status: 'online' });
 
           onDisconnect(statusRef).set({ status: 'offline' });
