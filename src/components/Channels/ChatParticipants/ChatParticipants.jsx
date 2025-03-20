@@ -7,6 +7,8 @@ import { CHAT_PARTICIPANTS_BTNS } from '../../../common/enums';
 import { useUsers } from '../../../hooks/useUsers';
 import { updateChat } from '../../../services/chat.services';
 import SelectUsersTeamChat from '../../SelectUsers/SelectUsersTeamChat/SelectUsersTeamChat';
+import ViewStatus from '../../../views/ViewStatus/ViewStatus';
+
 export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, setSelectedUser, chatId }) => {
     const { userData } = useContext(AppContext);
     const [users, setUsers] = useState([]);
@@ -96,6 +98,7 @@ export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, 
                                     </Button>
                                 </>
                             )}
+                            <ViewStatus username={user.username} type={'participants'} />
                         </div>
                     </li>
                 ))}
