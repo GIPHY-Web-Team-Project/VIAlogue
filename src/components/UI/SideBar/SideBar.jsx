@@ -25,7 +25,10 @@ export default function SideBar({ type, username, handleNewChat, chats, setChats
             <span className='flex justify-center'>Chats</span>
           </NavLink>
         </div>
-        <Button onClick={() => navigate(`/profile/${userData.username}`)}>Profile</Button>
+        <NavLink to={`/profile/${userData.username}`}>
+          <img src={userData.profilePicture} className="h-13 w-13 flex justify-self-center rounded-full"/>
+          <span className='flex justify-center'>Profile</span>
+        </NavLink>
       </div>
     );
   } else if (type === 'channels') {

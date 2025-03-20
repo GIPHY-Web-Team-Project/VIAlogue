@@ -43,7 +43,7 @@ export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, 
     }, [participants, userData, allUsers]);
 
   const handleProfileView = (user) => {
-    navigate(`/${user.username}`);
+    navigate(`/profile/${user.username}`);
   };
 
   const handleUserClick = (user) => {

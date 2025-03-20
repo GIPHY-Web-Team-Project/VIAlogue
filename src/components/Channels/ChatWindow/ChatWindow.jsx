@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef  } from 'react';
 import { AppContext } from '../../../store/app-context';
 import { MessageWindow } from '../MessageWindow/MessageWindow';
 import { getMessagesByChatId } from '../../../services/message.services';
@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import { updateChat } from '../../../services/chat.services';
 import ChatParticipants from '../ChatParticipants/ChatParticipants';
 import EditChat from '../EditChat/EditChat';
+
+
 export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
   const { userData } = useContext(AppContext);
   const [messages, setMessages] = useState(null);
@@ -16,18 +18,36 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [editTitle, setEditTitle] = useState(false);
   const [edit, setEdit] = useState(false);
+  const messagesEndRef = useRef(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!selectedChat?.id) {
+      setLoading(false);
       return;
     }
-    const unsubscribe = getMessagesByChatId(selectedChat?.id, setMessages);
+
+    setLoading(true);
+
+    const unsubscribe = getMessagesByChatId(selectedChat?.id, (fetchedMessages) => {
+      setMessages(fetchedMessages);
+      setLoading(false);
+    });
+
     return () => {
       if (typeof unsubscribe === 'function') {
         unsubscribe();
       }
     };
   }, [selectedChat.id]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (messagesEndRef.current) {
+        messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  }, [messages]);
 
   const toggleShowParticipants = () => {
     setShowParticipants(!showParticipants);
@@ -85,8 +105,12 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
             </div>
           </div>
         )}
-        <div className="flex flex-col overflow-y-auto">
-          {messages ? (
+        <div className="flex flex-col overflow-y-auto h-[80vh] pb-4">
+        {loading ? (
+            <div className="flex items-center justify-center h-full">
+              <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-blue-500"></div>
+            </div>
+          ) : messages && messages.length > 0 ? (
             messages.map((messageObj, index) => {
               const isFirstFromSender = index === 0 || messages[index - 1].sender !== messageObj.sender;
               return (
@@ -97,6 +121,7 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
           ) : (
             <p>No messages yet. Start typing and send your first message.</p>
           )}
+          <div ref={messagesEndRef}></div>
         </div>
         </div>
         <MessageWindow chatId={selectedChat.id} sender={userData?.username || 'Unknown'} />
