@@ -1,13 +1,11 @@
-import { useNavigate } from 'react-router';
 import { ChatList } from '../../Channels/ChatList/ChatList';
-import Button from '../Button/Button';
 import { useContext } from 'react';
 import { AppContext } from '../../../store/app-context';
 import { NavLink } from 'react-router-dom';
 import { variant } from '../../../common/button-const';
 
 export default function SideBar({ type, username, handleNewChat, chats, setChats, setSelectedChat }) {
-  const navigate = useNavigate();
+
   const { userData } = useContext(AppContext);
 
   if (type === 'menu') {
@@ -26,7 +24,7 @@ export default function SideBar({ type, username, handleNewChat, chats, setChats
           </NavLink>
         </div>
         <NavLink to={`/profile/${userData.username}`}>
-          <img src={userData.profilePicture} className="h-13 w-13 flex justify-self-center rounded-full"/>
+          <img src={userData.profilePicture || '/images/123.jpg'} className="h-13 w-13 flex justify-self-center rounded-full"/>
           <span className='flex justify-center'>Profile</span>
         </NavLink>
       </div>

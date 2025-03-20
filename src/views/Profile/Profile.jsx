@@ -5,7 +5,6 @@ import { AppContext } from '../../store/app-context';
 import { auth, db } from '../../config/firebase-config';
 import { signOut } from 'firebase/auth';
 import SideBar from '../../components/UI/SideBar/SideBar';
-import defaultProfilePicture from '../../../public/images/123.jpg';
 
 export default function Profile() {
   const { userData } = useContext(AppContext);
@@ -119,7 +118,7 @@ export default function Profile() {
       <SideBar type='menu' />
       <div className='bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-prose mx-auto'>
         <div className='flex flex-col items-center'>
-          <img src={profilePicture || defaultProfilePicture} alt='Profile' className='w-40 h-40 rounded-full cursor-pointer' onClick={() => fileInputRef.current.click()} />
+          <img src={profilePicture || '/images/123.jpg'} alt='Profile' className='w-40 h-40 rounded-full cursor-pointer' onClick={() => fileInputRef.current.click()} />
           <input type='file' ref={fileInputRef} className='hidden' onChange={handleProfilePictureChange} />
         </div>
         <div className='flex flex-row mt-6 space-y-4 justify-between'>

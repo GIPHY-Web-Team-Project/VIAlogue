@@ -81,7 +81,7 @@ export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, 
                     <li key={user.uid || user.username} className="p-2 hover:bg-gray-700 cursor-pointer">
                         <div className="flex flex-row">
                             <span>
-                                <img className="mr-2 h-5 w-5 rounded-full overflow-hidden bg-gray-100" src={user.profilePicture} alt={user.username} />
+                                <img className="mr-2 h-5 w-5 rounded-full overflow-hidden bg-gray-100" src={user.profilePicture || '/images/123.jpg'} alt={user.username} />
                             </span>
                             <span onClick={() => handleUserClick(user.username)} className="mr-2">{user.username}</span>
                             {(userData.username === user.username) && showLeave && (
