@@ -6,6 +6,24 @@ import PropTypes from 'prop-types';
 
 const statusOptions = ['online', 'busy', 'away', 'do not disturb'];
 
+/**
+ * Component for setting the user's status.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Function} props.setShowDropdown - Function to toggle the visibility of the dropdown.
+ * @param {string} props.status - The current status of the user.
+ * @param {Function} props.setStatus - Function to update the user's status.
+ *
+ * @returns {JSX.Element} A dropdown menu for selecting a status.
+ *
+ * @example
+ * <SetStatus
+ *   setShowDropdown={setShowDropdown}
+ *   status={currentStatus}
+ *   setStatus={updateStatus}
+ * />
+ */
 export default function SetStatus({ setShowDropdown, status, setStatus }) {
     const { userData } = useContext(AppContext);
 

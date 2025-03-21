@@ -5,6 +5,30 @@ import SetStatus from '../../components/SetStatus/SetStatus';
 import { AppContext } from '../../store/app-context';
 import PropTypes from 'prop-types';
 
+/**
+ * ViewStatus Component
+ *
+ * This component displays the online status of a user and allows the user to change their status
+ * if they are the logged-in user. The status is fetched from a database and updated in real-time.
+ *
+ * @component
+ * @param {Object} props - Component props.
+ * @param {string} props.username - The username of the user whose status is being displayed.
+ * @param {string} [props.type='user'] - The type of the entity (default is 'user').
+ *
+ * @returns {JSX.Element} A React component that displays the user's status and a dropdown for changing it.
+ *
+ * @example
+ * <ViewStatus username="john_doe" type="user" />
+ *
+ * @dependencies
+ * - useContext from React: To access the global application context.
+ * - useState from React: To manage the component's local state.
+ * - useEffect from React: To handle side effects like subscribing to database changes.
+ * - AppContext: The global application context for accessing user data.
+ * - ref and onValue from Firebase: To interact with the Firebase Realtime Database.
+ * - SetStatus: A child component for changing the user's status.
+ */
 export default function ViewStatus({ username, type = 'user' }) {
     const { userData } = useContext(AppContext);
     const [status, setStatus] = useState('offline');

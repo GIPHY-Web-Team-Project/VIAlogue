@@ -8,6 +8,50 @@ import { CANCEL } from '../../common/enums';
 import { variant } from '../../common/button-const';
 
 
+/**
+ * Login component for user authentication.
+ *
+ * This component provides a login form where users can enter their email and password
+ * to authenticate. It uses Firebase's `signInWithEmailAndPassword` for authentication
+ * and updates the application state upon successful login.
+ *
+ * @component
+ *
+ * @returns {JSX.Element} The rendered Login component.
+ *
+ * @example
+ * // Usage in a React application
+ * import Login from './Login';
+ * 
+ * function App() {
+ *   return <Login />;
+ * }
+ *
+ * @function
+ * @name Login
+ *
+ * @description
+ * - Displays a login form with email and password fields.
+ * - Validates user input to ensure both fields are filled.
+ * - Authenticates the user using Firebase and updates the app state.
+ * - Redirects the user to the `/chats` page upon successful login.
+ * - Provides a link to the registration page for new users.
+ *
+ * @dependencies
+ * - `useContext` from React for accessing the application context.
+ * - `useState` from React for managing form state.
+ * - `useNavigate` from React Router for navigation.
+ * - `signInWithEmailAndPassword` from Firebase for authentication.
+ *
+ * @hooks
+ * - `useContext(AppContext)` - Accesses the application state context.
+ * - `useState` - Manages the state of the email and password fields.
+ * - `useNavigate` - Handles navigation after login.
+ *
+ * @events
+ * - `onClick` - Triggers the login function when the "Login" button is clicked.
+ * - `onChange` - Updates the email and password state when the input fields change.
+ */
 export default function Login() {
   const { setAppState } = useContext(AppContext);
   const [user, setUser] = useState({

@@ -7,6 +7,43 @@ import { signOut } from 'firebase/auth';
 import SideBar from '../../components/UI/SideBar/SideBar';
 import ViewStatus from '../ViewStatus/ViewStatus';
 
+/**
+ * Profile component for displaying and editing user profile information.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered Profile component.
+ *
+ * @description
+ * This component fetches and displays user profile data, including profile picture,
+ * username, email, first name, last name, age, phone, gender, birthdate, and bio.
+ * It allows the user to edit their profile information and save changes.
+ * The component also provides functionality for logging out.
+ *
+ * @requires useContext - To access the AppContext for user data.
+ * @requires useRef - To manage the file input reference for profile picture upload.
+ * @requires useState - To manage local state for profile data and editing mode.
+ * @requires useEffect - To fetch user data from the database on component mount.
+ * @requires useParams - To retrieve the username from the URL parameters.
+ * @requires useNavigate - To navigate to different routes.
+ *
+ * @function handleLogout
+ * Logs the user out, updates their status to "offline", and navigates to the login page.
+ *
+ * @function handleSaveProfile
+ * Saves the updated profile data to the database and exits editing mode.
+ *
+ * @function handleProfilePictureChange
+ * Handles the profile picture upload and updates the local state with the new picture.
+ *
+ * @function calculateAge
+ * Calculates the user's age based on their birthdate.
+ *
+ * @function handleChange
+ * Handles changes to form inputs and updates the local state accordingly.
+ *
+ * @example
+ * <Profile />
+ */
 export default function Profile() {
   const { userData } = useContext(AppContext);
   const fileInputRef = useRef(null);
