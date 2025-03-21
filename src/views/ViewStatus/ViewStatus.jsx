@@ -1,13 +1,15 @@
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ref, onValue } from 'firebase/database';
 import { db } from '../../config/firebase-config';
 import SetStatus from '../../components/SetStatus/SetStatus';
 import { AppContext } from '../../store/app-context';
+import PropTypes from 'prop-types';
 
 export default function ViewStatus({ username, type = 'user' }) {
     const { userData } = useContext(AppContext);
     const [status, setStatus] = useState('offline');
     const [showDropdown, setShowDropdown] = useState(false);
+
     useEffect(() => {
         const statusRef = ref(db, 'status/' + username);
 
@@ -23,8 +25,6 @@ export default function ViewStatus({ username, type = 'user' }) {
 
     return (
         <div className='text-gray-400 text-center mt-2'>
-            
-                
             <div
                 className='relative inline-block text-center mt-2'
                 onMouseEnter={() => setShowDropdown(true)}
@@ -44,3 +44,8 @@ export default function ViewStatus({ username, type = 'user' }) {
         </div>
     );
 }
+
+ViewStatus.propTypes = {
+    username: PropTypes.string.isRequired,
+    type: PropTypes.string,
+};

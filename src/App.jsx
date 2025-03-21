@@ -1,7 +1,7 @@
 import LandingPage from './views/LandingPage/main/LandingPage';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AppContext } from './store/app-context';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './components/Header/Header';
 import ChatPage from './views/ChatPage/ChatPage';
 import Register from './views/Register/Register';
@@ -14,7 +14,6 @@ import Profile from './views/Profile/Profile';
 import TeamsPage from './views/Teams/TeamsPage/TeamsPage';
 import TeamWindow from './views/Teams/TeamWindow/TeamWindow';
 import UserStatus from './components/UserStatus/UserStatus';
-
 
 export default function App() {
   const [appState, setAppState] = useState({

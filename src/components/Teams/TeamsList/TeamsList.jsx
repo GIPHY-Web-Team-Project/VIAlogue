@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { getTeamsByUsername } from '../../../services/team.services';
 import { AppContext } from '../../../store/app-context';
 import Team from '../Team/Team';

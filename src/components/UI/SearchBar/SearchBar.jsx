@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Button from '../Button/Button';
 import { MEMBERS, USERS } from '../../../common/enums';
+import PropTypes from 'prop-types';
 
 export default function SearchBar({ type, objects, objectList, setObjectList, selectedUsers }) {
   const [selectedSearch, setSelectedSearch] = useState('username');
@@ -46,3 +47,11 @@ export default function SearchBar({ type, objects, objectList, setObjectList, se
     </div>
   );
 }
+
+SearchBar.propTypes = {
+  type: PropTypes.string,
+  objects: PropTypes.array,
+  objectList: PropTypes.array,
+  setObjectList: PropTypes.func,
+  selectedUsers: PropTypes.array,
+};

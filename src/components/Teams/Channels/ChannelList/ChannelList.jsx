@@ -1,9 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Button from '../../../UI/Button/Button';
 import { CHANNEL } from '../../../../common/enums';
 import CreateComp from '../../../CreateComp/CreateComp';
 import { AppContext } from '../../../../store/app-context';
 import { variant } from '../../../../common/button-const';
+import PropTypes from 'prop-types';
 
 export default function ChannelList({ team, setViewChannel }) {
   const [channels, setChannels] = useState([]);
@@ -49,3 +50,8 @@ export default function ChannelList({ team, setViewChannel }) {
 //     {channel.title}
 //   </li>
 // ))
+
+ChannelList.propTypes = {
+  team: PropTypes.object,
+  setViewChannel: PropTypes.func,
+};

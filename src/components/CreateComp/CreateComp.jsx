@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../store/app-context';
 import { useNavigate } from 'react-router';
 import { MAX_TEAM_TITLE_LENGTH, MIN_TEAM_TITLE_LENGTH } from '../../common/constants';
@@ -11,6 +11,7 @@ import Modal from '../UI/Modal/Modal';
 import SelectUsersTeamChat from '../SelectUsers/SelectUsersTeamChat/SelectUsersTeamChat';
 import SelectUsersChannel from '../SelectUsers/SelectUsersChannel/SelectUsersChannel';
 import { useUsers } from '../../hooks/useUsers';
+import PropTypes from 'prop-types';
 
 export default function CreateComp({ setViewCreateWindow, type, team }) {
   const { userData } = useContext(AppContext);
@@ -100,3 +101,9 @@ export default function CreateComp({ setViewCreateWindow, type, team }) {
     </div>
   );
 }
+
+CreateComp.propTypes = {
+  setViewCreateWindow: PropTypes.func,
+  type: PropTypes.string,
+  team: PropTypes.object,
+};

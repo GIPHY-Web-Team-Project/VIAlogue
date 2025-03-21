@@ -8,8 +8,25 @@ import { useNavigate } from 'react-router-dom';
 import { updateChat } from '../../../services/chat.services';
 import ChatParticipants from '../ChatParticipants/ChatParticipants';
 import EditChat from '../EditChat/EditChat';
+import PropTypes from 'prop-types';
 
-
+/**
+ * ChatWindow component renders the chat interface for a selected chat.
+ *
+ * @component
+ * @param {Object} props - The props object.
+ * @param {Object} props.selectedChat - The currently selected chat object.
+ * @param {Array} props.participants - The list of participants in the chat.
+ * @param {Function} props.setSelectedChat - Function to update the selected chat.
+ *
+ * @returns {JSX.Element} The rendered ChatWindow component.
+ *
+ * @description
+ * - Displays the chat messages, participants, and chat title.
+ * - Allows editing the chat title and leaving the chat.
+ * - Automatically scrolls to the latest message when new messages are added.
+ * - Handles loading state while fetching messages.
+ */
 export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
   const { userData } = useContext(AppContext);
   const [messages, setMessages] = useState(null);
@@ -52,6 +69,21 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
   const toggleShowParticipants = () => {
     setShowParticipants(!showParticipants);
   };
+
+  /**
+   * Handles the logic for leaving a chat.
+   * 
+   * This function performs the following actions:
+   * 1. Removes the current user from the list of users in the selected chat.
+   * 2. Updates the chat data on the server to reflect the changes.
+   * 3. If no users remain in the chat, marks the chat as deleted.
+   * 4. Removes the last opened chat reference from local storage.
+   * 5. Resets the selected chat state and navigates the user back to the chats page.
+   * 
+   * @async
+   * @function handleLeaveChat
+   * @returns {Promise<void>} Resolves when the chat leave process is complete.
+   */
   const handleLeaveChat = async () => {
     const updatedUsers = selectedChat.users.filter((user) => user !== userData.username);
     await updateChat(selectedChat.id, updatedUsers, "users");
@@ -131,3 +163,9 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
 };
 
 export default ChatWindow;
+
+ChatWindow.propTypes = {
+  selectedChat: PropTypes.object,
+  participants: PropTypes.array,
+  setSelectedChat: PropTypes.func,
+};

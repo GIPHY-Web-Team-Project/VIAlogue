@@ -1,13 +1,35 @@
 import React, { useContext, useEffect } from 'react';
 import { AppContext } from '../../store/app-context';
-// import { ChatList } from '../../components/Channels/ChatList/ChatList';
 import { ChatWindow } from '../../components/Channels/ChatWindow/ChatWindow';
 import { useState } from 'react';
 import SideBar from '../../components/UI/SideBar/SideBar';
 import LandingPage from '../LandingPage/main/LandingPage';
 import CreateChat from '../../components/Channels/CreateChat/CreateChat';
-// import { ParticipantsTab } from '../../components/ParticipantsTab/ParticipantsTab';
 
+/**
+ * ChatPage component renders the main chat interface for the application.
+ * It manages the state of the selected chat, available chats, participants, 
+ * and the visibility of the new chat creation interface.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered ChatPage component.
+ *
+ * @description
+ * - If the user is not logged in (`userData` is null), it redirects to the LandingPage.
+ * - Displays a sidebar for navigation and chat channels.
+ * - Allows users to create a new chat or select an existing chat.
+ * - Persists the last opened chat in localStorage for each user.
+ *
+ * @hook useContext(AppContext) - Accesses the global application context to retrieve user data.
+ * @hook useState - Manages local state for selected chat, chats, participants, and new chat visibility.
+ * @hook useEffect - Handles side effects for initializing chats and persisting the last opened chat.
+ *
+ * @state {Object|null} selectedChat - The currently selected chat object or null if no chat is selected.
+ * @state {Array|null} chats - The list of available chats or null if not loaded.
+ * @state {Array} participants - The list of participants in the selected chat.
+ * @state {boolean} showNewChat - Indicates whether the new chat creation interface is visible.
+ *
+ */
 export const ChatPage = () => {
   const { userData } = useContext(AppContext);
   const [selectedChat, setSelectedChat] = useState(null);

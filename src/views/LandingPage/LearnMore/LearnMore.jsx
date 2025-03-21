@@ -1,6 +1,18 @@
 import { useNavigate } from 'react-router';
 import Button from '../../../components/UI/Button/Button';
+import React from 'react';
+import PropTypes from 'prop-types';
 
+/**
+ * LearnMore component displays information about the features of VIALOGUE
+ * and provides a button to navigate to the registration page.
+ *
+ * @param {Object} props - The component props.
+ * @param {Function} props.setLearnMore - A function to update the state of the parent component
+ *                                        indicating whether the LearnMore component is visible.
+ *
+ * @returns {JSX.Element} The rendered LearnMore component.
+ */
 export default function LearnMore({ setLearnMore }) {
   const navigate = useNavigate();
 
@@ -22,3 +34,7 @@ export default function LearnMore({ setLearnMore }) {
     </div>
   );
 }
+
+LearnMore.propTypes = {
+  setLearnMore: PropTypes.func.isRequired,
+};

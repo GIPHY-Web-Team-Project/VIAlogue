@@ -1,5 +1,5 @@
 import { AppContext } from '../../store/app-context';
-import { useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../config/firebase-config';
@@ -61,7 +61,7 @@ export default function Login() {
           <Button onClick={login}>Login</Button>
         </div>
         <p className='text-gray-400 text-center mt-6'>
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <Link className={variant.textButton} to={'/register'}>
             Register
           </Link>

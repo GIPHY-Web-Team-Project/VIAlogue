@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '../Button/Button';
+import PropTypes from 'prop-types';
 
 const Modal = ({ show, handleClose, message }) => {
   if (!show) {
@@ -17,3 +18,9 @@ const Modal = ({ show, handleClose, message }) => {
 };
 
 export default Modal;
+
+Modal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  message: PropTypes.string.isRequired,
+};

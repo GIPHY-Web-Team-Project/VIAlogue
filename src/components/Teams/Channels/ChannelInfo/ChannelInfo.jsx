@@ -1,9 +1,10 @@
-import { useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Button from '../../../UI/Button/Button';
 import { AppContext } from '../../../../store/app-context';
 import { updateChannel } from '../../../../services/channel.services';
 import { useParams } from 'react-router';
 import AreYouSure from '../../../UI/AreYouSure/AreYouSure';
+import PropTypes from 'prop-types';
 
 export default function ChannelInfo({ channel, setShowChannelInfo }) {
   const [showSure, setShowSure] = useState(false);
@@ -43,3 +44,8 @@ export default function ChannelInfo({ channel, setShowChannelInfo }) {
     </div>
   );
 }
+
+ChannelInfo.propTypes = {
+  channel: PropTypes.object,
+  setShowChannelInfo: PropTypes.func,
+};

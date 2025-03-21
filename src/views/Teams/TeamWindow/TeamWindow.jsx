@@ -1,6 +1,6 @@
 import { useParams } from 'react-router';
 import SideBar from '../../../components/UI/SideBar/SideBar';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getTeamById } from '../../../services/team.services';
 import ChannelList from '../../../components/Teams/Channels/ChannelList/ChannelList';
 import Loading from '../../../components/UI/Loading/Loading';

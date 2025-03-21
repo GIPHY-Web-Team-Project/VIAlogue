@@ -8,7 +8,22 @@ import { useUsers } from '../../../hooks/useUsers';
 import { updateChat } from '../../../services/chat.services';
 import SelectUsersTeamChat from '../../SelectUsers/SelectUsersTeamChat/SelectUsersTeamChat';
 import ViewStatus from '../../../views/ViewStatus/ViewStatus';
+import PropTypes from 'prop-types';
 
+/**
+ * ChatParticipants component displays a list of chat participants and provides functionality 
+ * to view profiles, leave the chat, and add new participants. It manages the state of selected 
+ * users, users not in the chat, and visibility of various UI elements.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Array<string>} props.participants - List of usernames of current chat participants.
+ * @param {Function} props.handleLeaveChat - Callback function to handle leaving the chat.
+ * @param {string} props.selectedUser - The currently selected user.
+ * @param {Function} props.setSelectedUser - Function to update the selected user.
+ * @param {string} props.chatId - The ID of the current chat.
+ * @returns {JSX.Element} The rendered ChatParticipants component.
+ */
 export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, setSelectedUser, chatId }) => {
     const { userData } = useContext(AppContext);
     const [users, setUsers] = useState([]);
@@ -59,6 +74,14 @@ export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, 
     }
   };
 
+    /**
+     * Toggles the visibility of the user selection interface and updates the list of users not in the chat.
+     * If the list of users not in the chat is empty, it populates it with users who are not the current user
+     * and are not already participants in the chat.
+     *
+     * @function toggleSelectUsers
+     * @returns {void}
+     */
     const toggleSelectUsers = () => {
         setShowSelectUsers(!showSelectUsers);
         if(usersNotInChat.length === 0) {
@@ -67,6 +90,15 @@ export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, 
         }
     }
 
+    /**
+     * Handles adding new users to the chat by merging selected users with existing participants
+     * and updating the chat data.
+     *
+     * @async
+     * @function handleNewUsers
+     * @returns {Promise<void>} Resolves when the chat is successfully updated.
+     * @throws {Error} Logs an error to the console if the chat update fails.
+     */
     const handleNewUsers = async () => {
         const newUsers = selectedUsers.map((user) => user);
         try {
@@ -120,3 +152,11 @@ export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, 
 }
 
 export default ChatParticipants;
+
+ChatParticipants.propTypes = {
+    participants: PropTypes.array.isRequired,
+    handleLeaveChat: PropTypes.func.isRequired,
+    selectedUser: PropTypes.string,
+    setSelectedUser: PropTypes.func.isRequired,
+    chatId: PropTypes.string
+};

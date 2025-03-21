@@ -1,9 +1,23 @@
-import React, { useEffect, useContext, useState } from 'react';
-import { getChatsByUsername } from '../../../services/chat.services';
-import Button from '../../UI/Button/Button';
+import React, { useContext, useEffect, useState } from 'react';
 import { CHAT_TEAM_LIST_ITEM, NONE } from '../../../common/enums';
+import { getChatsByUsername } from '../../../services/chat.services';
 import { AppContext } from '../../../store/app-context';
+import Button from '../../UI/Button/Button';
+import PropTypes from 'prop-types';
 
+/**
+ * ChatList component displays a list of chat conversations for a given user.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {string} props.username - The username of the current user.
+ * @param {Function} props.handleNewChat - Callback function to handle the creation of a new chat.
+ * @param {Array} props.chats - Array of chat objects to be displayed.
+ * @param {Function} props.setChats - Function to update the list of chats.
+ * @param {Function} props.setSelectedChat - Function to set the currently selected chat.
+ *
+ * @returns {JSX.Element} The rendered ChatList component.
+ */
 export const ChatList = ({ username, handleNewChat, chats, setChats, setSelectedChat }) => {
   const { userData } = useContext(AppContext); 
   const [loading, setLoading] = useState(true);
@@ -64,3 +78,13 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
     </div>
   );
 };
+
+export default ChatList;
+
+ChatList.propTypes = {
+  username: PropTypes.string,
+  handleNewChat: PropTypes.func,
+  chats: PropTypes.array,
+  setChats: PropTypes.func,
+  setSelectedChat: PropTypes.func,
+}

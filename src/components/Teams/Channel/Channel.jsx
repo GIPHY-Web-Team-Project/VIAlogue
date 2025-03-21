@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Button from '../../UI/Button/Button';
 import ChannelInfo from '../Channels/ChannelInfo/ChannelInfo';
+import PropTypes from 'prop-types';
 
 export default function Channel({ channel, setViewChannel }) {
   const [chatVisible, setChatVisible] = useState(false);
@@ -28,3 +29,8 @@ export default function Channel({ channel, setViewChannel }) {
     </div>
   );
 }
+
+Channel.propTypes = {
+  channel: PropTypes.object.isRequired,
+  setViewChannel: PropTypes.func.isRequired,
+};

@@ -1,10 +1,11 @@
 import { MIN_CHAT_TITLE_LENGTH, MAX_CHAT_TITLE_LENGTH } from '../common/constants';
 
+
 /**
- * Checks if the provided name is valid based on length and character constraints.
+ * Validates the length of a chat title.
  *
- * @param {string} title - The title to be checked.
- * @returns {string} - Returns the title if valid, otherwise returns an error message.
+ * @param {string} title - The chat title to validate.
+ * @returns {string} Returns the original title if valid, otherwise an error message.
  */
 export const titleCheck = (title) => {
   if (title.length < MIN_CHAT_TITLE_LENGTH || title.length > MAX_CHAT_TITLE_LENGTH) {

@@ -1,7 +1,8 @@
 import { ref, set } from 'firebase/database';
 import { db } from '../../config/firebase-config';
 import { AppContext } from '../../store/app-context';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
+import PropTypes from 'prop-types';
 
 const statusOptions = ['online', 'busy', 'away', 'do not disturb'];
 
@@ -32,3 +33,9 @@ export default function SetStatus({ setShowDropdown, status, setStatus }) {
         </div>
     );
 }
+
+SetStatus.propTypes = {
+    setShowDropdown: PropTypes.func.isRequired,
+    status: PropTypes.string.isRequired,
+    setStatus: PropTypes.func.isRequired,
+};
