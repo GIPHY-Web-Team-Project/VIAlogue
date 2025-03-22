@@ -39,21 +39,22 @@ export const getMessagesByChatId = async (chat, callback, type) => {
   });
 };
 
-export const addMessage = async (chat, message, sender, type) => {
+export const addMessage = async (chatObj, message, sender, type, gifUrl = '') => {
   const newMessage = {
-    chatId: chat.id,
+    chatId: chatObj.id,
     message,
     createdOn: new Date().toString(),
     sender,
+    gifUrl,
     reactions: {},
   };
   const result = await push(ref(db, `messages`), newMessage);
   const id = result.key;
   await update(ref(db, `messages/${id}`), { id });
   if (type === CHANNEL) {
-    await update(ref(db, `teams/${chat.teamId}/channels/${chat.id}/chat/${Object.values(chat.chat)[0].id}/messages/${id}`), { [id]: true });
+    await update(ref(db, `teams/${chatObj.teamId}/channels/${chatObj.id}/chat/${Object.values(chatObj.chat)[0].id}/messages/${id}`), { [id]: true });
   } else {
-    await update(ref(db, `chats/${chat.id}/messages/${id}`), { [id]: true });
+    await update(ref(db, `chats/${chatObj.id}/messages/${id}`), { [id]: true });
   }
 };
 

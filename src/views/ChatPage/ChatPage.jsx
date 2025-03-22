@@ -57,7 +57,7 @@ export const ChatPage = () => {
     return <LandingPage />;
   }
 
-  console.log(selectedChat);
+  // console.log(selectedChat);
 
   if (userData) {
     return (

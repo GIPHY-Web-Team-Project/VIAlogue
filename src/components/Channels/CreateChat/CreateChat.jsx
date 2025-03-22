@@ -1,9 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../../../store/app-context';
 import { createChat } from '../../../services/chat.services';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../UI/Modal/Modal';
 import { titleCheck } from '../../../utils/chatUtils';
+import { useUsers } from '../../../hooks/useUsers';
 import TitleInput from '../../UI/TitleInput/TitleInput';
 import SelectUsersTeamChat from '../../SelectUsers/SelectUsersTeamChat/SelectUsersTeamChat';
 import Button from '../../UI/Button/Button';
@@ -14,6 +15,17 @@ export const CreateChat = (setShowNewChat, showNewChat, setSelectedChat) => {
   const [modalMessage, setModalMessage] = useState('');
   const [selectedUsers, setSelectedUsers] = useState([userData.username]);
   const [showModal, setShowModal] = useState(false);
+  const { users } = useUsers(userData);
+  const [userList, setUserList] = useState([]);
+
+  useEffect(() => {
+    if (users) {
+      const availableUsers = users
+        .filter((user) => user.username !== userData.username)
+        .filter((user) => !selectedUsers.includes(user.username));
+      setUserList(availableUsers);
+    }
+  }, [users, selectedUsers]);
 
   const handleCreateChat = async () => {
     const chatUsers = selectedUsers.map((user) => user);
@@ -57,8 +69,8 @@ export const CreateChat = (setShowNewChat, showNewChat, setSelectedChat) => {
           <input type='text' id='title' placeholder='Enter chat title' className='mt-1 w-full pb-2 border-b focus:ring-2 focus:ring-blue-500 outline-none' />
         </div>
 
-        <div className='mt-8'>
-          <SelectUsersTeamChat selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
+        <div className="mt-8">
+          <SelectUsersTeamChat selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} userList={userList} setUserList={setUserList}/>
         </div>
 
         <Button onClick={handleCreateChat}>Create Chat</Button>

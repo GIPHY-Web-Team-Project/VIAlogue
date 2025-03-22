@@ -1,16 +1,17 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ref, update, onValue } from 'firebase/database';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ref, update, onValue, set } from 'firebase/database';
 import { AppContext } from '../../store/app-context';
 import { auth, db } from '../../config/firebase-config';
 import { signOut } from 'firebase/auth';
 import SideBar from '../../components/UI/SideBar/SideBar';
-import defaultProfilePicture from '../../../public/images/123.jpg';
+import ViewStatus from '../ViewStatus/ViewStatus';
 
 export default function Profile() {
   const { userData } = useContext(AppContext);
   const fileInputRef = useRef(null);
   const [profilePicture, setProfilePicture] = useState('');
+  const { username } = useParams();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -19,14 +20,16 @@ export default function Profile() {
     gender: '',
     birthdate: { day: '', month: '', year: '' },
     bio: '',
+    username: '',
+    email: '',
   });
   const navigate = useNavigate();
 
   const [isEditing, setIsEditing] = useState(false);
+  
 
   useEffect(() => {
-    if (userData) {
-      const userRef = ref(db, `users/${userData.username}`);
+      const userRef = ref(db, `users/${username}`);
       const unsubscribe = onValue(userRef, (snapshot) => {
         const data = snapshot.val();
         setFormData({
@@ -36,17 +39,29 @@ export default function Profile() {
           gender: data?.gender || '',
           birthdate: data?.birthdate || { day: '', month: '', year: '' },
           bio: data?.bio || '',
+          username: data.username,
+          email: data.email,
         });
         setProfilePicture(data?.profilePicture || '');
       });
 
       return () => unsubscribe();
-    }
-  }, [userData]);
+
+  }, [username]);
+    if (!userData) {
+    return null;
+  }
+
+  const updateUserStatus = (username, status) => {
+      const userStatusRef = ref(db, 'status/' + username);
+      set(userStatusRef, { status: status });
+    };
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
+      
+      updateUserStatus(userData.username, 'offline');
       navigate('/login');
     } catch (error) {
       console.error('Error logging out:', error);
@@ -62,7 +77,6 @@ export default function Profile() {
 
       const userRef = ref(db, `users/${userData.username}`);
       await update(userRef, updatedData);
-
       setIsEditing(false);
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -109,21 +123,23 @@ export default function Profile() {
   return (
     <div className='flex flex-grow items-center bg-gray-900'>
       <SideBar type='menu' />
-      <div className='bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md mx-auto'>
-        <h2 className='text-2xl font-bold text-center mb-6'>User Profile</h2>
+      <div className='bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-prose mx-auto'>
         <div className='flex flex-col items-center'>
-          <img src={profilePicture || defaultProfilePicture} alt='Profile' className='w-24 h-24 rounded-full cursor-pointer' onClick={() => fileInputRef.current.click()} />
+          <img src={profilePicture || '/images/123.jpg'} alt='Profile' className='w-40 h-40 rounded-full cursor-pointer' onClick={() => fileInputRef.current.click()} />
           <input type='file' ref={fileInputRef} className='hidden' onChange={handleProfilePictureChange} />
         </div>
-
-        <div className='mt-6 space-y-4'>
+        <div>
+          <ViewStatus username={username} />
+        </div>
+        <div className='flex flex-row mt-6 space-y-4 justify-between'>
+          <div className='mr-6'>
           <div>
             <label className='text-gray-400'>Username:</label>
-            <div className='bg-gray-700 p-2 rounded'>{userData?.username}</div>
+            <div className='bg-gray-700 p-2 rounded'>{formData.username}</div>
           </div>
           <div>
             <label className='text-gray-400'>Email:</label>
-            <div className='bg-gray-700 p-2 rounded'>{userData?.email}</div>
+            <div className='bg-gray-700 p-2 rounded'>{formData.email}</div>
           </div>
 
           {/* First Name */}
@@ -143,7 +159,8 @@ export default function Profile() {
             <label className='text-gray-400'>Age:</label>
             <input type='text' value={calculateAge(formData.birthdate)} disabled className='bg-gray-700 p-2 rounded w-full' />
           </div>
-
+          </div>
+          <div>
           {/* Phone */}
           <div>
             <label className='text-gray-400'>Phone:</label>
@@ -163,7 +180,7 @@ export default function Profile() {
           {/* Birthdate */}
           <div>
             <label className='text-gray-400'>Birthdate:</label>
-            <div className='flex space-x-2'>
+            <div className='flex space-x-2 pt-0.5'>
               <input type='number' name='day' value={formData.birthdate.day} onChange={handleChange} placeholder='Day' disabled={!isEditing} className='bg-gray-700 p-2 rounded w-16' />
               <input type='number' name='month' value={formData.birthdate.month} onChange={handleChange} placeholder='Month' disabled={!isEditing} className='bg-gray-700 p-2 rounded w-16' />
               <input type='number' name='year' value={formData.birthdate.year} onChange={handleChange} placeholder='Year' disabled={!isEditing} className='bg-gray-700 p-2 rounded w-24' />
@@ -173,23 +190,25 @@ export default function Profile() {
           {/* Bio */}
           <div>
             <label className='text-gray-400'>Bio:</label>
-            <textarea name='bio' value={formData.bio} onChange={handleChange} disabled={!isEditing} className='bg-gray-700 p-2 rounded w-full' />
+            <textarea name='bio' value={formData.bio} onChange={handleChange} disabled={!isEditing} className='bg-gray-700 p-2 rounded w-full min-h-[12vh] overflow-auto' />
+          </div>
           </div>
         </div>
-
         <div className='mt-6 text-center'>
           {isEditing ? (
             <button onClick={handleSaveProfile} className='bg-green-600 text-white py-2 px-4 rounded hover:bg-green-500 transition mr-2'>
               Save Profile
             </button>
           ) : (
-            <button onClick={() => setIsEditing(true)} className='bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-500 transition mr-2'>
+            userData.username === username && <button onClick={() => setIsEditing(true)} className='bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-500 transition mr-2'>
               Edit Profile
             </button>
           )}
-          <button onClick={handleLogout} className='bg-red-600 text-white py-2 px-4 rounded hover:bg-red-500 transition'>
-            Logout
-          </button>
+          {userData.username === username && (
+            <button onClick={handleLogout} className='bg-red-600 text-white py-2 px-4 rounded hover:bg-red-500 transition'>
+              Logout
+            </button>
+          )}
         </div>
       </div>
     </div>

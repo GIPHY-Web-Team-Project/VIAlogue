@@ -7,6 +7,7 @@ import Button from '../../components/UI/Button/Button';
 import { CANCEL } from '../../common/enums';
 import { variant } from '../../common/button-const';
 
+
 export default function Login() {
   const { setAppState } = useContext(AppContext);
   const [user, setUser] = useState({
@@ -22,12 +23,14 @@ export default function Login() {
 
     signInWithEmailAndPassword(auth, user.email, user.password)
       .then((userCredential) => {
+        const loggedInUser = userCredential.user;
+
         setAppState({
-          user: userCredential.user,
+          user: loggedInUser,
           userData: null,
         });
 
-        navigate('/teams');
+        navigate('/chats');
       })
       .catch((error) => {
         console.error('Login failed', error);
@@ -67,3 +70,4 @@ export default function Login() {
     </div>
   );
 }
+

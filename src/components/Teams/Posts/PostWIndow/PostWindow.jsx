@@ -19,7 +19,7 @@ export default function PostWindow({ channel }) {
     };
   }, [channel]);
 
-  console.log(posts);
+  // console.log(posts);
 
   return (
     <div>
