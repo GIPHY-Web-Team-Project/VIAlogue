@@ -165,8 +165,8 @@ export default function Profile() {
           <img src={profilePicture || '/images/123.jpg'} alt='Profile' className='w-40 h-40 rounded-full cursor-pointer' onClick={() => fileInputRef.current.click()} />
           <input type='file' ref={fileInputRef} className='hidden' onChange={handleProfilePictureChange} />
         </div>
-        <div>
-          <ViewStatus username={username} />
+        <div className='text-center mt-4 flex flex-row justify-center'>
+          <ViewStatus username={username} source='profile-details'/>
         </div>
         <div className='flex flex-row mt-6 space-y-4 justify-between'>
           <div className='mr-6'>

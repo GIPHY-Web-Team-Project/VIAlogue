@@ -25,12 +25,14 @@ export default function SideBar({ type, username, handleNewChat, chats, setChats
             <span className='flex justify-center'>Chats</span>
           </NavLink>
         </div>
-        <div>
-        <NavLink to={`/profile/${userData.username}`}>
-          <img src={userData.profilePicture || '/images/123.jpg'} className="h-13 w-13 flex justify-self-center rounded-full"/>
-          <span className='flex justify-center'>Profile</span>
+        <div className="relative">
+        <img src={userData.profilePicture || '/images/123.jpg'} className="h-13 w-13 flex justify-self-center rounded-full"/>
+        <div className="absolute bottom-5 right-2">
+          <ViewStatus username={userData.username} />
+        </div>
+        <NavLink to={`/profile/${userData.username}`} className='mt-10'>
+          <span className='flex justify-center mt-2'>Profile</span>
         </NavLink>
-        <ViewStatus username={userData.username} />
       </div>
       </div>
     );
