@@ -13,6 +13,7 @@ import { ref, push, onValue, update, get } from 'firebase/database';
  *                              It receives an array of chat objects as its argument.
  * @returns {function} - A function to unsubscribe from the real-time database listener.
  */
+
 export const getChatsByUsername = async (username, callback) => {
     const chatsRef = ref(db, 'chats');
 
@@ -28,21 +29,25 @@ export const getChatsByUsername = async (username, callback) => {
         );
 
         const chatPromises = filteredChats.map(async (chat) => {
-            if (chat.messages && Object.keys(chat.messages).length > 0) {
+            let unreadCount = 0;
+
+            if (chat.messages) {
                 const messageIds = Object.keys(chat.messages);
-                const latestMessageId = messageIds[messageIds.length - 1];
-
-                const messageRef = ref(db, `messages/${latestMessageId}`);
-                const messageSnapshot = await get(messageRef);
-
-                if (messageSnapshot.exists()) {
-                    chat.latestMessage = messageSnapshot.val();
-                } else {
-                    chat.latestMessage = null;
+                for (const messageId of messageIds) {
+                    const messageRef = ref(db, `messages/${messageId}`);
+                    const messageSnapshot = await get(messageRef);
+                    if (messageSnapshot.exists()) {
+                        chat.latestMessage = messageSnapshot.val();
+                        if (messageSnapshot.val().unreadBy?.includes(username)) {
+                            unreadCount++;
+                        }
+                    } else {
+                        chat.latestMessage = null;
+                    }
                 }
-            } else {
-                chat.latestMessage = null;
             }
+
+            chat.unreadCount = unreadCount;
             return chat;
         });
 
@@ -52,7 +57,6 @@ export const getChatsByUsername = async (username, callback) => {
 
     return unsubscribe;
 }
-
 /**
  * Retrieves a chat by its ID and listens for real-time updates.
  *

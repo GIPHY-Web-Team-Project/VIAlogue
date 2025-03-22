@@ -1,4 +1,4 @@
-import { ref, push, update, remove, onValue } from 'firebase/database';
+import { ref, push, update, remove, onValue, get } from 'firebase/database';
 import { db } from '../config/firebase-config';
 
 /**
@@ -56,6 +56,14 @@ export const getMessagesByChatId = async (chatId, callback) => {
  * @returns {Promise<void>} A promise that resolves when the message and chat updates are complete.
  */
 export const addMessage = async (chatId, message, sender, gifUrl = "") => {
+    const chatRef = ref(db, `chats/${chatId}`);
+
+    const chatSnapshot = await get(chatRef);
+    if (!chatSnapshot.exists()) return;
+
+    const chatData = chatSnapshot.val();
+    const unreadBy = chatData.users.filter(user => user !== sender);
+
     const newMessage = {
         chatId,
         message,
@@ -63,6 +71,7 @@ export const addMessage = async (chatId, message, sender, gifUrl = "") => {
         sender,
         gifUrl,
         reactions: {},
+        unreadBy,
     }
     const result = await push(ref(db, `messages`), newMessage);
     const id = result.key;
@@ -107,4 +116,27 @@ export const updateMessage = async (chatId, messageId, updatedMessage, element) 
     } catch (error) {
         console.error("Error updating message:", error);
     }
+};
+
+export const markMessagesAsRead = async (chatId, username) => {
+    const chatMessagesRef = ref(db, `chats/${chatId}/messages`);
+
+    const chatMessagesSnapshot = await get(chatMessagesRef);
+    if (!chatMessagesSnapshot.exists()) return;
+
+    const messageIds = Object.keys(chatMessagesSnapshot.val());
+
+    const updates = {};
+    for (const messageId of messageIds) {
+        const messageRef = ref(db, `messages/${messageId}`);
+        const messageSnapshot = await get(messageRef);
+        if (messageSnapshot.exists()) {
+            const messageData = messageSnapshot.val();
+            if (messageData.unreadBy?.includes(username)) {
+                updates[`messages/${messageId}/unreadBy`] = messageData.unreadBy.filter(user => user !== username);
+            }
+        }
+    }
+
+    await update(ref(db), updates);
 };
