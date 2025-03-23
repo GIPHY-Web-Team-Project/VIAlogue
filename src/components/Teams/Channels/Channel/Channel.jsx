@@ -5,9 +5,11 @@ import PostWindow from '../../Posts/PostWIndow/PostWindow';
 import { getUserByUsername } from '../../../../services/user.service';
 import TeamParticipants from '../../TeamParticipants/TeamParticipants';
 import { useNavigate } from 'react-router';
+import CreatePost from '../../Posts/CreatePost/CreatePost';
 
 export default function Channel({ channel }) {
   const [users, setUsers] = useState([]);
+  const [viewCreatePost, setViewCreatePost] = useState(false);
   const [showChannelInfo, setShowChannelInfo] = useState(false);
   const navigate = useNavigate();
 
@@ -27,23 +29,19 @@ export default function Channel({ channel }) {
   }, [channel]);
 
   return (
-    <div className='flex flex-grow flex-col'>
-      <h1 className='text-4xl cursor-pointer hover:underline' onClick={() => setShowChannelInfo(true)}>
-        {channel.title}
-      </h1>
-      <div className='flex'>
-        <section className='flex flex-grow flex-col'>
-          {showChannelInfo ? (
-            <ChannelInfo channel={channel} setShowChannelInfo={setShowChannelInfo} />
-          ) : (
-            <>
-              <Button onClick={() => navigate('/chats')}>Channel Chat</Button>
-              <PostWindow channel={channel} />
-            </>
-          )}
+    <div className='flex flex-grow'>
+      <div className='flex flex-grow flex-col max-h-screen'>
+        <section className='flex justify-between px-20'>
+          <h1 className='text-4xl cursor-pointer hover:underline' onClick={() => setShowChannelInfo(true)}>
+            {channel.title}
+          </h1>
+          <Button onClick={() => navigate('/chats')}>Channel Chat</Button>
+          <Button onClick={() => setViewCreatePost(true)}>Upload a Post</Button>
         </section>
-        <TeamParticipants users={users} />
+        {viewCreatePost && <CreatePost channelId={channel.id} setViewCreatePost={setViewCreatePost} />}
+        <section className='flex flex-col flex-grow mt-20 overflow-y-auto '>{showChannelInfo ? <ChannelInfo channel={channel} setShowChannelInfo={setShowChannelInfo} /> : <PostWindow channel={channel} />}</section>
       </div>
+      <TeamParticipants users={users} />
     </div>
   );
 }

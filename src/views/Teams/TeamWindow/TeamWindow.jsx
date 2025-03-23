@@ -70,17 +70,9 @@ export default function TeamWindow() {
               </>
             )}
             {team && !viewChannel && (
-              // participants
               <div>
                 <h3>Team Members:</h3>
                 <TeamParticipants users={users} type={TEAM} />
-                {/* <ul>
-                  {team.members.map((member) => (
-                    <Button btnStyle={TEXT_BUTTON} onClick={() => navigate(`/profile/${member}`)}>
-                      {member}
-                    </Button>
-                  ))}
-                </ul> */}
               </div>
             )}
           </>
