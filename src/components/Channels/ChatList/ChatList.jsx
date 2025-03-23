@@ -42,7 +42,7 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
         ) : chats && chats.length > 0 ? (
           chats.map((chat) => {
             return (
-              <div key={chat.id} onClick={() => handleChatClick(chat)} className='hover:border-2 border-gray-600 p-2 mt-1 mb-1 rounded-md cursor-pointer hover:bg-gray-700'>
+              <div key={chat.id} onClick={() => handleChatClick(chat)} className='hover:ring-1 border-gray-600 p-2 mt-1 mb-1 rounded-md cursor-pointer hover:bg-gray-700'>
                 <Button btnStyle={CHAT_TEAM_LIST_ITEM}>{chat.title}</Button>
                 {chat.latestMessage ? (
                   <p className='text-sm text-gray-400 overflow-ellipsis overflow-hidden flex flex-row'>

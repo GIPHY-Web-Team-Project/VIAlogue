@@ -20,7 +20,7 @@ export const createTeam = async (title, owner, members, callback) => {
     const result = await push(teamsRef, team);
     const id = result.key;
     await update(ref(db, `teams/${id}`), { id });
-    await createChannel('general', id, members, owner);
+    await createChannel('general', { title, id: id }, members, owner);
     return callback(id);
   }
 };

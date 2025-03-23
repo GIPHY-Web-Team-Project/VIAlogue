@@ -24,9 +24,7 @@ export default function CreateComp({ setViewCreateWindow, type, team }) {
 
   useEffect(() => {
     if (users) {
-      const availableUsers = users
-        .filter((user) => user.username !== userData.username)
-        .filter((user) => !selectedUsers.includes(user.username));
+      const availableUsers = users.filter((user) => user.username !== userData.username).filter((user) => !selectedUsers.includes(user.username));
       setUserList(availableUsers);
     }
   }, [users, selectedUsers]);
@@ -65,7 +63,7 @@ export default function CreateComp({ setViewCreateWindow, type, team }) {
           navigate(`/teams/${teamId}`);
         });
       } else if (type === CHANNEL) {
-        await createChannel(title, team.id, members, userData.username);
+        await createChannel(title, team, members, userData.username);
       }
     } catch (error) {
       console.error(error.message);
@@ -84,7 +82,7 @@ export default function CreateComp({ setViewCreateWindow, type, team }) {
       <TitleInput />
       <br /> <br />
       {type === CHANNEL && members && <SelectUsersChannel selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} teamMembers={members} type={type} />}
-      {type === TEAM && <SelectUsersTeamChat selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} userList={userList} setUserList={setUserList}/>}
+      {type === TEAM && <SelectUsersTeamChat selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} userList={userList} setUserList={setUserList} />}
       <br /> <br />
       <div className=''>
         <Button

@@ -8,7 +8,6 @@ export const CHAT_PARTICIPANTS_BTNS = 'chatParticipantsBtns';
 export const CANCEL = 'cancel';
 export const CREATE_TEAM = 'createTeam';
 export const CHAT_TEAM_LIST_ITEM = 'chatTeamListItem';
-// export const CREATE_CHANNEL = 'createChannel';
 
 // ENUMS
 export const TEAM = 'team';

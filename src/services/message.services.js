@@ -2,13 +2,10 @@ import { ref, push, update, remove, onValue } from 'firebase/database';
 import { db } from '../config/firebase-config';
 import { CHANNEL } from '../common/enums';
 
-export const getMessagesByChatId = async (chat, callback, type) => {
+export const getMessagesByChatId = async (chat, callback) => {
   let chatMessagesRef;
-  if (type === CHANNEL) {
-    chatMessagesRef = ref(db, `teams/${chat.teamId}/channels/${chat.id}/chat/${Object.values(chat.chat)[0].id}/messages`);
-  } else {
-    chatMessagesRef = ref(db, `chats/${chat.id}/messages`);
-  }
+
+  chatMessagesRef = ref(db, `chats/${chat.id}/messages`);
 
   onValue(chatMessagesRef, async (snapshot) => {
     if (!snapshot.exists()) {
@@ -39,7 +36,7 @@ export const getMessagesByChatId = async (chat, callback, type) => {
   });
 };
 
-export const addMessage = async (chatObj, message, sender, type, gifUrl = '') => {
+export const addMessage = async (chatObj, message, sender, gifUrl = '') => {
   const newMessage = {
     chatId: chatObj.id,
     message,
@@ -51,11 +48,8 @@ export const addMessage = async (chatObj, message, sender, type, gifUrl = '') =>
   const result = await push(ref(db, `messages`), newMessage);
   const id = result.key;
   await update(ref(db, `messages/${id}`), { id });
-  if (type === CHANNEL) {
-    await update(ref(db, `teams/${chatObj.teamId}/channels/${chatObj.id}/chat/${Object.values(chatObj.chat)[0].id}/messages/${id}`), { [id]: true });
-  } else {
-    await update(ref(db, `chats/${chatObj.id}/messages/${id}`), { [id]: true });
-  }
+
+  await update(ref(db, `chats/${chatObj.id}/messages/${id}`), { [id]: true });
 };
 
 export const deleteMessage = async (chatId, messageId) => {

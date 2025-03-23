@@ -5,14 +5,34 @@ import { getTeamById } from '../../../services/team.services';
 import ChannelList from '../../../components/Teams/Channels/ChannelList/ChannelList';
 import Loading from '../../../components/UI/Loading/Loading';
 import Channel from '../../../components/Teams/Channels/Channel/Channel';
+import { TEAM } from '../../../common/enums';
+import { getUserByUsername } from '../../../services/user.service';
+import TeamParticipants from '../../../components/Teams/TeamParticipants/TeamParticipants';
 
 export default function TeamWindow() {
   const { teamId } = useParams();
+  const [users, setUsers] = useState([]);
   const [team, setTeam] = useState(null);
   const [loading, setLoading] = useState(false);
   const [viewChannel, setViewChannel] = useState(false);
   const [currChannel, setCurrChannel] = useState(null);
+
   // const [selectedChannel, setSelectedChannel] = useState(null);
+
+  useEffect(() => {
+    if (!team) return;
+
+    const fetchUsers = async () => {
+      const userList = await Promise.all(
+        team.members.map(async (username) => {
+          return await getUserByUsername(username);
+        })
+      );
+      setUsers(userList);
+    };
+
+    fetchUsers();
+  }, [team]);
 
   useEffect(() => {
     if (!teamId) return;
@@ -40,20 +60,27 @@ export default function TeamWindow() {
           <>
             <ChannelList team={team} setViewChannel={setViewChannel} setCurrChannel={setCurrChannel} />
             {viewChannel === true ? (
-              <Channel channel={currChannel} setViewChannel={setViewChannel} setCurrChannel={setCurrChannel} />
+              <Channel channel={currChannel} />
             ) : (
               <>
                 <div className=''>
-                  <h1>TEAM ID {teamId}</h1>
                   <h3>{team?.title}</h3>
                   <p>Owner: {team?.owner}</p>
                 </div>
               </>
             )}
             {team && !viewChannel && (
+              // participants
               <div>
                 <h3>Team Members:</h3>
-                <p>{team.members.map((member) => member).join(', ')}</p>
+                <TeamParticipants users={users} type={TEAM} />
+                {/* <ul>
+                  {team.members.map((member) => (
+                    <Button btnStyle={TEXT_BUTTON} onClick={() => navigate(`/profile/${member}`)}>
+                      {member}
+                    </Button>
+                  ))}
+                </ul> */}
               </div>
             )}
           </>

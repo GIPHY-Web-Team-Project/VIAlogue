@@ -28,23 +28,31 @@ export default function ChannelList({ team, setViewChannel, setCurrChannel }) {
     setViewChannel(true);
   };
 
+  const handleHome = () => {
+    setViewChannel(false);
+    setCurrChannel(null);
+  };
+
   return (
-    <div className='flex flex-col bg-gray-800 p-4 overflow-y-auto'>
+    <div className='flex flex-col justify-between bg-gray-800 p-4 overflow-y-auto'>
+      <div className='flex-grow'>
+        <Button onClick={() => handleHome()}>Home</Button>
+        <ul className='flex flex-col'>
+          {channels &&
+            channels.length > 0 &&
+            channels.map((channel) => (
+              <li className={variant.chatTeamListItem} onClick={() => changeChannel(channel)} key={channel.id}>
+                {channel.title}
+              </li>
+            ))}
+        </ul>
+      </div>
       <Button onClick={() => setViewCreateWindow(true)}>Create a Channel</Button>
       {viewCreateWindow && (
         <div className='fixed inset-0 bg-black/70 flex items-center justify-center z-50'>
           <CreateComp setViewCreateWindow={setViewCreateWindow} type={CHANNEL} team={team} />
         </div>
       )}
-      <ul className='flex flex-col'>
-        {channels &&
-          channels.length > 0 &&
-          channels.map((channel) => (
-            <li className={variant.chatTeamListItem} onClick={() => changeChannel(channel)} key={channel.id}>
-              {channel.title}
-            </li>
-          ))}
-      </ul>
     </div>
   );
 }

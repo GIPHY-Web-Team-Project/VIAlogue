@@ -8,8 +8,9 @@ import { useNavigate } from 'react-router-dom';
 import { updateChat } from '../../../services/chat.services';
 import ChatParticipants from '../ChatParticipants/ChatParticipants';
 import { CHANNEL } from '../../../common/enums';
+import EditChat from '../EditChat/EditChat';
 
-export const ChatWindow = ({ selectedChat, participants, setSelectedChat, type }) => {
+export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
   const { userData } = useContext(AppContext);
   const [messages, setMessages] = useState(null);
   const [showParticipants, setShowParticipants] = useState(false);
@@ -28,14 +29,10 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat, type }
 
     setLoading(true);
 
-    const unsubscribe = getMessagesByChatId(
-      selectedChat,
-      (fetchedMessages) => {
-        setMessages(fetchedMessages);
-        setLoading(false);
-      },
-      type
-    );
+    const unsubscribe = getMessagesByChatId(selectedChat, (fetchedMessages) => {
+      setMessages(fetchedMessages);
+      setLoading(false);
+    });
 
     return () => {
       if (typeof unsubscribe === 'function') {
@@ -96,12 +93,10 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat, type }
                 </h1>
                 {edit && <EditChat chat={selectedChat} onCancel={() => setEdit(false)} />}
               </div>
-              {type !== CHANNEL && (
-                <div className='flex flex-col overflow-x-auto'>
-                  <img src='/images/members.jpg' alt='Members' className='w-8 h-8 pr-2' onClick={toggleShowParticipants} />
-                  {showParticipants && <ChatParticipants participants={participants} handleLeaveChat={handleLeaveChat} selectedUser={selectedUser} setSelectedUser={setSelectedUser} chatId={selectedChat.id} />}
-                </div>
-              )}
+              <div className='flex flex-col overflow-x-auto'>
+                <img src='/images/members.jpg' alt='Members' className='w-8 h-8 pr-2' onClick={toggleShowParticipants} />
+                {showParticipants && <ChatParticipants participants={participants} handleLeaveChat={handleLeaveChat} selectedUser={selectedUser} setSelectedUser={setSelectedUser} chatId={selectedChat.id} />}
+              </div>
             </div>
           )}
           <div className='flex flex-col overflow-y-auto h-[80vh] pb-4'>
@@ -124,7 +119,7 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat, type }
             <div ref={messagesEndRef}></div>
           </div>
         </div>
-        <MessageWindow chat={selectedChat} sender={userData?.username || 'Unknown'} type={type} />
+        <MessageWindow chat={selectedChat} sender={userData?.username || 'Unknown'} />
       </div>
     );
   }

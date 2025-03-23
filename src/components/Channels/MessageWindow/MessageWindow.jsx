@@ -5,7 +5,7 @@ import EmojiPicker from 'emoji-picker-react';
 import GifPicker from 'gif-picker-react';
 import { API_KEY } from '../../../common/constants';
 
-export const MessageWindow = ({ chat, sender, type }) => {
+export const MessageWindow = ({ chat, sender }) => {
   const [message, setMessage] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showGifPicker, setShowGifPicker] = useState(false);
@@ -13,7 +13,7 @@ export const MessageWindow = ({ chat, sender, type }) => {
   const handleNewMessage = () => {
     if (message.trim() === '') return;
 
-    addMessage(chat, message, sender, type);
+    addMessage(chat, message, sender);
     setMessage('');
   };
 
@@ -31,7 +31,7 @@ export const MessageWindow = ({ chat, sender, type }) => {
 
   const handleGifClick = async (gifObject) => {
     try {
-      await addMessage(chat, '', sender, type, gifObject.url);
+      await addMessage(chat, '', sender, gifObject.url);
     } catch (error) {
       console.error(error);
     }

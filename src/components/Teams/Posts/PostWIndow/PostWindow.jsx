@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Button from '../../../UI/Button/Button';
 import CreatePost from '../CreatePost/CreatePost';
 import { getChannelPosts } from '../../../../services/posts.services';
+import Post from '../Post/Post';
 
 export default function PostWindow({ channel }) {
   const [viewCreatePost, setViewCreatePost] = useState(false);
@@ -22,14 +23,11 @@ export default function PostWindow({ channel }) {
   // console.log(posts);
 
   return (
-    <div>
-      <h1>Post Window</h1>
-
+    <div className='flex flex-col'>
       {posts.length > 0 ? (
         posts.map((post) => (
-          <div key={post.id}>
-            <p>{post.title}</p>
-            <p>{post.content}</p>
+          <div key={post.id} className=''>
+            <Post post={post} />
           </div>
         ))
       ) : (
