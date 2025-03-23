@@ -20,18 +20,25 @@ import { markMessagesAsRead } from '../../../services/message.services';
  * @returns {JSX.Element} The rendered ChatList component.
  */
 export const ChatList = ({ username, handleNewChat, chats, setChats, setSelectedChat }) => {
-  const { userData } = useContext(AppContext); 
+  const { userData } = useContext(AppContext);
   const [loading, setLoading] = useState(true);
+  const [selectedChatId, setSelectedChatId] = useState(null); // Track selected chat ID separately
 
   useEffect(() => {
     setLoading(true);
-    const unsubscribe = getChatsByUsername(username, (chats) => {
-      setChats([...chats]);
+    const unsubscribe = getChatsByUsername(username, (fetchedChats) => {
+      setChats((prevChats) => {
+        // Only update state if chats have actually changed
+        if (JSON.stringify(prevChats) !== JSON.stringify(fetchedChats)) {
+          return [...fetchedChats];
+        }
+        return prevChats;
+      });
       setLoading(false);
     });
 
     return () => {
-      if (typeof unsubscribe === 'function') {
+      if (typeof unsubscribe === "function") {
         unsubscribe();
       }
     };
@@ -39,10 +46,10 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
 
   const handleChatClick = (chat) => {
     markMessagesAsRead(chat.id, username);
-    setSelectedChat(chat);
-    setChats(prevChats => prevChats.map(c => 
-      c.id === chat.id ? { ...c, unreadCount: 0 } : c
-    ));
+    setSelectedChat({ ...chat }); 
+    setChats((prevChats) =>
+      prevChats.map((c) => (c.id === chat.id ? { ...c, unreadCount: 0 } : c))
+    );
   };
 
   return (

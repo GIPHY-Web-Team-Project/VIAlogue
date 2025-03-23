@@ -38,37 +38,32 @@ export const ChatPage = () => {
   const [showNewChat, setShowNewChat] = useState(false);
 
   useEffect(() => {
-    if (!userData || !chats) return;
+    if (!userData || !chats || selectedChat) return;  // ✅ Prevent overwriting clicked chat
 
     const lastChatId = localStorage.getItem(`lastOpenedChat_${userData.uid}`);
+    const lastChat = lastChatId ? chats.find((chat) => chat.id === lastChatId) : null;
 
-    if (lastChatId) {
-      const lastChat = chats.find((chat) => chat.id === lastChatId);
-      if (lastChat) {
-        setSelectedChat(lastChat);
-        setParticipants(lastChat.users);
-        setShowNewChat(false);
-        return;
-      }
-    }
-
-    const userChats = chats.filter((chat) => chat.users.some((user) => user === userData.username));
-
-    if (userChats.length > 0) {
-      setSelectedChat(userChats[0]);
-      localStorage.setItem(`lastOpenedChat_${userData.uid}`, userChats[0].id);
-      setParticipants(userChats[0].users);
+    if (lastChat) {
+      setSelectedChat({ ...lastChat });
+      setParticipants(lastChat.users);
       setShowNewChat(false);
+    } else {
+      const userChats = chats.filter((chat) => chat.users.includes(userData.username));
+      if (userChats.length > 0) {
+        setSelectedChat({ ...userChats[0] });
+        localStorage.setItem(`lastOpenedChat_${userData.uid}`, userChats[0].id);
+        setParticipants(userChats[0].users);
+        setShowNewChat(false);
+      }
     }
   }, [chats, userData]);
 
   useEffect(() => {
-    if (selectedChat && userData) {
-      localStorage.setItem(`lastOpenedChat_${userData.uid}`, selectedChat.id);
+    if (selectedChat) {
       setParticipants(selectedChat.users);
-      setShowNewChat(false);
+      localStorage.setItem(`lastOpenedChat_${userData.uid}`, selectedChat.id);
     }
-  }, [selectedChat, userData]);
+  }, [selectedChat]);
 
   const handleNewChat = () => {
     setShowNewChat(!showNewChat);
