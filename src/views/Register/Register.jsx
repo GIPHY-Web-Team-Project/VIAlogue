@@ -26,7 +26,7 @@ import { variant } from '../../common/button-const';
  *
  * @description
  * - Validates user input for first name, last name, username, email, and password.
- * - Checks if the username or email already exists in the database.
+ * - Checks if the username and email already exist in the database.
  * - Registers the user using Firebase authentication and creates a user handle.
  * - Displays a modal on successful registration and navigates to the login page.
  *
@@ -36,27 +36,17 @@ import { variant } from '../../common/button-const';
  * @state {string} user.username - The user's username.
  * @state {string} user.email - The user's email address.
  * @state {string} user.password - The user's password.
- * @state {boolean} showModal - Controls the visibility of the modal.
- * @state {string} modalMessage - The message displayed in the modal.
+ * @state {boolean} showModal - State to control the visibility of the modal.
+ * @state {string} modalMessage - Message to display in the modal.
  *
  * @dependencies
- * - `useState` - React hook for managing component state.
- * - `useNavigate` - React Router hook for navigation.
- * - `createUserWithEmailAndPassword` - Firebase function for user registration.
- * - `signOut` - Firebase function to sign out the user.
- * - `getUserByUsername` - Custom function to check if a username exists.
- * - `getUserByEmail` - Custom function to check if an email exists.
- * - `createUserHandle` - Custom function to create a user handle in the database.
+ * - `useState` from React for managing component state.
+ * - `useNavigate` from React Router for navigation.
+ * - `createUserWithEmailAndPassword`, `signOut` from Firebase for authentication.
+ * - `getUserByUsername`, `getUserByEmail`, `createUserHandle` for backend interactions.
+ * - `Button`, `Modal` components for UI elements.
  *
- * @modals
- * - Displays a modal with a success message upon successful registration.
- * - Navigates to the login page when the modal is closed.
- *
- * @validation
- * - Ensures all fields are filled.
- * - Validates first and last names to be between 4 and 32 characters and contain only letters.
- * - Validates username to be between 4 and 32 characters and contain only letters, numbers, underscores, dots, and hyphens.
- * - Checks if the username or email already exists in the database.
+ * @throws {Error} Throws an error if validation fails or if the username/email already exists.
  */
 export default function Register() {
   const [user, setUser] = useState({
@@ -125,36 +115,87 @@ export default function Register() {
   };
 
   return (
-    <div className='flex flex-grow items-center justify-center bg-gray-900'>
-      <div className='bg-gray-800 p-8 rounded-lg shadow-lg max-w-lg w-full'>
-        <h3 className='text-3xl font-bold text-center text-gray-100 mb-6'>Register</h3>
+    <div className='flex flex-grow items-center justify-center bg-gray-900 min-h-screen p-4'>
+      <div className='bg-gray-800 p-6 md:p-8 rounded-lg shadow-lg w-full max-w-md'>
+        <h3 className='text-2xl md:text-3xl font-bold text-center text-gray-100 mb-6'>Register</h3>
 
-        <label className='text-gray-400' htmlFor='firstName'>
-          First name:
-        </label>
-        <input className='w-full p-3 mt-2 mb-4 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' value={user.firstName} onChange={updateUser('firstName')} type='text' name='firstName' id='firstName' />
+        <div className='space-y-4'>
+          <div>
+            <label className='text-gray-400' htmlFor='firstName'>
+              First name:
+            </label>
+            <input
+              className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
+              value={user.firstName}
+              onChange={updateUser('firstName')}
+              type='text'
+              name='firstName'
+              id='firstName'
+            />
+          </div>
 
-        <label className='text-gray-400' htmlFor='lastName'>
-          Last name:
-        </label>
-        <input className='w-full p-3 mt-2 mb-4 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' value={user.lastName} onChange={updateUser('lastName')} type='text' name='lastName' id='lastName' />
+          <div>
+            <label className='text-gray-400' htmlFor='lastName'>
+              Last name:
+            </label>
+            <input
+              className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
+              value={user.lastName}
+              onChange={updateUser('lastName')}
+              type='text'
+              name='lastName'
+              id='lastName'
+            />
+          </div>
 
-        <label className='text-gray-400' htmlFor='username'>
-          Username:
-        </label>
-        <input className='w-full p-3 mt-2 mb-4 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' value={user.username} onChange={updateUser('username')} type='text' name='username' id='username' />
+          <div>
+            <label className='text-gray-400' htmlFor='username'>
+              Username:
+            </label>
+            <input
+              className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
+              value={user.username}
+              onChange={updateUser('username')}
+              type='text'
+              name='username'
+              id='username'
+            />
+          </div>
 
-        <label className='text-gray-400' htmlFor='email'>
-          Email:
-        </label>
-        <input className='w-full p-3 mt-2 mb-4 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' value={user.email} onChange={updateUser('email')} type='email' name='email' id='email' />
+          <div>
+            <label className='text-gray-400' htmlFor='email'>
+              Email:
+            </label>
+            <input
+              className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
+              value={user.email}
+              onChange={updateUser('email')}
+              type='email'
+              name='email'
+              id='email'
+            />
+          </div>
 
-        <label className='text-gray-400' htmlFor='password'>
-          Password:
-        </label>
-        <input className='w-full p-3 mt-2 mb-6 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' value={user.password} onChange={updateUser('password')} type='password' name='password' id='password' />
+          <div>
+            <label className='text-gray-400' htmlFor='password'>
+              Password:
+            </label>
+            <input
+              className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
+              value={user.password}
+              onChange={updateUser('password')}
+              type='password'
+              name='password'
+              id='password'
+            />
+          </div>
+        </div>
 
-        <Button onClick={register} id='btn-register-form' className='w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition'>
+        <Button
+          onClick={register}
+          id='btn-register-form'
+          className='w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition mt-6'
+        >
           Register
         </Button>
 
