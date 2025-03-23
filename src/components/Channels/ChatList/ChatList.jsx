@@ -4,6 +4,7 @@ import { getChatsByUsername } from '../../../services/chat.services';
 import { AppContext } from '../../../store/app-context';
 import Button from '../../UI/Button/Button';
 import PropTypes from 'prop-types';
+import { markMessagesAsRead } from '../../../services/message.services';
 
 /**
  * ChatList component displays a list of chat conversations for a given user.
@@ -25,7 +26,7 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
   useEffect(() => {
     setLoading(true);
     const unsubscribe = getChatsByUsername(username, (chats) => {
-      setChats(chats);
+      setChats([...chats]);
       setLoading(false);
     });
 
@@ -37,7 +38,11 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
   }, [username]);
 
   const handleChatClick = (chat) => {
+    markMessagesAsRead(chat.id, username);
     setSelectedChat(chat);
+    setChats(prevChats => prevChats.map(c => 
+      c.id === chat.id ? { ...c, unreadCount: 0 } : c
+    ));
   };
 
   return (
@@ -58,6 +63,7 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
             return (
               <div key={chat.id} onClick={() => handleChatClick(chat)} className='hover:border-2 border-gray-600 p-2 mt-1 mb-1 rounded-md cursor-pointer hover:bg-gray-700'>
                 <Button btnStyle={CHAT_TEAM_LIST_ITEM}>{chat.title}</Button>
+                <div className='flex flex-row justify-between'>
                 {chat.latestMessage ? (
                   <p className="text-sm text-gray-400 overflow-ellipsis overflow-hidden flex flex-row">
                     <strong>{(chat.latestMessage.sender !== userData.username) ? (chat.latestMessage.sender) : "You"}: </strong> &nbsp;{chat.latestMessage.message}
@@ -65,6 +71,12 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
                 ) : (
                   <p className="text-sm text-gray-500 italic">No messages yet</p>
                 )}
+                {chat.unreadCount > 0 && (
+                <h5 className="bg-gray-950 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                    {chat.unreadCount}
+                </h5>
+                )}
+                </div>
               </div>
             )
           })
