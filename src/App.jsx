@@ -14,6 +14,7 @@ import Profile from './views/Profile/Profile';
 import TeamsPage from './views/Teams/TeamsPage/TeamsPage';
 import TeamWindow from './views/Teams/TeamWindow/TeamWindow';
 import UserStatus from './components/UserStatus/UserStatus';
+//import NotificationListener from './components/Notifications/NotificationListener/NotificationListener';
 
 export default function App() {
   const [appState, setAppState] = useState({
@@ -52,6 +53,7 @@ export default function App() {
           <div className='font-medium flex flex-col w-screen h-screen bg-gray-900 text-white'>
             { !user && <Header />}
             <UserStatus /> 
+            {/* <NotificationListener/> */}
           <Routes>
             <Route path='/' element={<LandingPage />} />
             <Route path='/register' element={<Register />} />

@@ -108,3 +108,16 @@ export const updateMessage = async (chatId, messageId, updatedMessage, element) 
         console.error("Error updating message:", error);
     }
 };
+
+export const getMessageById = async (messageId) => {
+    const messageRef = ref(db, `messages/${messageId}`);
+    onValue(messageRef, (snapshot) => {
+        if (snapshot.exists()) {
+            return (snapshot.val());
+        } else {
+            return (null);
+        }
+    });
+    return messageRef;
+}
+

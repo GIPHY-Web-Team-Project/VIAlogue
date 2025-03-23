@@ -8,6 +8,7 @@ import { useUsers } from '../../../hooks/useUsers';
 import SelectUsersTeamChat from '../../SelectUsers/SelectUsersTeamChat/SelectUsersTeamChat';
 import Button from '../../UI/Button/Button';
 import PropTypes from 'prop-types';
+import { addNotification } from '../../../services/notification.service';
 
 /**
  * CreateChat component allows users to create a new chat by selecting users and providing a chat title.
@@ -81,6 +82,12 @@ export const CreateChat = (setShowNewChat, showNewChat, setSelectedChat) => {
     titleCheck(chatTitle);
 
     try {
+      chatUsers.forEach(async (user) => {
+        console.log(user);
+        if (user !== userData.username) {
+          await addNotification(user, 'Chat', `You were added to a new chat: ${chatTitle}`);
+        }
+      });
       await createChat(chatUsers, chatTitle, (chatId) => {
         setSelectedChat({ id: chatId, chatUsers });
         setShowNewChat(!showNewChat);
@@ -109,7 +116,6 @@ export const CreateChat = (setShowNewChat, showNewChat, setSelectedChat) => {
 
         <Button onClick={handleCreateChat}>Create Chat</Button>
       </div>
-
       {showModal && <Modal message={modalMessage} show={showModal} handleClose={handleCloseModal} />}
     </div>
   );

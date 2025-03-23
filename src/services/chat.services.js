@@ -1,6 +1,6 @@
 import { db } from '../config/firebase-config';
 import { ref, push, onValue, update, get } from 'firebase/database';
-
+import { getMessageById } from './message.services';
 
 /**
  * Retrieves chats associated with a specific username and provides the data through a callback function.
@@ -65,17 +65,19 @@ export const getChatsByUsername = async (username, callback) => {
  * @returns {Promise<function>} A promise that resolves to an unsubscribe function 
  *                              to stop listening for real-time updates.
  */
-export const getChatById = async (chatId, callback) => {
-    const chatRef = await ref(db, `chats/${chatId}`);
+export const getChatById = (chatId, callback) => {
+    const chatRef = ref(db, `chats/${chatId}`);
+
     const unsubscribe = onValue(chatRef, (snapshot) => {
-        if(snapshot.exists()) {
-            return callback(Object.values(snapshot.val()));
+        if (snapshot.exists()) {
+            callback(snapshot.val());
         } else {
-            return callback(null);
+            callback(null);
         }
-    })
+    });
+
     return unsubscribe;
-}
+};
 
 /**
  * Creates a new chat with the specified users and title, and executes a callback with the chat ID.
@@ -92,6 +94,7 @@ export const createChat = async (users, title = '', callback) => {
         users,
         title,
         messages: [],
+        createdOn: new Date().toString(),
     }
 
     const result = await push(ref(db, 'chats'), chat);
@@ -126,15 +129,23 @@ export const deleteChat = async (chatId) => {
     await update(ref(db, `chats/${chatId}`), { isDeleted: true });
 }
 
-export const sortChats = (chats, sortBy) => {
-    switch (sortBy) {
-        case 'recent':
-            return chats.sort((a, b) => new Date(b.messages[b.messages.length - 1].createdOn) - new Date(a.messages[a.messages.length - 1].createdOn));
-        case 'oldest':
-            return chats.sort((a, b) => new Date(a.messages[a.messages.length - 1].createdOn) - new Date(b.messages[b.messages.length - 1].createdOn));
-        case 'title':
-            return chats.sort((a, b) => a.title.localeCompare(b.title));
-        default:
-            return chats;
+export const sortChats = (chats, sortBy = 'title') => {
+    if ( sortBy !== 'title') {
+        chats.sort((a, b) => {
+            const lastAMessageId = a.messages[a.messages.length - 1];
+            const lastBMessageId = b.messages[b.messages.length - 1];
+            const lastAMessage = getMessageById(lastAMessageId);
+            const lastBMessage = getMessageById(lastBMessageId);
+            switch (sortBy) {
+                case 'oldest':
+                    return new Date(lastAMessage.createdOn) - new Date(lastBMessage.createdOn)
+                default:
+                    return new Date(lastBMessage.createdOn) - new Date(lastAMessage.createdOn)
+            }
+        });
+    } 
+    if (sortBy === 'title') {
+        return chats.sort((a, b) => a.title.localeCompare(b.title));
     }
+    return chats;
 }

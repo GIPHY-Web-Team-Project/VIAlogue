@@ -48,9 +48,8 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
           <img src="/images/newchat.jpg" alt="New chat" className="w-7 h-7 ml-2"/>
       </Button>
       </div>
-      <div className="flex flex-col overflow-y-auto h-[80vh] pb-4">
+      <div className="flex flex-col overflow-y-auto h-[90vh] pb-4">
       {loading ? (
-          // Show loading spinner while fetching chats
           <div className="flex items-center justify-center h-full">
             <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-blue-500"></div>
           </div>

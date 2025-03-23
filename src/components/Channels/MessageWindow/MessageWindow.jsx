@@ -5,6 +5,8 @@ import EmojiPicker from 'emoji-picker-react';
 import GifPicker from 'gif-picker-react';
 import { API_KEY } from '../../../common/constants';
 import PropTypes from 'prop-types';
+//import { getChatById } from '../../../services/chat.services';
+//import { addNotification } from '../../../services/notification.service';
 
 /**
  * MessageWindow component allows users to send messages, emojis, and GIFs in a chat interface.
@@ -30,7 +32,7 @@ export const MessageWindow = ({ chatId, sender }) => {
     const [message, setMessage] = useState('');
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [showGifPicker, setShowGifPicker] = useState(false);
-
+    // const [receivers, setReceivers] = useState([]);
   /**
    * Handles the creation of a new message.
    * Prevents adding empty messages and resets the input field after adding a message.
@@ -38,10 +40,24 @@ export const MessageWindow = ({ chatId, sender }) => {
    * @function
    * @returns {void}
    */
-  const handleNewMessage = () => {
+  const handleNewMessage = async () => {
     if (message.trim() === '') return;
-    addMessage(chatId, message, sender);
+    await addMessage(chatId, message, sender);
     setMessage('');
+
+    // const unsubscribe = getChatById(chatId, (chat) => {
+    //   if (chat) {
+    //       setReceivers(chat.users.filter((user) => user !== sender));
+    //       const chatTitle = chat.title;
+    //       receivers.forEach(async (receiver) => {
+    //         await addNotification(receiver, `New message in ${chatTitle}`, `${sender}: ${message}`, 'message');
+    //       });
+    //   } else {
+    //       console.log("Chat not found.");
+    //   }
+    // });
+
+    // return () => unsubscribe();
   };
 
   /**

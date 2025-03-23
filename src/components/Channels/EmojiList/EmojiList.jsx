@@ -5,6 +5,7 @@ import { AppContext } from '../../../store/app-context';
 import { useEffect } from 'react';
 import { useContext } from 'react';
 import PropTypes from 'prop-types';
+import { addNotification } from '../../../services/notification.service';
 
 /**
  * EmojiList component allows users to react to a message with emojis.
@@ -68,6 +69,7 @@ export const EmojiList = ({ message }) => {
 
         setReaction(updatedReactions);
         await updateMessage(message.chatId, message.id, updatedReactions, "reactions");
+        await addNotification(message.sender, 'Reaction', `${userData.username} reacted to your message with: ${emoji}.`);
     };
 
     return (
