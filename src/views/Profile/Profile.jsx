@@ -6,7 +6,6 @@ import { auth, db } from '../../config/firebase-config';
 import { signOut } from 'firebase/auth';
 import SideBar from '../../components/UI/SideBar/SideBar';
 import ViewStatus from '../ViewStatus/ViewStatus';
-// import { createChat, getChatByParticipants } from '../../services/chat.services';
 
 /**
  * Profile component that displays and allows editing of user profile information.
@@ -42,12 +41,6 @@ import ViewStatus from '../ViewStatus/ViewStatus';
  * 
  * @function handleChange
  * Updates the form data state when input fields are changed.
- * 
- * @function handleChat
- * Initiates a chat with the profile user. Creates a new chat if one doesn't already exist.
- * 
- * @function handleVideoCall
- * Navigates to the video call page with the profile user.
  * 
  * @function updateUserStatus
  * @param {string} username - The username of the user.
@@ -173,51 +166,18 @@ export default function Profile() {
     }
   };
 
-  const handleChat = async () => {
-    try {
-      const existingChat = await getChatByParticipants([userData.username, username]);
-
-      if (existingChat) {
-        navigate(`/chats/${existingChat.id}`);
-      } else {
-        const newChat = await createChat({
-          title: `${userData.username} and ${username}`,
-          users: [userData.username, username],
-        });
-
-        navigate(`/chats/${newChat.id}`);
-      }
-    } catch (error) {
-      console.error('Error starting chat:', error);
-    }
-  };
-
-  const handleVideoCall = () => {
-    navigate(`/video-call/${username}`);
-  };
-
   return (
     <div className='flex flex-grow items-center bg-gray-900 min-h-screen'>
       <SideBar type='menu' />
       <div className='bg-gray-800 p-4 md:p-8 rounded-lg shadow-lg w-full max-w-4xl mx-auto my-4'>
         <div className='flex flex-col items-center'>
           <div className='flex items-center'>
-            {userData.username !== username && (
-              <button onClick={handleChat} className='bg-blue-600 text-white p-2 rounded-full hover:bg-blue-500 transition mr-2'>
-                💬
-              </button>
-            )}
             <img
               src={profilePicture || '/images/123.jpg'}
               alt='Profile'
               className='w-32 h-32 md:w-40 md:h-40 rounded-full cursor-pointer'
               onClick={() => fileInputRef.current.click()}
             />
-            {userData.username !== username && (
-              <button onClick={handleVideoCall} className='bg-green-600 text-white p-2 rounded-full hover:bg-green-500 transition ml-2'>
-                📹
-              </button>
-            )}
           </div>
           <input type='file' ref={fileInputRef} className='hidden' onChange={handleProfilePictureChange} />
         </div>
