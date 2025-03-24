@@ -3,15 +3,20 @@ import { ref, push, onValue, update, get } from 'firebase/database';
 import { getMessageById } from './message.services';
 
 /**
- * Retrieves chats associated with a specific username and provides the data through a callback function.
- * Filters out deleted chats and includes the latest message for each chat if available.
+ * Retrieves chats associated with a specific username, including additional metadata such as
+ * the latest message and unread message count for each chat. The chats are sorted by the
+ * timestamp of the latest message in descending order.
  *
  * @async
- * @function getChatsByUsername
+ * @function
  * @param {string} username - The username to filter chats by.
- * @param {function} callback - A callback function to handle the retrieved chats. 
- *                              It receives an array of chat objects as its argument.
- * @returns {function} - A function to unsubscribe from the real-time database listener.
+ * @param {function(Array): void} callback - A callback function that receives the updated list of chats.
+ * Each chat object includes the following properties:
+ *   - `users` (Array<string>): The users participating in the chat.
+ *   - `isDeleted` (boolean): Indicates if the chat is deleted.
+ *   - `latestMessage` (Object|null): The most recent message in the chat, or null if no messages exist.
+ *   - `unreadCount` (number): The count of unread messages for the given username.
+ * @returns {function(): void} - A function to unsubscribe from the real-time database listener.
  */
 
 export const getChatsByUsername = async (username, callback) => {
@@ -30,46 +35,46 @@ export const getChatsByUsername = async (username, callback) => {
 
         const chatPromises = filteredChats.map(async (chat) => {
             let unreadCount = 0;
-
+            let latestMessage = null;
+            
             if (chat.messages) {
                 const messageIds = Object.keys(chat.messages);
                 for (const messageId of messageIds) {
                     const messageRef = ref(db, `messages/${messageId}`);
                     const messageSnapshot = await get(messageRef);
                     if (messageSnapshot.exists()) {
-                        chat.latestMessage = messageSnapshot.val();
-                        if (messageSnapshot.val().unreadBy?.includes(username)) {
+                        const messageData = messageSnapshot.val();
+                        if (!latestMessage || new Date(messageData.createdOn) > new Date(latestMessage.createdOn)) {
+                            latestMessage = messageData;
+                        }
+                        if (messageData.unreadBy?.includes(username)) {
                             unreadCount++;
                         }
-                    } else {
-                        chat.latestMessage = null;
                     }
                 }
             }
 
+            chat.latestMessage = latestMessage;
             chat.unreadCount = unreadCount;
             return chat;
         });
 
         const updatedChats = await Promise.all(chatPromises);
+
         updatedChats.sort((a, b) => {
-            const lastAMessageId = a.messages ? a.messages[a.messages.length - 1] : null;
-            const lastBMessageId = b.messages ? b.messages[b.messages.length - 1] : null;
-        
-            const lastAMessage = lastAMessageId ? getMessageById(lastAMessageId) : null;
-            const lastBMessage = lastBMessageId ? getMessageById(lastBMessageId) : null;
+            if (!a.latestMessage && !b.latestMessage) return 0;
+            if (!a.latestMessage) return 1;
+            if (!b.latestMessage) return -1;
 
-            if (!lastAMessage && !lastBMessage) return 0;
-            if (!lastAMessage) return 1;
-            if (!lastBMessage) return -1; 
-
-            return new Date(lastBMessage.createdOn) - new Date(lastAMessage.createdOn);
+            return new Date(b.latestMessage.createdOn) - new Date(a.latestMessage.createdOn);
         });
+
         callback(updatedChats);
     });
 
     return unsubscribe;
-}
+};
+
 /**
  * Retrieves a chat by its ID and listens for real-time updates.
  *

@@ -23,7 +23,7 @@ export default function SelectUsersTeamChat({ selectedUsers, setSelectedUsers, u
   };
 
   return (
-    <div className='flex flex-row justify-between'>
+    <div className='flex flex-row justify-between overflow-y-auto h-[60vh]'>
       <div className='flex flex-col w-full h-full'>
         <SearchBar type='users' objects={users} objectList={userList} setObjectList={setUserList} selectedUsers={selectedUsers} />
         <ul>
