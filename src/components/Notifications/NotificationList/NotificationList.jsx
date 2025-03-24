@@ -31,7 +31,7 @@ const NotificationList = () => {
     };
 
     return (
-        <div className='absolute top-2 left-15 bg-gray-800 border rounded-lg shadow-lg p-4 border-gray-600 w-96 h-96 overflow-y-auto'>
+        <div className='absolute top-2 left-15 bg-gray-800 border rounded-lg shadow-lg p-4 border-gray-600 w-96 h-96 overflow-y-auto z-20'>
             {loading ? (
                 <div className="flex items-center justify-center h-full">
                     <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-blue-500"></div>

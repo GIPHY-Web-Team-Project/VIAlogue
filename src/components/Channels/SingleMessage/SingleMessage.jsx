@@ -95,22 +95,24 @@ export const SingleMessage = ({ msg, isFirstFromSender }) => {
               )}
             </div>
           </div>
-          <div className='flex flex-row justify-between mt-2'>
+          <div className='relative flex flex-row justify-between mt-2'>
             {msg.reactions && Object.values(msg.reactions).some((users) => users.length > 0) && (
               <div className='flex flex-row gap-2 bg-gray-700 rounded-md pl-1 pr-1 mt-1'>
                 {Object.entries(msg.reactions).map(
                   ([emoji, users]) =>
                     users.length > 0 && (
-                      <div key={emoji}>
-                        <button key={emoji} className='flex flex-row items-center text-white px-2' onClick={() => setShowUsers(!showUsers)}>
+                      <div key={emoji} className='flex flex-col'>
+                        <button key={emoji} className='flex flex-row items-center text-white px-1' onClick={() => setShowUsers(!showUsers)}>
                           {emoji} {users.length}
                         </button>
                         {showUsers && (
-                          <ul key={emoji} className='absolute bg-gray-700 shadow-md rounded-md p-1 flex flex-col align-center mt-7'>
-                            {users.map((user) => (
-                              <li key={user}>{user}</li>
-                            ))}
-                          </ul>
+                          <div className='absolute bg-gray-800 shadow-md rounded-md p-1 mt-6'>
+                            <ul key={emoji}>
+                              {users.map((user) => (
+                                <li key={user}>{user}</li>
+                              ))}
+                            </ul>
+                          </div>
                         )}
                       </div>
                     )
