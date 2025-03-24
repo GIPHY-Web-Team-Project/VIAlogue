@@ -23,6 +23,7 @@ import { formatDateShort } from '../../../utils/dateUtils';
 export const ChatList = ({ username, handleNewChat, chats, setChats, setSelectedChat }) => {
   const { userData } = useContext(AppContext);
   const [loading, setLoading] = useState(true);
+  const [selectedChatId, setSelectedChatId] = useState(null);
 
   useEffect(() => {
     setLoading(true);
@@ -46,6 +47,7 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
   const handleChatClick = (chat) => {
     markMessagesAsRead(chat.id, username);
     setSelectedChat({ ...chat }); 
+    setSelectedChatId(chat.id);
     setChats((prevChats) =>
       prevChats.map((c) => (c.id === chat.id ? { ...c, unreadCount: 0 } : c))
     );
@@ -68,8 +70,12 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
           </div>
         ) : chats && chats.length > 0 ? (
           chats.map((chat) => {
+            const isSelected = chat.id === selectedChatId;
             return (
-              <div key={chat.id} onClick={() => handleChatClick(chat)} className='hover:bg-gray-600 border-gray-600 p-2 rounded-md cursor-pointer'>
+              <div key={chat.id} onClick={() => handleChatClick(chat)}
+              className={`p-2 rounded-md cursor-pointer border-gray-600 hover:bg-gray-600 
+                ${isSelected ? 'bg-gray-700 text-white' : 'bg-gray-800'}`}
+            >
                 <div className='flex flex-row justify-between'>
                   <Button btnStyle={CHAT_TEAM_LIST_ITEM}>{chat.title}</Button>
                   {chat.latestMessage && <p className="text-xs text-gray-500">{formatDateShort(chat.latestMessage.createdOn)}</p>}
