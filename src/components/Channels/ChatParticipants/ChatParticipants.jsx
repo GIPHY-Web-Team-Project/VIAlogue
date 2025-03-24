@@ -9,6 +9,7 @@ import { updateChat } from '../../../services/chat.services';
 import SelectUsersTeamChat from '../../SelectUsers/SelectUsersTeamChat/SelectUsersTeamChat';
 import ViewStatus from '../../../views/ViewStatus/ViewStatus';
 import PropTypes from 'prop-types';
+import { set } from 'firebase/database';
 
 /**
  * ChatParticipants component displays a list of chat participants and provides functionality 
@@ -103,9 +104,19 @@ export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, 
         const newUsers = selectedUsers.map((user) => user);
         try {
             await updateChat(chatId, [...participants, ...newUsers], "users");
+            setSelectedUsers([]);
+            const userList = await Promise.all(
+                newUsers.map(async (username) => {
+                    return await getUserByUsername(username);
+                })
+            );
+            setUsers([...users, ...userList]);
+            setUsersNotInChat(usersNotInChat.filter((user) => !newUsers.includes(user.username)));
         } catch (error) {
             console.log(error);
         }
+
+        
     }
 
     return (
@@ -141,7 +152,7 @@ export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, 
                     <SelectUsersTeamChat selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} userList={usersNotInChat} setUserList={setUsersNotInChat} />
                     <button
                         onClick={handleNewUsers}
-                        className="mt-2 w-full mb-2 border-t-2 border-gray-700 p-2"
+                        className="mt-2 w-full mb-2 border-t-2 border-gray-700 p-2 cursor-pointer"
                     >
                         Add to chat
                     </button>

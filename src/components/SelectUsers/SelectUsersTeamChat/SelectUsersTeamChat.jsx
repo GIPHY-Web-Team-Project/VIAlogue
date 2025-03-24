@@ -18,8 +18,8 @@ export default function SelectUsersTeamChat({ selectedUsers, setSelectedUsers, u
     const userObj = users.find((u) => u.username === user);
     if (userObj) {
       setUserList((prevList) => [...prevList, userObj]);
+      setSelectedUsers(selectedUsers.filter((selectedUser) => selectedUser !== user));
     }
-    setSelectedUsers(selectedUsers.filter((selectedUser) => selectedUser !== user));
   };
 
   return (
