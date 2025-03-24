@@ -64,6 +64,7 @@ export default function CreateComp({ setViewCreateWindow, type, team }) {
         });
       } else if (type === CHANNEL) {
         await createChannel(title, team, members, userData.username);
+        setViewCreateWindow(false);
       }
     } catch (error) {
       console.error(error.message);

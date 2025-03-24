@@ -15,7 +15,6 @@ import TeamsPage from './views/Teams/TeamsPage/TeamsPage';
 import TeamWindow from './views/Teams/TeamWindow/TeamWindow';
 import UserStatus from './components/UserStatus/UserStatus';
 
-
 export default function App() {
   const [appState, setAppState] = useState({
     user: null,
@@ -50,9 +49,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <AppContext.Provider value={{ ...appState, setAppState }}>
-          <div className='font-medium flex flex-col w-screen h-screen bg-gray-900 text-white'>
-            { !user && <Header />}
-            <UserStatus /> 
+        <div className='font-medium flex flex-col w-screen h-screen bg-gray-900 text-white'>
+          {!user && <Header />}
+          <UserStatus />
           <Routes>
             <Route path='/' element={<LandingPage />} />
             <Route path='/register' element={<Register />} />
@@ -60,7 +59,6 @@ export default function App() {
             <Route path='/teams' element={<TeamsPage />} />
             <Route path='/teams/:teamId' element={<TeamWindow />} />
             <Route path='/profile/:username' element={<Profile />} />
-            {/* <Route path="/view-profile/:username" element={<ViewProfile />} /> */}
             <Route path='/chats' element={<ChatPage />} />
             <Route path='*' element={<h1>404 Not Found</h1>} />
           </Routes>

@@ -1,6 +1,7 @@
 export const variant = {
   default: 'py-2 px-4 text-white bg-dark-blue rounded-lg cursor-pointer transition hover:bg-blue hover:text-black',
   none: '',
+  leaveComment: 'py-1 px-2 text-sm text-white bg-dark-blue rounded-lg cursor-pointer transition hover:bg-blue hover:text-black',
   chatTeamListItem: 'cursor-pointer hover:underline active:no-underline',
   createTeam: 'fixed right-10 bottom-10 self-end py-4 px-8 text-white text-2xl bg-dark-blue rounded-lg cursor-pointer transition hover:bg-blue hover:text-black',
   login: 'border-4 border-dark-blue rounded-lg py-1 px-2 hover:text-black hover:bg-blue hover:border-blue cursor-pointer transition',

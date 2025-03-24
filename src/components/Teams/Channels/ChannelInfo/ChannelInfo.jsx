@@ -18,9 +18,7 @@ export default function ChannelInfo({ channel, setShowChannelInfo }) {
 
   const leaveChannel = async () => {
     const updatedMembers = channel.members.filter((member) => member !== userData.username);
-    console.log('updatedMembers', updatedMembers);
     await updateChannel(teamId, channel.id, { members: updatedMembers });
-    console.log(channel);
 
     if (updatedMembers.length === 0) {
       await updatedMembers(teamId, channel.id, { isDeleted: true });

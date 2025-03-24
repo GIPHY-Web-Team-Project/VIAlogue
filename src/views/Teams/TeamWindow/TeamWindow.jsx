@@ -64,17 +64,13 @@ export default function TeamWindow() {
             ) : (
               <>
                 <div className=''>
+                  {/* {team.avatar} */}
                   <h3>{team?.title}</h3>
                   <p>Owner: {team?.owner}</p>
                 </div>
               </>
             )}
-            {team && !viewChannel && (
-              <div>
-                <h3>Team Members:</h3>
-                <TeamParticipants users={users} type={TEAM} />
-              </div>
-            )}
+            {team && !viewChannel && <TeamParticipants users={users} type={TEAM} />}
           </>
         )}
       </div>

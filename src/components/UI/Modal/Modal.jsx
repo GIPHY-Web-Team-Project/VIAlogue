@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '../Button/Button';
 
-const Modal = ({ show, handleClose, message }) => {
+export default function Modal({ show, handleClose, message }) {
   if (!show) {
     return null;
   }
@@ -14,6 +14,4 @@ const Modal = ({ show, handleClose, message }) => {
       </div>
     </div>
   );
-};
-
-export default Modal;
+}
