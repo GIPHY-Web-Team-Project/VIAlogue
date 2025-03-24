@@ -7,6 +7,7 @@ import { AppContext } from '../../../store/app-context';
 import EmojiList from '../EmojiList/EmojiList';
 import { useNavigate } from 'react-router';
 import PropTypes from 'prop-types';
+import { formatDate } from '../../../utils/dateUtils';
 
 /**
  * Component representing a single message in a chat.
@@ -34,24 +35,6 @@ export const SingleMessage = ({ msg, isFirstFromSender }) => {
 
   const handleEdit = () => {
     setShowEdit(true);
-  };
-
-  /**
-   * Formats a date string into a human-readable format.
-   * If the date corresponds to today, it returns the time in "HH:MM" format.
-   * Otherwise, it returns the date and time in "Weekday, DD/MM/YYYY, HH:MM" format.
-   *
-   * @param {string} dateString - The date string to format.
-   * @returns {string} - The formatted date string.
-   */
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const today = new Date();
-    const isToday = date.toDateString() === today.toDateString();
-
-    const options = isToday ? { hour: '2-digit', minute: '2-digit' } : { hour: '2-digit', minute: '2-digit', weekday: 'short', day: 'numeric', month: 'numeric', year: 'numeric' };
-
-    return date.toLocaleString(undefined, options);
   };
 
   return (

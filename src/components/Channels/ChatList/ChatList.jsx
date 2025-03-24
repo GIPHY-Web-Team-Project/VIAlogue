@@ -5,6 +5,7 @@ import { AppContext } from '../../../store/app-context';
 import Button from '../../UI/Button/Button';
 import PropTypes from 'prop-types';
 import { markMessagesAsRead } from '../../../services/message.services';
+import { formatDateShort } from '../../../utils/dateUtils';
 
 /**
  * ChatList component displays a list of chat conversations for a given user.
@@ -50,6 +51,8 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
     );
   };
 
+
+
   return (
     <div className='bg-gray-800 p-4 overflow-y-auto w-80'>
       <div className='flex flex-row justify-between border-b-2 border-gray-600 mb-2'>
@@ -67,7 +70,10 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
           chats.map((chat) => {
             return (
               <div key={chat.id} onClick={() => handleChatClick(chat)} className='hover:bg-gray-600 border-gray-600 p-2 rounded-md cursor-pointer'>
-                <Button btnStyle={CHAT_TEAM_LIST_ITEM}>{chat.title}</Button>
+                <div className='flex flex-row justify-between'>
+                  <Button btnStyle={CHAT_TEAM_LIST_ITEM}>{chat.title}</Button>
+                  {chat.latestMessage && <p className="text-xs text-gray-500">{formatDateShort(chat.latestMessage.createdOn)}</p>}
+                </div>
                 <div className='flex flex-row justify-between'>
                 {chat.latestMessage ? (
                   <p className="text-sm text-gray-500 overflow-ellipsis overflow-hidden flex flex-row">
