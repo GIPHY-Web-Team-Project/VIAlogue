@@ -6,7 +6,7 @@ import { auth, db } from '../../config/firebase-config';
 import { signOut } from 'firebase/auth';
 import SideBar from '../../components/UI/SideBar/SideBar';
 import ViewStatus from '../ViewStatus/ViewStatus';
-import { createChat, getChatByParticipants } from '../../services/chat.services';
+// import { createChat, getChatByParticipants } from '../../services/chat.services';
 
 /**
  * Profile component that displays and allows editing of user profile information.

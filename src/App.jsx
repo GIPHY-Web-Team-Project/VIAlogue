@@ -14,7 +14,7 @@ import Profile from './views/Profile/Profile';
 import TeamsPage from './views/Teams/TeamsPage/TeamsPage';
 import TeamWindow from './views/Teams/TeamWindow/TeamWindow';
 import UserStatus from './components/UserStatus/UserStatus';
-import ChatWindow from './components/Channels/ChatWindow/ChatWindow';
+// import ChatWindow from './components/Channels/ChatWindow/ChatWindow';
 
 export default function App() {
   const [appState, setAppState] = useState({
@@ -61,7 +61,7 @@ export default function App() {
             <Route path='/teams/:teamId' element={<TeamWindow />} />
             <Route path='/profile/:username' element={<Profile />} />
             {/* <Route path="/view-profile/:username" element={<ViewProfile />} /> */}
-            <Route path='/chats/:chatId' element={<ChatWindow />} />
+            {/* <Route path='/chats/:chatId' element={<ChatWindow />} /> */}
             <Route path='/chats' element={<ChatPage />} />
             <Route path='*' element={<h1>404 Not Found</h1>} />
           </Routes>
