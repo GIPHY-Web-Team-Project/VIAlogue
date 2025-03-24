@@ -49,7 +49,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <AppContext.Provider value={{ ...appState, setAppState }}>
-        <div className='font-medium flex flex-col w-screen h-screen bg-gray-900 text-white'>
+        <div className='font-medium flex flex-col w-screen h-screen max-w-screen max-h-screen bg-gray-900 text-white'>
           {!user && <Header />}
           <UserStatus />
           <Routes>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import LeaveComment from '../LeaveComment/LeaveComment';
 import { getAllComments } from '../../../../services/comments.services';
+import Comment from '../Comment/Comment';
 
 export default function CommentWindow({ post }) {
   const [comments, setComments] = useState([]);
@@ -19,12 +20,11 @@ export default function CommentWindow({ post }) {
 
   return (
     <div className='flex flex-col'>
-      <section>
+      <section className='flex flex-col items-start'>
         {comments.length > 0 &&
           comments.map((comment) => (
-            <div key={comment.id}>
-              <p>{comment.content}</p>
-              <div>{comment.author}</div>
+            <div key={comment.id} className='bg-gray-800 mt-3 border-1 rounded-md border-gray-700 py-2 px-3'>
+              <Comment comment={comment} />
             </div>
           ))}
       </section>

@@ -8,6 +8,7 @@ export default function Post({ post }) {
   return (
     <>
       <h3 className='mb-5 text-4xl'>{post.title}</h3>
+      <section></section>
       <p className='text-xl break-words whitespace-normal'>{post.content}</p>
       <section>
         <Button onClick={() => setShowComments(!showComments)}>{showComments ? 'Hide Comments' : 'Show Comments'}</Button>

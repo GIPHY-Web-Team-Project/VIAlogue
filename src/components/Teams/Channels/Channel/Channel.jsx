@@ -39,7 +39,7 @@ export default function Channel({ channel }) {
           <Button onClick={() => setViewCreatePost(true)}>Upload a Post</Button>
         </section>
         {viewCreatePost && <CreatePost channelId={channel.id} setViewCreatePost={setViewCreatePost} />}
-        <section className='flex flex-col flex-grow mt-20 overflow-y-auto px-20'>{showChannelInfo ? <ChannelInfo channel={channel} setShowChannelInfo={setShowChannelInfo} /> : <PostWindow channel={channel} />}</section>
+        <section className='flex flex-col mt-20 overflow-y-auto px-20'>{showChannelInfo ? <ChannelInfo channel={channel} setShowChannelInfo={setShowChannelInfo} /> : <PostWindow channel={channel} />}</section>
       </div>
       <TeamParticipants users={users} />
     </div>
