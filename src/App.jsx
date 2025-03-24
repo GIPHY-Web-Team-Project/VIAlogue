@@ -61,7 +61,6 @@ export default function App() {
             <Route path='/teams' element={<TeamsPage />} />
             <Route path='/teams/:teamId' element={<TeamWindow />} />
             <Route path='/profile/:username' element={<Profile />} />
-            {/* <Route path="/view-profile/:username" element={<ViewProfile />} /> */}
             <Route path='/chats' element={<ChatPage />} />
             <Route path='*' element={<h1>404 Not Found</h1>} />
           </Routes>

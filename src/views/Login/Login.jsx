@@ -7,50 +7,52 @@ import Button from '../../components/UI/Button/Button';
 import { CANCEL } from '../../common/enums';
 import { variant } from '../../common/button-const';
 
-
 /**
  * Login component for user authentication.
  *
  * This component provides a login form where users can enter their email and password
  * to authenticate. It uses Firebase's `signInWithEmailAndPassword` for authentication
- * and updates the application state upon successful login.
+ * and updates the application state upon successful login. If the login fails, an error
+ * message is displayed.
  *
  * @component
  *
  * @returns {JSX.Element} The rendered Login component.
  *
  * @example
- * // Usage in a React application
- * import Login from './Login';
- * 
- * function App() {
- *   return <Login />;
- * }
- *
- * @function
- * @name Login
- *
- * @description
- * - Displays a login form with email and password fields.
- * - Validates user input to ensure both fields are filled.
- * - Authenticates the user using Firebase and updates the app state.
- * - Redirects the user to the `/chats` page upon successful login.
- * - Provides a link to the registration page for new users.
+ * <Login />
  *
  * @dependencies
- * - `useContext` from React for accessing the application context.
- * - `useState` from React for managing form state.
- * - `useNavigate` from React Router for navigation.
- * - `signInWithEmailAndPassword` from Firebase for authentication.
+ * - `useContext` from React: To access the application context (`AppContext`).
+ * - `useState` from React: To manage the local state for user credentials.
+ * - `useNavigate` from React Router: To navigate to different routes.
+ * - `signInWithEmailAndPassword` from Firebase: To handle user authentication.
+ *
+ * @function login
+ * Handles the login process. Validates user input, attempts to authenticate with Firebase,
+ * updates the application state, and navigates to the `/chats` route upon success.
+ *
+ * @function updateUser
+ * Updates the local state for user credentials dynamically based on the input field.
+ *
+ * @state {Object} user - The local state object containing `email` and `password`.
+ * @state {string} user.email - The user's email address.
+ * @state {string} user.password - The user's password.
+ *
+ * @context {Object} AppContext - The application context.
+ * @context {Function} setAppState - Function to update the application state.
  *
  * @hooks
- * - `useContext(AppContext)` - Accesses the application state context.
- * - `useState` - Manages the state of the email and password fields.
- * - `useNavigate` - Handles navigation after login.
+ * - `useContext(AppContext)`: To access the `setAppState` function.
+ * - `useState`: To manage the `user` state.
+ * - `useNavigate`: To navigate programmatically.
  *
- * @events
- * - `onClick` - Triggers the login function when the "Login" button is clicked.
- * - `onChange` - Updates the email and password state when the input fields change.
+ * @styles
+ * - Tailwind CSS classes are used for styling the component.
+ *
+ * @errors
+ * - Displays an alert if email or password is missing.
+ * - Displays an alert with the error message if login fails.
  */
 export default function Login() {
   const { setAppState } = useContext(AppContext);
@@ -90,13 +92,25 @@ export default function Login() {
   };
 
   return (
-    <div className='flex flex-grow items-center justify-center bg-gray-900'>
-      <div className='bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-sm'>
-        <h2 className='text-2xl font-bold text-center mb-4'>Login</h2>
+    <div className='flex flex-grow items-center justify-center bg-gray-900 min-h-screen p-4'>
+      <div className='bg-gray-800 p-6 md:p-8 rounded-lg shadow-lg w-full max-w-sm'>
+        <h2 className='text-2xl font-bold text-center text-gray-100 mb-4'>Login</h2>
         <p className='text-gray-400 text-center mb-6'>Enter your credentials to log in</p>
         <div className='space-y-4'>
-          <input type='email' placeholder='Email' value={user.email} onChange={updateUser('email')} className='w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' />
-          <input type='password' placeholder='Password' value={user.password} onChange={updateUser('password')} className='w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' />
+          <input
+            type='email'
+            placeholder='Email'
+            value={user.email}
+            onChange={updateUser('email')}
+            className='w-full p-3 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-100'
+          />
+          <input
+            type='password'
+            placeholder='Password'
+            value={user.password}
+            onChange={updateUser('password')}
+            className='w-full p-3 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-100'
+          />
         </div>
         <div className='flex justify-end space-x-4 mt-6'>
           <Button btnStyle={CANCEL} onClick={() => navigate('/')}>
