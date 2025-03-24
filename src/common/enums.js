@@ -15,3 +15,5 @@ export const TEAM = 'team';
 export const CHANNEL = 'channel';
 export const USERS = 'users';
 export const MEMBERS = 'members';
+
+export const CHAT_SEND = 'chatSend';

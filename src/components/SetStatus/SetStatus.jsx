@@ -41,7 +41,7 @@ export default function SetStatus({ setShowDropdown, status, setStatus }) {
                 {statusOptions.map((option) => (
                     <li
                         key={option}
-                        className={`cursor-pointer px-4 py-2 hover:bg-gray-600 ${option === status ? 'text-gray-200' : ''}`}
+                        className={`cursor-pointer px-4 py-2 hover:bg-gray-600 hover:text-blue ${option === status ? 'text-gray-200' : ''}`}
                         onClick={() => handleStatusChange(option)}
                     >
                         {option}

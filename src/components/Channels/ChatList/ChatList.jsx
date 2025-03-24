@@ -57,7 +57,7 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
       <div className='flex flex-row justify-between border-b-2 border-gray-600 mb-2'>
         <h3 className="flex flex-row mb-2">Chat</h3>
       <Button btnStyle={NONE} onClick={() => handleNewChat()}>
-          <img src="/images/newchat.jpg" alt="New chat" className="w-7 h-7 ml-2"/>
+          <img src="/images/newchat.jpg" alt="New chat" className="w-7 h-7 ml-2 mb-2 cursor-pointer"/>
       </Button>
       </div>
       <div className="flex flex-col overflow-y-auto h-[90vh] pb-4">
@@ -68,11 +68,11 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
         ) : chats && chats.length > 0 ? (
           chats.map((chat) => {
             return (
-              <div key={chat.id} onClick={() => handleChatClick(chat)} className='hover:border-2 border-gray-600 p-2 mt-1 mb-1 rounded-md cursor-pointer hover:bg-gray-700'>
+              <div key={chat.id} onClick={() => handleChatClick(chat)} className='hover:bg-gray-600 border-gray-600 p-2 rounded-md cursor-pointer'>
                 <Button btnStyle={CHAT_TEAM_LIST_ITEM}>{chat.title}</Button>
                 <div className='flex flex-row justify-between'>
                 {chat.latestMessage ? (
-                  <p className="text-sm text-gray-400 overflow-ellipsis overflow-hidden flex flex-row">
+                  <p className="text-sm text-gray-500 overflow-ellipsis overflow-hidden flex flex-row">
                     <strong>{(chat.latestMessage.sender !== userData.username) ? (chat.latestMessage.sender) : "You"}: </strong> &nbsp;{chat.latestMessage.message}
                   </p>
                 ) : (

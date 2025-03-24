@@ -52,6 +52,19 @@ export const getChatsByUsername = async (username, callback) => {
         });
 
         const updatedChats = await Promise.all(chatPromises);
+        updatedChats.sort((a, b) => {
+            const lastAMessageId = a.messages ? a.messages[a.messages.length - 1] : null;
+            const lastBMessageId = b.messages ? b.messages[b.messages.length - 1] : null;
+        
+            const lastAMessage = lastAMessageId ? getMessageById(lastAMessageId) : null;
+            const lastBMessage = lastBMessageId ? getMessageById(lastBMessageId) : null;
+
+            if (!lastAMessage && !lastBMessage) return 0;
+            if (!lastAMessage) return 1;
+            if (!lastBMessage) return -1; 
+
+            return new Date(lastBMessage.createdOn) - new Date(lastAMessage.createdOn);
+        });
         callback(updatedChats);
     });
 

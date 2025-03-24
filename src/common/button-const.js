@@ -1,7 +1,7 @@
 export const variant = {
   default: 'py-2 px-4 text-white bg-dark-blue rounded-lg cursor-pointer transition hover:bg-blue hover:text-black',
   none: '',
-  chatTeamListItem: 'cursor-pointer hover:underline active:no-underline',
+  chatTeamListItem: 'cursor-pointer hover:underline active:no-underline hover:text-blue',
   createTeam: 'fixed right-10 bottom-10 self-end py-4 px-8 text-white text-2xl bg-dark-blue rounded-lg cursor-pointer transition hover:bg-blue hover:text-black',
   // createChannel: 'py-2 px-4 text-white bg-dark-blue rounded-lg cursor-pointer transition hover:bg-blue hover:text-black',
   login: 'border-4 border-dark-blue rounded-lg py-1 px-2 hover:text-black hover:bg-blue hover:border-blue cursor-pointer transition',
@@ -10,4 +10,5 @@ export const variant = {
   chatParticipantsBtns: 'text-gray-500 text-xs',
   cancel: 'bg-gray-600 px-4 py-2 rounded-lg hover:bg-gray-700 cursor-pointer',
   home: 'text-white bg-transparent rounded-lg hover:bg-blue cursor-pointer active:bg-blue py-2 px-2 transition duration-200 active:scale-90',
+  chatSend: 'bg-transparent hover:text-blue px-2 border-l-2 border-gray-500 my-1 cursor-pointer',
 };

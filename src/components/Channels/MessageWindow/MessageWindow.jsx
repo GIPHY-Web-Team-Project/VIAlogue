@@ -7,6 +7,7 @@ import { API_KEY } from '../../../common/constants';
 import PropTypes from 'prop-types';
 //import { getChatById } from '../../../services/chat.services';
 //import { addNotification } from '../../../services/notification.service';
+import { CHAT_SEND } from '../../../common/enums';
 
 /**
  * MessageWindow component allows users to send messages, emojis, and GIFs in a chat interface.
@@ -121,7 +122,7 @@ export const MessageWindow = ({ chatId, sender }) => {
                     <GifPicker tenorApiKey={API_KEY} onGifClick={handleGifClick} theme="dark"/>
                 </div>
             )}
-            <Button onClick={handleNewMessage}>Send</Button>
+            <Button btnStyle={CHAT_SEND} onClick={handleNewMessage}>Send</Button>
         </div>
     )
 }
