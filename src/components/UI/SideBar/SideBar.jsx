@@ -1,5 +1,5 @@
 import { ChatList } from '../../Channels/ChatList/ChatList';
-import { use, useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { AppContext } from '../../../store/app-context';
 import { NavLink } from 'react-router-dom';
 import { variant } from '../../../common/button-const';
@@ -33,12 +33,16 @@ export default function SideBar({ type, username, handleNewChat, chats, setChats
     return (
       <div className='flex flex-col justify-between h-full bg-gray-700 p-2'>
         <div className='flex flex-col gap-4'>
-          <div onClick={() => setShowNotification(!showNotification)} className={variant.home}>
+          <div 
+            className={variant.home}
+            onMouseEnter={() => setShowNotification(true)} 
+            onMouseLeave={() => setShowNotification(false)}
+          >
             <div className='relative cursor-pointer py-2'>
             <img src="/images/notifications.png" className="h-10 w-10 flex justify-self-center"/>
             { notificationCount > 0 && <span className="text-gray-300 absolute top-0 right-0 bottom-auto text-xs flex items-center justify-center rounded-full bg-gray-500 w-5 h-6">{notificationCount}</span> }
             </div>
-            { showNotification && <NotificationList /> }
+              { showNotification && <NotificationList /> }
           </div>
           <NavLink className={({ isActive }) => 
             `${variant.home} ${isActive && "border-b-blue"}` + "py-2"

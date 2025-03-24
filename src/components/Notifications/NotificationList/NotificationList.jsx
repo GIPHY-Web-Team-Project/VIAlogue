@@ -4,8 +4,30 @@ import SingleNotification from "../SingleNotification/SingleNotification";
 import { useContext } from "react";
 import { AppContext } from "../../../store/app-context";
 import { getNotificationsByUsername } from "../../../services/notification.service";
-import { deleteAllNotifications } from "../../../services/notification.service";
+import { deleteAllNotifications, deleteNotification } from "../../../services/notification.service";
 
+/**
+ * NotificationList Component
+ * 
+ * This component displays a list of notifications for the current user. It fetches notifications
+ * based on the user's username and provides functionality to delete individual notifications or 
+ * clear all notifications at once.
+ * 
+ * Features:
+ * - Fetches notifications in real-time using a subscription mechanism.
+ * - Displays a loading spinner while notifications are being fetched.
+ * - Allows users to delete individual notifications or clear all notifications.
+ * - Displays a message when there are no notifications.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered NotificationList component.
+ *
+ * @dependencies
+ * - React (useState, useEffect, useContext)
+ * - AppContext for accessing user data.
+ * - Utility functions: getNotificationsByUsername, deleteAllNotifications, deleteNotification.
+ * - SingleNotification component for rendering individual notifications.
+ */
 const NotificationList = () => {
     const { userData } = useContext(AppContext);
     const [notifications, setNotifications] = useState([]);
@@ -24,18 +46,18 @@ const NotificationList = () => {
                 unsubscribe();
             }
         };
-    }, [userData]);
-
-    const handleDelete = (notificationId) => {
-        setNotifications((prevNotifications) =>
-            prevNotifications.filter((n) => n.id !== notificationId)
-        );
-        deleteNotification(userData.username, notificationId);
-    };
-
+    }, [userData.username]);
 
     const handleDeleteAll = async () => {
         await deleteAllNotifications(userData.username);
+        setNotifications([]);
+    };
+
+    const handleDeleteNotification = async (notificationId) => {
+        await deleteNotification(userData.username, notificationId);
+        setNotifications(prevNotifications =>
+            prevNotifications.filter(notification => notification.id !== notificationId)
+        );
     };
 
     return (
@@ -55,9 +77,12 @@ const NotificationList = () => {
                             if (notificationObj.type === 'other') {
                                 return (
                                     <li key={notificationObj.id}>
-                                        <SingleNotification key={notificationObj.id} notification={notificationObj} onDelete={handleDelete}/>
+                                        <SingleNotification 
+                                            notification={notificationObj} 
+                                            onDelete={handleDeleteNotification} // Pass handler here
+                                        />
                                     </li>
-                                )
+                                );
                             }
                         })}
                     </ul>
@@ -70,14 +95,14 @@ const NotificationList = () => {
             )}
         </div>
     );
-}
+};
 
 export default NotificationList;
 
 NotificationList.propTypes = {
     notifications: PropTypes.arrayOf(
         PropTypes.shape({
-            id: PropTypes.number,
+            id: PropTypes.string,
             type: PropTypes.string,
             message: PropTypes.string,
         })

@@ -9,7 +9,6 @@ import { updateChat } from '../../../services/chat.services';
 import SelectUsersTeamChat from '../../SelectUsers/SelectUsersTeamChat/SelectUsersTeamChat';
 import ViewStatus from '../../../views/ViewStatus/ViewStatus';
 import PropTypes from 'prop-types';
-import { set } from 'firebase/database';
 
 /**
  * ChatParticipants component displays a list of chat participants and provides functionality 

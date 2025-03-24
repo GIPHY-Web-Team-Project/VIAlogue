@@ -73,4 +73,5 @@ export default function ViewStatus({ username, type = 'user', source = 'profile'
 ViewStatus.propTypes = {
     username: PropTypes.string.isRequired,
     type: PropTypes.string,
+    source: PropTypes.string,
 };
