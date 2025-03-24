@@ -26,6 +26,14 @@ const NotificationList = () => {
         };
     }, [userData]);
 
+    const handleDelete = (notificationId) => {
+        setNotifications((prevNotifications) =>
+            prevNotifications.filter((n) => n.id !== notificationId)
+        );
+        deleteNotification(userData.username, notificationId);
+    };
+
+
     const handleDeleteAll = async () => {
         await deleteAllNotifications(userData.username);
     };
@@ -47,7 +55,7 @@ const NotificationList = () => {
                             if (notificationObj.type === 'other') {
                                 return (
                                     <li key={notificationObj.id}>
-                                        <SingleNotification key={notificationObj.id} notification={notificationObj} />
+                                        <SingleNotification key={notificationObj.id} notification={notificationObj} onDelete={handleDelete}/>
                                     </li>
                                 )
                             }

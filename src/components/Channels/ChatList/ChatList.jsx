@@ -22,13 +22,11 @@ import { markMessagesAsRead } from '../../../services/message.services';
 export const ChatList = ({ username, handleNewChat, chats, setChats, setSelectedChat }) => {
   const { userData } = useContext(AppContext);
   const [loading, setLoading] = useState(true);
-  const [selectedChatId, setSelectedChatId] = useState(null); // Track selected chat ID separately
 
   useEffect(() => {
     setLoading(true);
     const unsubscribe = getChatsByUsername(username, (fetchedChats) => {
       setChats((prevChats) => {
-        // Only update state if chats have actually changed
         if (JSON.stringify(prevChats) !== JSON.stringify(fetchedChats)) {
           return [...fetchedChats];
         }

@@ -166,3 +166,19 @@ export const sortChats = (chats, sortBy = 'title') => {
     }
     return chats;
 }
+
+export const getChatByParticipants = async (participants) => {
+    const chatsRef = ref(db, 'chats');
+    const snapshot = await get(chatsRef);
+    if (snapshot.exists()) {
+        const chats = snapshot.val();
+        const chat = Object.values(chats).find(chat => 
+            chat.users.length === participants.length &&
+            chat.users.every(user => participants.includes(user)) &&
+            !chat.isDeleted // Ensure it's not a deleted chat
+        );
+        return chat || null;
+    } else {
+        return null;
+    }
+};

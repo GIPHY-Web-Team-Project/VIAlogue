@@ -32,18 +32,18 @@ export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, 
     const [showProfile, setShowProfile] = useState(false);
     const [showSelectUsers, setShowSelectUsers] = useState(false);
     const [usersNotInChat, setUsersNotInChat] = useState([]);
-    const { users: allUsers } = useUsers(userData); 
-    const [ selectedUsers, setSelectedUsers ] = useState([]);
+    const { users: allUsers } = useUsers(userData);
+    const [selectedUsers, setSelectedUsers] = useState([]);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const userList = await Promise.all(
-        participants.map(async (username) => {
-          return await getUserByUsername(username);
-        })
-      );
-      setUsers(userList);
-    };
+    useEffect(() => {
+        const fetchUsers = async () => {
+            const userList = await Promise.all(
+                participants.map(async (username) => {
+                    return await getUserByUsername(username);
+                })
+            );
+            setUsers(userList);
+        };
 
         fetchUsers();
 
@@ -59,20 +59,20 @@ export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, 
         fetchUsersNotInChat();
     }, [participants, userData, allUsers]);
 
-  const handleProfileView = (user) => {
-    navigate(`/profile/${user.username}`);
-  };
+    const handleProfileView = (user) => {
+        navigate(`/profile/${user.username}`);
+    };
 
-  const handleUserClick = (user) => {
-    if (user === userData.username) {
-      setShowLeave(!showLeave);
-      setShowProfile(false);
-    } else {
-      setSelectedUser(user);
-      setShowProfile(!showProfile);
-      setShowLeave(false);
-    }
-  };
+    const handleUserClick = (user) => {
+        if (user === userData.username) {
+            setShowLeave(!showLeave);
+            setShowProfile(false);
+        } else {
+            setSelectedUser(user);
+            setShowProfile(!showProfile);
+            setShowLeave(false);
+        }
+    };
 
     /**
      * Toggles the visibility of the user selection interface and updates the list of users not in the chat.
@@ -84,7 +84,7 @@ export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, 
      */
     const toggleSelectUsers = () => {
         setShowSelectUsers(!showSelectUsers);
-        if(usersNotInChat.length === 0) {
+        if (usersNotInChat.length === 0) {
             const userList = users.filter((user) => user.username !== userData.username && !participants.includes(user.username));
             setUsersNotInChat(userList);
         }
@@ -114,7 +114,7 @@ export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, 
                 {users.map((user) => (
                     <li key={user.uid || user.username} className="p-2 hover:bg-gray-700 cursor-pointer">
                         <div className="flex flex-row">
-                            <ViewStatus username={user.username} type={'participants'} source='chat-participants'/>
+                            <ViewStatus username={user.username} type={'participants'} source='chat-participants' />
                             <span className='content-center'>
                                 <img className="mr-2 h-5 w-5 rounded-full overflow-hidden bg-gray-100" src={user.profilePicture || '/images/123.jpg'} alt={user.username} />
                             </span>
@@ -135,16 +135,16 @@ export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, 
                     </li>
                 ))}
             </ul>
-            <button className="text-s flex flex-wrap place-content-center p-2 cursor-pointer border-t-2 border-gray-700 w-full" onClick={toggleSelectUsers}>Add people &nbsp; <img src="/images/add-people.png" className="h-5 w-5 flex justify-self-center align-center"/></button>
-            { showSelectUsers && (
+            <button className="text-s flex flex-wrap place-content-center p-2 cursor-pointer border-t-2 border-gray-700 w-full" onClick={toggleSelectUsers}>Add people &nbsp; <img src="/images/add-people.png" className="h-5 w-5 flex justify-self-center align-center" /></button>
+            {showSelectUsers && (
                 <div className="mt-4">
-                    <SelectUsersTeamChat selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} userList={usersNotInChat} setUserList={setUsersNotInChat}/>
-                    <button 
-                        onClick={handleNewUsers} 
+                    <SelectUsersTeamChat selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} userList={usersNotInChat} setUserList={setUsersNotInChat} />
+                    <button
+                        onClick={handleNewUsers}
                         className="mt-2 w-full mb-2 border-t-2 border-gray-700 p-2"
                     >
-                    Add to chat
-                    </button>   
+                        Add to chat
+                    </button>
                 </div>
             )}
         </div>
