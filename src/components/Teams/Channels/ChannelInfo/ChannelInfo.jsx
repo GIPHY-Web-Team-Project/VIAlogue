@@ -50,17 +50,20 @@ export default function ChannelInfo({ channel, setShowChannelInfo, setCurrChanne
   };
 
   return (
-    <div>
-      <h1>Channel Info</h1>
-      <h3>{channel.title}</h3>
-      <p>Owner: {channel.owner}</p>
-      <p>Members: {channel.members.join(', ')}</p>
-      <section>
-        {userData && userData.username === channel.owner && <Button onClick={() => handleDelete()}>Delete channel</Button>}
-        <Button onClick={() => handleLeave()}>Leave channel</Button>
-
+    <div className='flex flex-col gap-4 items-center'>
+      <h1 className='text-4xl border-b-2 border-gray-700'>Channel Info</h1>
+      <h3 className='text-6xl'>{channel.title}</h3>
+      <p className='text-3xl'>Owner: {channel.owner}</p>
+      <section className='flex gap-4'>
+        {channel.title !== 'general' && (
+          <>
+            {userData && userData.username === channel.owner && <Button onClick={() => handleDelete()}>Delete channel</Button>}
+            <Button onClick={() => handleLeave()}>Leave channel</Button>
+          </>
+        )}
         <Button onClick={() => setShowChannelInfo(false)}>Close</Button>
       </section>
+
       {showSure && <AreYouSure message={sureMessage} setShowSure={setShowSure} executeFn={executeFn === 'leave' ? leaveChannel : deleteChannel} />}
     </div>
   );

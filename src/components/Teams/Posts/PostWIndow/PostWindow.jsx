@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { getChannelPosts } from '../../../../services/posts.services';
 import Post from '../Post/Post';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 export default function PostWindow({ channel }) {
   const [posts, setPosts] = useState([]);
@@ -34,8 +36,12 @@ export default function PostWindow({ channel }) {
           </div>
         ))
       ) : (
-        <p>No posts available.</p>
+        <p className='text-4xl h-[30vh]'>No posts available - start posting!</p>
       )}
     </div>
   );
 }
+
+PostWindow.propTypes = {
+  channel: PropTypes.object.isRequired,
+};

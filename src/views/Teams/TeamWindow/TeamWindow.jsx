@@ -63,10 +63,9 @@ export default function TeamWindow() {
               <Channel channel={currChannel} setCurrChannel={setCurrChannel} />
             ) : (
               <>
-                <div className=''>
-                  {/* {team.avatar} */}
-                  <h3>{team?.title}</h3>
-                  <p>Owner: {team?.owner}</p>
+                <div className='flex flex-col items-center gap-4 mt-12'>
+                  <h3 className='text-6xl'>{team?.title}</h3>
+                  <p className='text-3xl pb-2 border-b-2 border-gray-600'>Owner: {team?.owner}</p>
                 </div>
               </>
             )}
