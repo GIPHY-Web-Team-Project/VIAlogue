@@ -24,7 +24,7 @@ export default function CommentWindow({ post }) {
         {comments.length > 0 &&
           comments.map((comment) => (
             <div key={comment.id} className='flex flex-col bg-gray-800 mt-3 border-1 rounded-md border-gray-700 py-2 px-3'>
-              <Comment comment={comment} />
+              <Comment comment={comment} post={post} />
             </div>
           ))}
       </section>

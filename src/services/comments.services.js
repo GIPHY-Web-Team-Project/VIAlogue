@@ -1,4 +1,4 @@
-import { onValue, push, ref, update } from 'firebase/database';
+import { onValue, push, ref, remove, update } from 'firebase/database';
 import { db } from '../config/firebase-config';
 
 export const uploadComment = async (author, postId, content) => {
@@ -19,8 +19,10 @@ export const updateComment = async (id, updatedComment) => {
   await update(ref(db, `comments/${id}`), updatedComment);
 };
 
-export const deleteComment = async () => {};
-
+export const deleteComment = async (postId, id) => {
+  await remove(ref(db, `comments/${id}`));
+  await remove(ref(db, `posts/${postId}/comments/${id}`));
+};
 export const getAllComments = async (postId, callback) => {
   const commentsRef = ref(db, 'comments');
   const unsubscribe = onValue(commentsRef, (snapshot) => {

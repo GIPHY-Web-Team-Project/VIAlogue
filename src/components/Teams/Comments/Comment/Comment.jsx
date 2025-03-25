@@ -1,11 +1,9 @@
 import { useContext, useState } from 'react';
 import CommPostAdditionalInfo from '../../../UI/CommPostAdditionalInfo/CommPostAdditionalInfo';
 import { AppContext } from '../../../../store/app-context';
-import Button from '../../../UI/Button/Button';
-import { TEXT_BUTTON } from '../../../../common/enums';
-import { updateComment } from '../../../../services/comments.services';
+import { deleteComment, updateComment } from '../../../../services/comments.services';
 
-export default function Comment({ comment }) {
+export default function Comment({ comment, post }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedComment, setEditedComment] = useState({
     content: comment.content,
@@ -31,6 +29,15 @@ export default function Comment({ comment }) {
     } catch (error) {
       console.error('Error updating comment', error);
       //   modal
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteComment(post.id, id);
+    } catch (error) {
+      console.error(error);
+      alert('Failed to delete comment!');
     }
   };
 
