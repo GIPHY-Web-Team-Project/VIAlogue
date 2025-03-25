@@ -24,7 +24,7 @@ export default function PostWindow({ channel }) {
     <div>
       {posts.length > 0 ? (
         posts.map((post) => (
-          <div key={post.id} className=''>
+          <div key={post.id} className='border-4 shadow-lg p-2 rounded-md border-gray-800 mb-5'>
             <Post post={post} />
           </div>
         ))

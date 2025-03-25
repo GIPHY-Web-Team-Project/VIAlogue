@@ -15,6 +15,10 @@ export const uploadComment = async (author, postId, content) => {
   await update(ref(db, `posts/${postId}/comments/${id}`), { [id]: true });
 };
 
+export const updateComment = async (id, updatedComment) => {
+  await update(ref(db, `comments/${id}`), updatedComment);
+};
+
 export const deleteComment = async () => {};
 
 export const getAllComments = async (postId, callback) => {
