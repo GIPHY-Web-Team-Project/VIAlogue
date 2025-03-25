@@ -1,4 +1,6 @@
 import { useNavigate } from 'react-router';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 export default function Team({ team }) {
   const navigate = useNavigate();
@@ -11,3 +13,12 @@ export default function Team({ team }) {
     </li>
   );
 }
+
+Team.propTypes = {
+  team: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+    members: PropTypes.arrayOf(PropTypes.string).isRequired,
+  }).isRequired,
+};

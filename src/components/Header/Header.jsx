@@ -1,28 +1,12 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router';
 import { AppContext } from '../../store/app-context';
-import { auth } from '../../config/firebase-config';
-import { signOut } from 'firebase/auth';
 import { LOGIN } from '../../common/enums';
 import Button from '../UI/Button/Button';
 
 export default function Header() {
   const navigate = useNavigate();
-  const { user, setAppState } = useContext(AppContext);
-
-  const handleLogout = () => {
-    signOut(auth)
-      .then(() => {
-        setAppState({
-          user: null,
-          userData: null,
-        });
-        navigate('/login');
-      })
-      .catch((error) => {
-        console.error(error.message);
-      });
-  };
+  const { user } = useContext(AppContext);
 
   if (!user) {
     return (

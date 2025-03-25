@@ -5,10 +5,32 @@ import { useNavigate } from 'react-router-dom';
 import Modal from '../../UI/Modal/Modal';
 import { titleCheck } from '../../../utils/chatUtils';
 import { useUsers } from '../../../hooks/useUsers';
-import TitleInput from '../../UI/TitleInput/TitleInput';
 import SelectUsersTeamChat from '../../SelectUsers/SelectUsersTeamChat/SelectUsersTeamChat';
 import Button from '../../UI/Button/Button';
+import PropTypes from 'prop-types';
 
+/**
+ * CreateChat component allows users to create a new chat by selecting users and providing a chat title.
+ *
+ * @param {Function} setShowNewChat - Function to toggle the visibility of the new chat creation modal.
+ * @param {boolean} showNewChat - Boolean indicating whether the new chat creation modal is visible.
+ * @param {Function} setSelectedChat - Function to set the currently selected chat.
+ *
+ * @returns {JSX.Element} The CreateChat component.
+ *
+ * @description
+ * This component provides a form for creating a new chat. Users can:
+ * - Enter a chat title.
+ * - Select users to include in the chat.
+ * - Submit the form to create the chat.
+ *
+ * The component validates the input to ensure:
+ * - At least two users are selected.
+ * - A chat title is provided.
+ *
+ * If validation fails, a modal is displayed with an appropriate error message.
+ *
+ */
 export const CreateChat = (setShowNewChat, showNewChat, setSelectedChat) => {
   const { userData } = useContext(AppContext);
   const navigate = useNavigate();
@@ -20,13 +42,23 @@ export const CreateChat = (setShowNewChat, showNewChat, setSelectedChat) => {
 
   useEffect(() => {
     if (users) {
-      const availableUsers = users
-        .filter((user) => user.username !== userData.username)
-        .filter((user) => !selectedUsers.includes(user.username));
+      const availableUsers = users.filter((user) => user.username !== userData.username).filter((user) => !selectedUsers.includes(user.username));
       setUserList(availableUsers);
     }
   }, [users, selectedUsers]);
 
+  /**
+   * Handles the creation of a new chat.
+   *
+   * This function validates the selected users and chat title, displays error messages
+   * if necessary, and creates a new chat if all conditions are met. Upon successful
+   * creation, it navigates to the chats page and updates the selected chat state.
+   *
+   * @async
+   * @function handleCreateChat
+   * @returns {Promise<void>} Resolves when the chat creation process is complete.
+   * @throws Will log an error to the console if the chat creation fails.
+   */
   const handleCreateChat = async () => {
     const chatUsers = selectedUsers.map((user) => user);
 
@@ -69,8 +101,8 @@ export const CreateChat = (setShowNewChat, showNewChat, setSelectedChat) => {
           <input type='text' id='title' placeholder='Enter chat title' className='mt-1 w-full pb-2 border-b focus:ring-2 focus:ring-blue-500 outline-none' />
         </div>
 
-        <div className="mt-8">
-          <SelectUsersTeamChat selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} userList={userList} setUserList={setUserList}/>
+        <div className='mt-8'>
+          <SelectUsersTeamChat selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} userList={userList} setUserList={setUserList} />
         </div>
 
         <Button onClick={handleCreateChat}>Create Chat</Button>
@@ -82,3 +114,9 @@ export const CreateChat = (setShowNewChat, showNewChat, setSelectedChat) => {
 };
 
 export default CreateChat;
+
+CreateChat.propTypes = {
+  setShowNewChat: PropTypes.func,
+  showNewChat: PropTypes.bool,
+  setSelectedChat: PropTypes.func,
+};

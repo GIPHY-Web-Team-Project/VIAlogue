@@ -1,4 +1,6 @@
 import Button from '../Button/Button';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 export default function AreYouSure({ setShowSure, message, fn }) {
   const handleYes = () => {
@@ -20,3 +22,9 @@ export default function AreYouSure({ setShowSure, message, fn }) {
     </div>
   );
 }
+
+AreYouSure.propTypes = {
+  setShowSure: PropTypes.func.isRequired,
+  message: PropTypes.string.isRequired,
+  fn: PropTypes.func.isRequired,
+};

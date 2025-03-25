@@ -8,6 +8,56 @@ import Modal from '../../components/UI/Modal/Modal';
 import Button from '../../components/UI/Button/Button';
 import { variant } from '../../common/button-const';
 
+/**
+ * Register component for user registration.
+ *
+ * This component provides a registration form for users to create an account.
+ * It includes fields for first name, last name, username, email, and password.
+ * The form validates user input and interacts with backend services to register the user.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered Register component.
+ *
+ * @example
+ * <Register />
+ *
+ * @function
+ * @name Register
+ *
+ * @description
+ * - Validates user input for first name, last name, username, email, and password.
+ * - Checks if the username or email already exists in the database.
+ * - Registers the user using Firebase authentication and creates a user handle.
+ * - Displays a modal on successful registration and navigates to the login page.
+ *
+ * @state {Object} user - The user object containing registration details.
+ * @state {string} user.firstName - The user's first name.
+ * @state {string} user.lastName - The user's last name.
+ * @state {string} user.username - The user's username.
+ * @state {string} user.email - The user's email address.
+ * @state {string} user.password - The user's password.
+ * @state {boolean} showModal - Controls the visibility of the modal.
+ * @state {string} modalMessage - The message displayed in the modal.
+ *
+ * @dependencies
+ * - `useState` - React hook for managing component state.
+ * - `useNavigate` - React Router hook for navigation.
+ * - `createUserWithEmailAndPassword` - Firebase function for user registration.
+ * - `signOut` - Firebase function to sign out the user.
+ * - `getUserByUsername` - Custom function to check if a username exists.
+ * - `getUserByEmail` - Custom function to check if an email exists.
+ * - `createUserHandle` - Custom function to create a user handle in the database.
+ *
+ * @modals
+ * - Displays a modal with a success message upon successful registration.
+ * - Navigates to the login page when the modal is closed.
+ *
+ * @validation
+ * - Ensures all fields are filled.
+ * - Validates first and last names to be between 4 and 32 characters and contain only letters.
+ * - Validates username to be between 4 and 32 characters and contain only letters, numbers, underscores, dots, and hyphens.
+ * - Checks if the username or email already exists in the database.
+ */
 export default function Register() {
   const [user, setUser] = useState({
     firstName: '',

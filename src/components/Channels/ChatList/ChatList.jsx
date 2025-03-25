@@ -1,14 +1,29 @@
-import React, { useEffect, useContext, useState } from 'react';
-import { getChatsByUsername } from '../../../services/chat.services';
-import Button from '../../UI/Button/Button';
+import React, { useContext, useEffect, useState } from 'react';
 import { CHAT_TEAM_LIST_ITEM, NONE } from '../../../common/enums';
+import { getChatsByUsername } from '../../../services/chat.services';
 import { AppContext } from '../../../store/app-context';
+import Button from '../../UI/Button/Button';
+import PropTypes from 'prop-types';
 
+/**
+ * ChatList component displays a list of chat conversations for a given user.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {string} props.username - The username of the current user.
+ * @param {Function} props.handleNewChat - Callback function to handle the creation of a new chat.
+ * @param {Array} props.chats - Array of chat objects to be displayed.
+ * @param {Function} props.setChats - Function to update the list of chats.
+ * @param {Function} props.setSelectedChat - Function to set the currently selected chat.
+ *
+ * @returns {JSX.Element} The rendered ChatList component.
+ */
 export const ChatList = ({ username, handleNewChat, chats, setChats, setSelectedChat }) => {
   const { userData } = useContext(AppContext);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     const unsubscribe = getChatsByUsername(username, (chats) => {
       setChats(chats);
       setLoading(false);
@@ -42,7 +57,7 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
         ) : chats && chats.length > 0 ? (
           chats.map((chat) => {
             return (
-              <div key={chat.id} onClick={() => handleChatClick(chat)} className='hover:ring-1 border-gray-600 p-2 mt-1 mb-1 rounded-md cursor-pointer hover:bg-gray-700'>
+              <div key={chat.id} onClick={() => handleChatClick(chat)} className='hover:border-2 border-gray-600 p-2 mt-1 mb-1 rounded-md cursor-pointer hover:bg-gray-700'>
                 <Button btnStyle={CHAT_TEAM_LIST_ITEM}>{chat.title}</Button>
                 {chat.latestMessage ? (
                   <p className='text-sm text-gray-400 overflow-ellipsis overflow-hidden flex flex-row'>
@@ -62,4 +77,14 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
       </div>
     </div>
   );
+};
+
+export default ChatList;
+
+ChatList.propTypes = {
+  username: PropTypes.string,
+  handleNewChat: PropTypes.func,
+  chats: PropTypes.array,
+  setChats: PropTypes.func,
+  setSelectedChat: PropTypes.func,
 };

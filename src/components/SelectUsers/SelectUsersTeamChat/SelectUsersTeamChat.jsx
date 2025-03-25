@@ -1,8 +1,9 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { AppContext } from '../../../store/app-context';
 import { useUsers } from '../../../hooks/useUsers';
 import SearchBar from '../../UI/SearchBar/SearchBar';
 import Button from '../../UI/Button/Button';
+import PropTypes from 'prop-types';
 
 export default function SelectUsersTeamChat({ selectedUsers, setSelectedUsers, userList = [], setUserList = () => {} }) {
   const { userData } = useContext(AppContext);
@@ -58,3 +59,10 @@ export default function SelectUsersTeamChat({ selectedUsers, setSelectedUsers, u
     </div>
   );
 }
+
+SelectUsersTeamChat.propTypes = {
+  selectedUsers: PropTypes.array,
+  setSelectedUsers: PropTypes.func,
+  userList: PropTypes.array,
+  setUserList: PropTypes.func,
+};

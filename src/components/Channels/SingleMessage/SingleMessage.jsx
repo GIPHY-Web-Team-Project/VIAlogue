@@ -6,7 +6,25 @@ import { useContext } from 'react';
 import { AppContext } from '../../../store/app-context';
 import EmojiList from '../EmojiList/EmojiList';
 import { useNavigate } from 'react-router';
+import PropTypes from 'prop-types';
 
+/**
+ * Component representing a single message in a chat.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Object} props.msg - The message object containing details about the message.
+ * @param {string} props.msg.sender - The username of the sender.
+ * @param {string} props.msg.message - The text content of the message.
+ * @param {string} [props.msg.gifUrl] - The URL of a GIF associated with the message (if any).
+ * @param {string} props.msg.createdOn - The timestamp of when the message was created.
+ * @param {Object} [props.msg.reactions] - An object containing emoji reactions and the users who reacted.
+ * @param {string} props.msg.chatId - The ID of the chat the message belongs to.
+ * @param {string} props.msg.id - The unique ID of the message.
+ * @param {boolean} props.isFirstFromSender - Indicates if this is the first message from the sender in a sequence.
+ *
+ * @returns {JSX.Element} The rendered SingleMessage component.
+ */
 export const SingleMessage = ({ msg, isFirstFromSender }) => {
   const [showEdit, setShowEdit] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
@@ -18,6 +36,14 @@ export const SingleMessage = ({ msg, isFirstFromSender }) => {
     setShowEdit(true);
   };
 
+  /**
+   * Formats a date string into a human-readable format.
+   * If the date corresponds to today, it returns the time in "HH:MM" format.
+   * Otherwise, it returns the date and time in "Weekday, DD/MM/YYYY, HH:MM" format.
+   *
+   * @param {string} dateString - The date string to format.
+   * @returns {string} - The formatted date string.
+   */
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const today = new Date();
@@ -36,7 +62,7 @@ export const SingleMessage = ({ msg, isFirstFromSender }) => {
         <div className='flex-1 flex-col pr-2 '>
           <div className='flex flex-row justify-between'>
             {isFirstFromSender && (
-             <div className='pt-4 flex flex-row justify-between w-full cursor-pointer' onClick={() => navigate(`/profile/${msg.sender}`)}>
+              <div className='pt-4 flex flex-row justify-between w-full cursor-pointer' onClick={() => navigate(`/profile/${msg.sender}`)}>
                 <h3 className={userData.username === msg.sender ? 'text-blue-700' : 'text-blue-300'}>
                   <strong>{userData.username === msg.sender ? 'You' : msg.sender}</strong>
                 </h3>
@@ -46,9 +72,9 @@ export const SingleMessage = ({ msg, isFirstFromSender }) => {
           </div>
           <div className='flex flex-row justify-between mt-2'>
             <div>
-              <span className="text-gray-200 whitespace-pre-wrap w-full overflow-hidden [overflow-wrap:anywhere]">
+              <span className='text-gray-200 whitespace-pre-wrap w-full overflow-hidden [overflow-wrap:anywhere]'>
                 {msg.message && msg.message}
-                {msg.gifUrl && <img src={msg.gifUrl} alt="GIF" className="w-40 h-auto rounded-lg" />}
+                {msg.gifUrl && <img src={msg.gifUrl} alt='GIF' className='w-40 h-auto rounded-lg' />}
               </span>
             </div>
             <div className='relative'>
@@ -99,3 +125,8 @@ export const SingleMessage = ({ msg, isFirstFromSender }) => {
 };
 
 export default SingleMessage;
+
+SingleMessage.propTypes = {
+  msg: PropTypes.object.isRequired,
+  isFirstFromSender: PropTypes.bool.isRequired,
+};

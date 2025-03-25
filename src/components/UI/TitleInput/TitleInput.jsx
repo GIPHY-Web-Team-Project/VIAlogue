@@ -1,4 +1,6 @@
-export default function TitleInput({ placeholder = 'Enter title' }) {
+import React from 'react';
+
+export default function TitleInput() {
   return (
     <>
       <label htmlFor='title'>Title: </label>

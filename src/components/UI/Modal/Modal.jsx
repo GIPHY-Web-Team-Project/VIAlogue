@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '../Button/Button';
+import PropTypes from 'prop-types';
 
 export default function Modal({ show, handleClose, message }) {
   if (!show) {
@@ -14,4 +15,12 @@ export default function Modal({ show, handleClose, message }) {
       </div>
     </div>
   );
-}
+};
+
+export default Modal;
+
+Modal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  message: PropTypes.string.isRequired,
+};

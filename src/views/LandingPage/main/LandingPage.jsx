@@ -1,29 +1,28 @@
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router';
 import { AppContext } from '../../../store/app-context';
 import LearnMore from '../LearnMore/LearnMore';
 import { TEXT_BUTTON } from '../../../common/enums';
 import Button from '../../../components/UI/Button/Button';
 import { variant } from '../../../common/button-const';
-import { getAllTeams, getAllUsers } from '../../../services/stats.services';
 
+/**
+ * LandingPage component renders the main landing page of the application.
+ *
+ * - If the user is not logged in (`userData` is falsy), it displays a welcome message,
+ *   options to "Get Started" or "Learn more", and a section promoting community features.
+ * - If the user is logged in (`userData` is truthy), it displays a personalized welcome message
+ *   and a link to start chatting.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered LandingPage component.
+ *
+ */
 export default function LandingPage() {
   const [learnMore, setLearnMore] = useState(false);
   const [numOfTeams, setNumOfTeams] = useState(null);
   const [numOfUsers, setNumOfUsers] = useState(null);
   const { userData } = useContext(AppContext);
-
-  useEffect(() => {
-    const unsubscribe = getAllUsers(setNumOfUsers);
-
-    return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    const unsubscribe = getAllTeams(setNumOfTeams);
-
-    return () => unsubscribe();
-  }, []);
 
   return (
     <div className='flex flex-col flex-grow'>

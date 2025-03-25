@@ -2,7 +2,9 @@ import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../../store/app-context';
 import Button from '../../UI/Button/Button';
 import SearchBar from '../../UI/SearchBar/SearchBar';
-import { MEMBERS, USERS } from '../../../common/enums';
+import { MEMBERS } from '../../../common/enums';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 export default function SelectUsersChannel({ selectedUsers, setSelectedUsers, teamMembers }) {
   const { userData } = useContext(AppContext);
@@ -67,3 +69,9 @@ export default function SelectUsersChannel({ selectedUsers, setSelectedUsers, te
     </div>
   );
 }
+
+SelectUsersChannel.propTypes = {
+  selectedUsers: PropTypes.array,
+  setSelectedUsers: PropTypes.func,
+  teamMembers: PropTypes.array,
+};
