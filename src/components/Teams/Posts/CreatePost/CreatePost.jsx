@@ -23,15 +23,15 @@ export default function CreatePost({ channelId, setViewCreatePost }) {
       return;
     }
 
-    // if (title.trim().length < 16 || title.trim().length > 64) {
-    //   alert('Title must be between 16 and 64 characters');
-    //   return;
-    // }
+    if (title.trim().length < 3 || title.trim().length > 64) {
+      alert('Title must be between 3 and 64 characters');
+      return;
+    }
 
-    // if (content.trim().length < 32 || content.trim().length > 8192) {
-    //   alert('Content must be between 32 and 8192 characters');
-    //   return;
-    // }
+    if (content.trim().length < 10 || content.trim().length > 8192) {
+      alert('Content must be between 10 and 8192 characters');
+      return;
+    }
 
     try {
       await uploadPost(userData.username, title, content, channelId, teamId);
@@ -44,15 +44,17 @@ export default function CreatePost({ channelId, setViewCreatePost }) {
   };
 
   return (
-    <div>
+    <section className='bg-gray-700'>
       <h1>Create Post</h1>
-      <section>
+      <div className='flex gap-6'>
         <TitleInput />
         <ContentInput />
-        <Button onClick={() => handleCreatePost()}>Submit</Button>
-        <Button onClick={() => setViewCreatePost(false)}>Cancel</Button>
-      </section>
-    </div>
+        <div className='flex items-center'>
+          <Button onClick={() => handleCreatePost()}>Submit</Button>
+          <Button onClick={() => setViewCreatePost(false)}>Cancel</Button>
+        </div>
+      </div>
+    </section>
   );
 }
 

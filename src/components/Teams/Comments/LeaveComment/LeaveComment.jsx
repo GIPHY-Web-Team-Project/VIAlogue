@@ -4,6 +4,8 @@ import { uploadComment } from '../../../../services/comments.services';
 import { AppContext } from '../../../../store/app-context';
 import Modal from '../../../UI/Modal/Modal';
 import Button from '../../../UI/Button/Button';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 export default function LeaveComment({ post }) {
   const { userData } = useContext(AppContext);
@@ -44,3 +46,7 @@ export default function LeaveComment({ post }) {
     </div>
   );
 }
+
+LeaveComment.propTypes = {
+  post: PropTypes.object.isRequired,
+};

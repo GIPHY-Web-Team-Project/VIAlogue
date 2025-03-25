@@ -2,9 +2,9 @@ import Button from '../Button/Button';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function AreYouSure({ setShowSure, message, fn }) {
-  const handleYes = () => {
-    fn();
+export default function AreYouSure({ setShowSure, message, executeFn }) {
+  const handleYes = async () => {
+    await executeFn();
     setShowSure(false);
   };
 
@@ -26,5 +26,5 @@ export default function AreYouSure({ setShowSure, message, fn }) {
 AreYouSure.propTypes = {
   setShowSure: PropTypes.func.isRequired,
   message: PropTypes.string.isRequired,
-  fn: PropTypes.func.isRequired,
+  executeFn: PropTypes.func.isRequired,
 };

@@ -5,6 +5,8 @@ import { deleteComment, updateComment } from '../../../../services/comments.serv
 import CommPostBtns from '../../../UI/CommPostBtns/CommPostBtns';
 import EditForm from '../../../UI/EditForm/EditForm';
 import { COMMENT } from '../../../../common/enums';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 export default function Comment({ comment, post }) {
   const [showBtns, setShowBtns] = useState(false);
@@ -55,13 +57,20 @@ export default function Comment({ comment, post }) {
         <>
           <div className='flex' onMouseEnter={() => setShowBtns(true)} onMouseLeave={() => setShowBtns(false)}>
             <section className='min-w-full mr-4'>
-              <CommPostAdditionalInfo obj={comment} />
+              <div className='flex justify-between'>
+                <CommPostAdditionalInfo obj={comment} />
+                {userData && userData.username === comment.author && <CommPostBtns showBtns={showBtns} setIsEditing={setIsEditing} handleDelete={handleDelete} objId={comment.id} />}
+              </div>
               <p className='break-words whitespace-normal shadow-sm rounded-md px-2 py-1 mb-2'>{comment.content}</p>
             </section>
-            <div>{userData && userData.username === comment.author && <CommPostBtns showBtns={showBtns} setIsEditing={setIsEditing} handleDelete={handleDelete} objId={comment.id} />}</div>
           </div>
         </>
       )}
     </>
   );
 }
+
+Comment.propTypes = {
+  comment: PropTypes.object.isRequired,
+  post: PropTypes.object.isRequired,
+};

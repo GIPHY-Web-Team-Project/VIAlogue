@@ -6,8 +6,10 @@ import { getUserByUsername } from '../../../../services/user.service';
 import TeamParticipants from '../../TeamParticipants/TeamParticipants';
 import { useNavigate } from 'react-router';
 import CreatePost from '../../Posts/CreatePost/CreatePost';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-export default function Channel({ channel }) {
+export default function Channel({ channel, setCurrChannel }) {
   const [users, setUsers] = useState([]);
   const [viewCreatePost, setViewCreatePost] = useState(false);
   const [showChannelInfo, setShowChannelInfo] = useState(false);
@@ -39,9 +41,14 @@ export default function Channel({ channel }) {
           <Button onClick={() => setViewCreatePost(true)}>Upload a Post</Button>
         </section>
         {viewCreatePost && <CreatePost channelId={channel.id} setViewCreatePost={setViewCreatePost} />}
-        <section className='flex flex-col mt-20 overflow-y-auto px-20 '>{showChannelInfo ? <ChannelInfo channel={channel} setShowChannelInfo={setShowChannelInfo} /> : <PostWindow channel={channel} />}</section>
+        <section className='flex flex-col mt-20 overflow-y-auto px-20 '>{showChannelInfo ? <ChannelInfo channel={channel} setShowChannelInfo={setShowChannelInfo} setCurrChannel={setCurrChannel} /> : <PostWindow channel={channel} />}</section>
       </div>
       <TeamParticipants users={users} />
     </div>
   );
 }
+
+Channel.propTypes = {
+  channel: PropTypes.object.isRequired,
+  setCurrChannel: PropTypes.func.isRequired,
+};

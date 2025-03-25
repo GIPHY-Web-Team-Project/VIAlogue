@@ -1,7 +1,7 @@
 import { useParams } from 'react-router';
 import SideBar from '../../../components/UI/SideBar/SideBar';
 import React, { useEffect, useState } from 'react';
-import { getTeamById } from '../../../services/team.services';
+import { getTeamByIdSubs } from '../../../services/team.services';
 import ChannelList from '../../../components/Teams/Channels/ChannelList/ChannelList';
 import Loading from '../../../components/UI/Loading/Loading';
 import Channel from '../../../components/Teams/Channels/Channel/Channel';
@@ -38,7 +38,7 @@ export default function TeamWindow() {
     if (!teamId) return;
     setLoading(true);
 
-    const unsubscribe = getTeamById(teamId, (team) => {
+    const unsubscribe = getTeamByIdSubs(teamId, (team) => {
       setTeam(team);
       setLoading(false);
     });
@@ -60,7 +60,7 @@ export default function TeamWindow() {
           <>
             <ChannelList team={team} setViewChannel={setViewChannel} setCurrChannel={setCurrChannel} />
             {viewChannel === true ? (
-              <Channel channel={currChannel} />
+              <Channel channel={currChannel} setCurrChannel={setCurrChannel} />
             ) : (
               <>
                 <div className=''>
