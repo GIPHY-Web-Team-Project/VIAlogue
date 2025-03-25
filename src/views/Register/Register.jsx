@@ -122,87 +122,48 @@ export default function Register() {
   };
 
   return (
-    <div className='flex flex-grow items-center justify-center bg-gray-900 min-h-screen p-4'>
+    <div className='flex flex-grow items-center justify-center bg-gray-900 max-h-screen p-4'>
       <div className='bg-gray-800 p-6 md:p-8 rounded-lg shadow-lg w-full max-w-md'>
         <h3 className='text-2xl md:text-3xl font-bold text-center text-gray-100 mb-6'>Register</h3>
 
-        <div className='space-y-4'>
+        <div className='space-y-4 mb-6'>
           <div>
             <label className='text-gray-400' htmlFor='firstName'>
               First name:
             </label>
-            <input
-              className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
-              value={user.firstName}
-              onChange={updateUser('firstName')}
-              type='text'
-              name='firstName'
-              id='firstName'
-            />
+            <input className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' value={user.firstName} onChange={updateUser('firstName')} type='text' name='firstName' id='firstName' />
           </div>
 
           <div>
             <label className='text-gray-400' htmlFor='lastName'>
               Last name:
             </label>
-            <input
-              className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
-              value={user.lastName}
-              onChange={updateUser('lastName')}
-              type='text'
-              name='lastName'
-              id='lastName'
-            />
+            <input className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' value={user.lastName} onChange={updateUser('lastName')} type='text' name='lastName' id='lastName' />
           </div>
 
           <div>
             <label className='text-gray-400' htmlFor='username'>
               Username:
             </label>
-            <input
-              className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
-              value={user.username}
-              onChange={updateUser('username')}
-              type='text'
-              name='username'
-              id='username'
-            />
+            <input className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' value={user.username} onChange={updateUser('username')} type='text' name='username' id='username' />
           </div>
 
           <div>
             <label className='text-gray-400' htmlFor='email'>
               Email:
             </label>
-            <input
-              className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
-              value={user.email}
-              onChange={updateUser('email')}
-              type='email'
-              name='email'
-              id='email'
-            />
+            <input className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' value={user.email} onChange={updateUser('email')} type='email' name='email' id='email' />
           </div>
 
           <div>
             <label className='text-gray-400' htmlFor='password'>
               Password:
             </label>
-            <input
-              className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
-              value={user.password}
-              onChange={updateUser('password')}
-              type='password'
-              name='password'
-              id='password'
-            />
+            <input className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' value={user.password} onChange={updateUser('password')} type='password' name='password' id='password' />
           </div>
         </div>
 
-        <Button
-          onClick={register}
-          id='btn-register-form'
-          className='w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition mt-6'
-        >
+        <Button onClick={register} id='btn-register-form'>
           Register
         </Button>
 

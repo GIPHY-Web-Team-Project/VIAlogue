@@ -42,25 +42,24 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className='flex flex-col flex-grow h-full max-h-screen'>
+    <div className='flex flex-col flex-grow items-center h-full max-h-screen'>
       {!userData && (
         <>
-          <section className='flex justify-between pl-16 w-full mt-30'>
-            {learnMore && <LearnMore setLearnMore={setLearnMore} />}
-            {!learnMore && (
-              <>
-                <h1 className='text-6xl font-bold'>Communication is key - start chatting now!</h1>
-                <div className='flex flex-col items-center mt-40 mr-60'>
-                  <Link className={variant.getStarted} to={'/register'}>
-                    Get Started
-                  </Link>
-                  <Button btnStyle={TEXT_BUTTON} onClick={() => setLearnMore(true)}>
-                    Learn more
-                  </Button>
-                </div>
-              </>
-            )}
-          </section>
+          {learnMore ? (
+            <LearnMore setLearnMore={setLearnMore} />
+          ) : (
+            <section className='flex justify-between pl-16 w-full mt-30'>
+              <h1 className='text-6xl font-bold'>Communication is key - start chatting now!</h1>
+              <div className='flex flex-col items-center mt-40 mr-60'>
+                <Link className={variant.getStarted} to={'/register'}>
+                  Get Started
+                </Link>
+                <Button btnStyle={TEXT_BUTTON} onClick={() => setLearnMore(true)}>
+                  Learn more
+                </Button>
+              </div>
+            </section>
+          )}
 
           <section className='flex flex-col items-center gap-5 bg-gray-800 rounded-xl mx-auto mt-auto h-[40vh] w-full max-w-[30vw] p-8'>
             <h1 className='text-4xl text-center'>Looking for a community, group or team?</h1>

@@ -97,7 +97,7 @@ export default function Login() {
   };
 
   return (
-    <div className='flex flex-grow items-center justify-center bg-gray-900 min-h-screen p-4'>
+    <div className='flex flex-grow items-center justify-center bg-gray-900 max-h-screen p-4'>
       <div className='bg-gray-800 p-6 md:p-8 rounded-lg shadow-lg w-full max-w-sm'>
         <h2 className='text-2xl font-bold text-center text-gray-100 mb-4'>Login</h2>
         <p className='text-gray-400 text-center mb-6'>Enter your credentials to log in</p>
