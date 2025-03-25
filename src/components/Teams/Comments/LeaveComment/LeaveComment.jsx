@@ -33,14 +33,14 @@ export default function LeaveComment({ post }) {
   };
 
   return (
-    <>
-      <section className='flex flex-col min-w-max'>
-        <textarea id='comment' placeholder='Enter comment' />
+    <div>
+      <section className='flex flex-col  max-w-lg'>
+        <textarea className='mt-4 mb-2 border-4 p-2 border-gray-700 rounded-md' id='comment' placeholder='Enter comment' />
         <Button btnStyle={LEAVE_COMMENT} onClick={() => handleLeaveComment()}>
           Comment
         </Button>
       </section>
       {showModal && <Modal show={showModal} handleClose={() => setShowModal(false)} message={modalMessage} />}
-    </>
+    </div>
   );
 }

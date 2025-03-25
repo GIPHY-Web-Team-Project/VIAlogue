@@ -38,6 +38,7 @@ export default function Comment({ comment, post }) {
     } catch (error) {
       console.error(error);
       alert('Failed to delete comment!');
+      //   modal
     }
   };
 
