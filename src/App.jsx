@@ -20,7 +20,7 @@ export default function App() {
     user: null,
     userData: null,
   });
-
+  const [selectedChat, setSelectedChat] = useState(null);
   const [user] = useAuthState(auth);
 
   if (appState.user !== user) {
@@ -48,7 +48,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <AppContext.Provider value={{ ...appState, setAppState }}>
+      <AppContext.Provider value={{ ...appState, setAppState, selectedChat, setSelectedChat }}>
         <div className='font-medium flex flex-col w-screen h-screen max-w-screen max-h-screen bg-gray-900 text-white'>
           {!user && <Header />}
           <UserStatus />

@@ -183,3 +183,19 @@ export const getChatByParticipants = async (participants) => {
     return null;
   }
 };
+
+export const getChatByMessageId = async (messageId) => {
+  const chatsRef = ref(db, 'chats');
+  const snapshot = await get(chatsRef);
+  
+  if (!snapshot.exists()) return null;
+
+  const chats = snapshot.val();
+
+  const chatId = Object.keys(chats).find(chatId => {
+    const chat = chats[chatId];
+    return chat.messages && messageId in chat.messages;
+  });
+
+  return chatId ? { id: chatId, ...chats[chatId] } : null;
+};

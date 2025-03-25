@@ -31,14 +31,13 @@ import CreateChat from '../../components/Channels/CreateChat/CreateChat';
  *
  */
 export const ChatPage = () => {
-  const { userData } = useContext(AppContext);
-  const [selectedChat, setSelectedChat] = useState(null);
+  const { userData, selectedChat, setSelectedChat } = useContext(AppContext);
   const [chats, setChats] = useState(null);
   const [participants, setParticipants] = useState([]);
   const [showNewChat, setShowNewChat] = useState(false);
 
   useEffect(() => {
-    if (!userData || !chats || selectedChat) return;  // ✅ Prevent overwriting clicked chat
+    if (!userData || !chats || selectedChat) return;
 
     const lastChatId = localStorage.getItem(`lastOpenedChat_${userData.uid}`);
     const lastChat = lastChatId ? chats.find((chat) => chat.id === lastChatId) : null;
@@ -73,8 +72,6 @@ export const ChatPage = () => {
   if (!userData) {
     return <LandingPage />;
   }
-
-  // console.log(selectedChat);
 
   if (userData) {
     return (

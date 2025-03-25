@@ -71,9 +71,9 @@ export const EmojiList = ({ message }) => {
         await updateMessage(message.chatId, message.id, updatedReactions, "reactions");
         if (message.sender !== userData.username) {
             if (userReaction !== null) {
-                await addNotification(message.sender, 'Reaction', `${userData.username} removed their reaction from your message.`);
+                await addNotification(message.sender, 'Reaction', `${userData.username} removed their reaction from your message.`, 'reaction', message.id);
             } else {
-                await addNotification(message.sender, 'Reaction', `${userData.username} reacted with ${emoji} to your message.`);
+                await addNotification(message.sender, 'Reaction', `${userData.username} reacted with ${emoji} to your message.`, 'reaction', message.id);
             }
         }
     };

@@ -61,12 +61,12 @@ export default function CreateComp({ setViewCreateWindow, type, team }) {
 
     try {
       if (type === TEAM) {
-        members.forEach(async (member) => {
-          if (member !== userData.username) { 
-            await addNotification(member, 'Team', `You have been invited to join ${title} by ${userData.username}`);
-          }
-        });
         await createTeam(title, userData.username, members, async (teamId) => {
+          members.forEach(async (member) => {
+            if (member !== userData.username) { 
+              await addNotification(member, 'Team', `You have been added to a new team: ${title} by ${userData.username}`, 'team', teamId);
+            }
+          });
           navigate(`/teams/${teamId}`);
         });
       } else if (type === CHANNEL) {
