@@ -22,7 +22,7 @@ export default function TeamsList() {
   }, [userData]);
 
   return (
-    <ul className='grid grid-cols-3 gap-32 my-10 overflow-y-auto px-70 pt-2'>
+    <ul className='grid grid-cols-3 items-start gap-32 my-10 overflow-y-auto px-70 pt-2'>
       {teams.length !== 0 ? (
         <>
           {teams.map((team) => (
