@@ -5,6 +5,8 @@ import TitleInput from '../../../UI/TitleInput/TitleInput';
 import ContentInput from '../../../UI/ContentInput/ContentInput';
 import Button from '../../../UI/Button/Button';
 import { useParams } from 'react-router';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 export default function CreatePost({ channelId, setViewCreatePost }) {
   const { userData } = useContext(AppContext);
@@ -53,3 +55,8 @@ export default function CreatePost({ channelId, setViewCreatePost }) {
     </div>
   );
 }
+
+CreatePost.propTypes = {
+  channelId: PropTypes.string.isRequired,
+  setViewCreatePost: PropTypes.func.isRequired,
+};

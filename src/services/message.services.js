@@ -1,9 +1,5 @@
 import { ref, push, update, remove, onValue, get } from 'firebase/database';
 import { db } from '../config/firebase-config';
-import { CHANNEL } from '../common/enums';
-
-export const getMessagesByChatId = async (chat, callback) => {
-  let chatMessagesRef;
 
 /**
  * Retrieves messages for a specific chat by its ID and invokes a callback with the messages.
@@ -21,13 +17,13 @@ export const getMessagesByChatId = async (chat, callback) => {
  * });
  */
 export const getMessagesByChatId = async (chatId, callback) => {
-    const chatMessagesRef = ref(db, `chats/${chatId}/messages`);
-    
-    onValue(chatMessagesRef, async (snapshot) => {
-        if (!snapshot.exists()) {
-            callback([]);
-            return;
-        }
+  const chatMessagesRef = ref(db, `chats/${chatId}/messages`);
+
+  onValue(chatMessagesRef, async (snapshot) => {
+    if (!snapshot.exists()) {
+      callback([]);
+      return;
+    }
 
     const messageIds = Object.keys(snapshot.val());
     const messages = [];
@@ -63,29 +59,29 @@ export const getMessagesByChatId = async (chatId, callback) => {
  * @param {string} [gifUrl=""] - Optional URL of a GIF associated with the message.
  * @returns {Promise<void>} A promise that resolves when the message and chat updates are complete.
  */
-export const addMessage = async (chatId, message, sender, gifUrl = "") => {
-    const chatRef = ref(db, `chats/${chatId}`);
+export const addMessage = async (chatId, message, sender, gifUrl = '') => {
+  const chatRef = ref(db, `chats/${chatId}`);
 
-    const chatSnapshot = await get(chatRef);
-    if (!chatSnapshot.exists()) return;
+  const chatSnapshot = await get(chatRef);
+  if (!chatSnapshot.exists()) return;
 
-    const chatData = chatSnapshot.val();
-    const unreadBy = chatData.users.filter(user => user !== sender);
+  const chatData = chatSnapshot.val();
+  const unreadBy = chatData.users.filter((user) => user !== sender);
 
-    const newMessage = {
-        chatId,
-        message,
-        createdOn: new Date().toString(),
-        sender,
-        gifUrl,
-        reactions: {},
-        unreadBy,
-    }
-    const result = await push(ref(db, `messages`), newMessage);
-    const id = result.key;
-    await update(ref(db, `messages/${id}`), { id });
-    await update(ref(db, `chats/${chatId}/messages/${id}`), {[id] : true });
-}
+  const newMessage = {
+    chatId,
+    message,
+    createdOn: new Date().toString(),
+    sender,
+    gifUrl,
+    reactions: {},
+    unreadBy,
+  };
+  const result = await push(ref(db, `messages`), newMessage);
+  const id = result.key;
+  await update(ref(db, `messages/${id}`), { id });
+  await update(ref(db, `chats/${chatId}/messages/${id}`), { [id]: true });
+};
 
 /**
  * Deletes a message from the database.
@@ -100,9 +96,9 @@ export const addMessage = async (chatId, message, sender, gifUrl = "") => {
  * @returns {Promise<void>} A promise that resolves when the message is deleted.
  */
 export const deleteMessage = async (chatId, messageId) => {
-    await remove(ref(db, `messages/${messageId}`));
-    await remove(ref(db, `chats/${chatId}/messages/${messageId}`));
-}
+  await remove(ref(db, `messages/${messageId}`));
+  await remove(ref(db, `chats/${chatId}/messages/${messageId}`));
+};
 
 /**
  * Updates a specific message in both the messages and chats database references.
@@ -127,37 +123,36 @@ export const updateMessage = async (chatId, messageId, updatedMessage, element) 
 };
 
 export const markMessagesAsRead = async (chatId, username) => {
-    const chatMessagesRef = ref(db, `chats/${chatId}/messages`);
+  const chatMessagesRef = ref(db, `chats/${chatId}/messages`);
 
-    const chatMessagesSnapshot = await get(chatMessagesRef);
-    if (!chatMessagesSnapshot.exists()) return;
+  const chatMessagesSnapshot = await get(chatMessagesRef);
+  if (!chatMessagesSnapshot.exists()) return;
 
-    const messageIds = Object.keys(chatMessagesSnapshot.val());
+  const messageIds = Object.keys(chatMessagesSnapshot.val());
 
-    const updates = {};
-    for (const messageId of messageIds) {
-        const messageRef = ref(db, `messages/${messageId}`);
-        const messageSnapshot = await get(messageRef);
-        if (messageSnapshot.exists()) {
-            const messageData = messageSnapshot.val();
-            if (messageData.unreadBy?.includes(username)) {
-                updates[`messages/${messageId}/unreadBy`] = messageData.unreadBy.filter(user => user !== username);
-            }
-        }
+  const updates = {};
+  for (const messageId of messageIds) {
+    const messageRef = ref(db, `messages/${messageId}`);
+    const messageSnapshot = await get(messageRef);
+    if (messageSnapshot.exists()) {
+      const messageData = messageSnapshot.val();
+      if (messageData.unreadBy?.includes(username)) {
+        updates[`messages/${messageId}/unreadBy`] = messageData.unreadBy.filter((user) => user !== username);
+      }
     }
+  }
 
-    await update(ref(db), updates);
+  await update(ref(db), updates);
 };
 
 export const getMessageById = async (messageId) => {
-    const messageRef = ref(db, `messages/${messageId}`);
-    onValue(messageRef, (snapshot) => {
-        if (snapshot.exists()) {
-            return (snapshot.val());
-        } else {
-            return (null);
-        }
-    });
-    return messageRef;
-}
-
+  const messageRef = ref(db, `messages/${messageId}`);
+  onValue(messageRef, (snapshot) => {
+    if (snapshot.exists()) {
+      return snapshot.val();
+    } else {
+      return null;
+    }
+  });
+  return messageRef;
+};

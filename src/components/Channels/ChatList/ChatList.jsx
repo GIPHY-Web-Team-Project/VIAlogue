@@ -93,15 +93,26 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
           chats.map((chat) => {
             const isSelected = chat.id === selectedChatId;
             return (
-              <div key={chat.id} onClick={() => handleChatClick(chat)} className='hover:border-2 border-gray-600 p-2 mt-1 mb-1 rounded-md cursor-pointer hover:bg-gray-700'>
-                <Button btnStyle={CHAT_TEAM_LIST_ITEM}>{chat.title}</Button>
-                {chat.latestMessage ? (
-                  <p className='text-sm text-gray-500 overflow-ellipsis overflow-hidden flex flex-row'>
-                    <strong>{chat.latestMessage.sender !== userData.username ? chat.latestMessage.sender : 'You'}: </strong> &nbsp;{chat.latestMessage.message}
-                  </p>
-                ) : (
-                  <p className='text-sm text-gray-500 italic'>No messages yet</p>
-                )}
+              <div
+                key={chat.id}
+                onClick={() => handleChatClick(chat)}
+                className={`p-2 rounded-md cursor-pointer border-gray-600 hover:bg-gray-600
+                ${isSelected ? 'bg-gray-700 text-white' : 'bg-gray-800'}`}
+              >
+                <div className='flex flex-row justify-between'>
+                  <Button btnStyle={CHAT_TEAM_LIST_ITEM}>{chat.title}</Button>
+                  {chat.latestMessage && <p className='text-xs text-gray-500'>{formatDateShort(chat.latestMessage.createdOn)}</p>}
+                </div>
+                <div className='flex flex-row justify-between'>
+                  {chat.latestMessage ? (
+                    <p className='text-sm text-gray-500 overflow-ellipsis overflow-hidden flex flex-row'>
+                      <strong>{chat.latestMessage.sender !== userData.username ? chat.latestMessage.sender : 'You'}: </strong> &nbsp;{chat.latestMessage.message}
+                    </p>
+                  ) : (
+                    <p className='text-sm text-gray-500 italic'>No messages yet</p>
+                  )}
+                  {chat.unreadCount > 0 && chat.id !== selectedChatId && <h5 className='bg-gray-950 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center'>{chat.unreadCount}</h5>}
+                </div>
               </div>
             );
           })

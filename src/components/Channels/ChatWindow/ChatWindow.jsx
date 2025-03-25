@@ -39,15 +39,15 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!selectedChat) return; 
-    console.log('Updating messages for chat:', selectedChat.id); 
+    if (!selectedChat) return;
+    console.log('Updating messages for chat:', selectedChat.id);
     setLoading(true);
-  
+
     const unsubscribe = getMessagesByChatId(selectedChat.id, (fetchedMessages) => {
       setMessages(fetchedMessages);
       setLoading(false);
     });
-  
+
     return () => {
       if (typeof unsubscribe === 'function') {
         unsubscribe();
@@ -115,8 +115,8 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
                 <h1 className='text-2xl border-b-2 mb-4 pb-2 border-black shadow-2xl'>
                   {selectedChat.title}
                   {editTitle && (
-                    <button className='text-gray-600 hover:text-gray-800 p-1 flex-row' onClick={handleEditTitle}>
-                      <img src='/images/edit.png' alt='Edit' className='w-4 h-4' />
+                    <button className='text-gray-400 hover:text-gray-600 p-1 flex-row' onClick={handleEditTitle}>
+                      &#128393;
                     </button>
                   )}
                 </h1>
@@ -148,7 +148,7 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
             <div ref={messagesEndRef}></div>
           </div>
         </div>
-        <MessageWindow chat={selectedChat} sender={userData?.username || 'Unknown'} />
+        <MessageWindow chatId={selectedChat.id} sender={userData?.username || 'Unknown'} />
       </div>
     );
   }

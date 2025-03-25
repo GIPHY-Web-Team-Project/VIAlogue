@@ -15,9 +15,7 @@ export default function Modal({ show, handleClose, message }) {
       </div>
     </div>
   );
-};
-
-export default Modal;
+}
 
 Modal.propTypes = {
   show: PropTypes.bool.isRequired,

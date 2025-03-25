@@ -49,13 +49,13 @@ export default function SideBar({ type, username, handleNewChat, chats, setChats
         </div>
         <div className='relative bottom-5 flex flex-col justify-between'>
           <div>
-            <NavLink to={`/profile/${userData.username}`} className='mt-10'>
-              <img src={userData.profilePicture || '/images/123.jpg'} className='h-13 w-13 flex justify-self-center rounded-full' />
-            </NavLink>
+            {userData && (
+              <NavLink to={`/profile/${userData.username}`} className='mt-10'>
+                <img src={userData.profilePicture || '/images/123.jpg'} className='h-13 w-13 flex justify-self-center rounded-full' />
+              </NavLink>
+            )}
           </div>
-          <div className='absolute top-6 right-1'>
-            <ViewStatus username={userData.username} />
-          </div>
+          <div className='absolute top-6 right-1'>{userData && <ViewStatus username={userData.username} />}</div>
         </div>
       </div>
     );
