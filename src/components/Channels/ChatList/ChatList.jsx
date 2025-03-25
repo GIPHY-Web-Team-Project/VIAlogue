@@ -6,6 +6,7 @@ import Button from '../../UI/Button/Button';
 import PropTypes from 'prop-types';
 import { markMessagesAsRead } from '../../../services/message.services';
 import { formatDateShort } from '../../../utils/dateUtils';
+import newMessageSound from '/new-message.wav';
 
 /**
  * ChatList component displays a list of chat conversations for a given user.
@@ -24,6 +25,8 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
   const { userData } = useContext(AppContext);
   const [loading, setLoading] = useState(true);
   const [selectedChatId, setSelectedChatId] = useState(null);
+  const [prevUnreadCounts, setPrevUnreadCounts] = useState({});
+  const audio = new Audio(newMessageSound);
 
   useEffect(() => {
     setLoading(true);
@@ -43,6 +46,23 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
       }
     };
   }, [username]);
+
+  useEffect(() => {
+    if (chats) {
+      chats.forEach((chat) => {
+        if (prevUnreadCounts[chat.id] !== undefined && chat.unreadCount > (prevUnreadCounts[chat.id] || 0)) {
+          audio.play();
+        }
+      });
+  
+      setPrevUnreadCounts(
+        chats.reduce((acc, chat) => {
+          acc[chat.id] = chat.unreadCount;
+          return acc;
+        }, {})
+      );
+    }
+  }, [chats]);
 
   const handleChatClick = (chat) => {
     markMessagesAsRead(chat.id, username);
