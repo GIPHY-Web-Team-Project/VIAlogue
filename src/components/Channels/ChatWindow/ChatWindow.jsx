@@ -97,6 +97,7 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat, setPar
   const handleEditTitle = () => {
     setEdit(true);
   };
+
   if (!userData) {
     return <p>Loading...</p>;
   }

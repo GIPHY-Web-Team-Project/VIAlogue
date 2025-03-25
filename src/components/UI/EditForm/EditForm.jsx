@@ -1,5 +1,6 @@
+import React from 'react';
 import { POST } from '../../../common/enums';
-import Button from '../Button/Button';
+import PropTypes from 'prop-types';
 
 export default function EditForm({ editedObj, setIsEditing, handleInputChange, handleSave, type }) {
   return (
@@ -27,3 +28,11 @@ export default function EditForm({ editedObj, setIsEditing, handleInputChange, h
     </div>
   );
 }
+
+EditForm.propTypes = {
+  editedObj: PropTypes.object.isRequired,
+  setIsEditing: PropTypes.func.isRequired,
+  handleInputChange: PropTypes.func.isRequired,
+  handleSave: PropTypes.func.isRequired,
+  type: PropTypes.string.isRequired,
+};

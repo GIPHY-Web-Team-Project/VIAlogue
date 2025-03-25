@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { AppContext } from '../../../../store/app-context';
 import Button from '../../../UI/Button/Button';
 import CommentWindow from '../../Comments/CommentWindow/CommentWindow';
@@ -7,6 +7,8 @@ import { deletePost, updatePost } from '../../../../services/posts.services';
 import CommPostBtns from '../../../UI/CommPostBtns/CommPostBtns';
 import EditForm from '../../../UI/EditForm/EditForm';
 import { POST } from '../../../../common/enums';
+import PropTypes from 'prop-types';
+import Modal from '../../../UI/Modal/Modal';
 
 export default function Post({ post, onPostUpdate, handlePostDelete }) {
   const [showComments, setShowComments] = useState(false);
@@ -16,7 +18,8 @@ export default function Post({ post, onPostUpdate, handlePostDelete }) {
     content: post.content,
   });
   const [showBtns, setShowBtns] = useState(false);
-
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
   const { userData } = useContext(AppContext);
 
   const handleInputChange = (e) => {
@@ -28,8 +31,8 @@ export default function Post({ post, onPostUpdate, handlePostDelete }) {
 
   const handleSave = async () => {
     if (!editedPost.content || !editedPost.title) {
-      alert('Content cannot be empty');
-      // modal
+      setModalMessage('Content cannot be empty.');
+      setShowModal(true);
       return;
     }
     try {
@@ -41,8 +44,9 @@ export default function Post({ post, onPostUpdate, handlePostDelete }) {
 
       setIsEditing(false);
     } catch (error) {
-      console.error('Error updating comment', error);
-      //   modal
+      console.error('Error updating post', error);
+      setModalMessage('Post could not be updated. Please try again later.');
+      setShowModal(true);
     }
   };
 
@@ -55,8 +59,8 @@ export default function Post({ post, onPostUpdate, handlePostDelete }) {
       }
     } catch (error) {
       console.error(error);
-      alert('Failed to delete comment!');
-      //   modal
+      setModalMessage('Post could not be deleted. Please try again later.');
+      setShowModal(true);
     }
   };
 
@@ -82,6 +86,13 @@ export default function Post({ post, onPostUpdate, handlePostDelete }) {
           </section>
         </>
       )}
+      {showModal && <Modal message={modalMessage} show={showModal} handleClose={() => setShowModal(false)} />}
     </div>
   );
 }
+
+Post.propTypes = {
+  post: PropTypes.object.isRequired,
+  onPostUpdate: PropTypes.func,
+  handlePostDelete: PropTypes.func,
+};

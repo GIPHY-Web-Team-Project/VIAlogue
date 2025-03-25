@@ -1,3 +1,6 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+
 export default function CommPostBtns({ showBtns, setIsEditing, handleDelete, objId }) {
   return (
     <div className='self-end'>
@@ -14,3 +17,10 @@ export default function CommPostBtns({ showBtns, setIsEditing, handleDelete, obj
     </div>
   );
 }
+
+CommPostBtns.propTypes = {
+  showBtns: PropTypes.bool.isRequired,
+  setIsEditing: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
+  objId: PropTypes.string.isRequired,
+};

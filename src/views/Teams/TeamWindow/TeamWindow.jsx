@@ -16,9 +16,7 @@ export default function TeamWindow() {
   const [loading, setLoading] = useState(false);
   const [viewChannel, setViewChannel] = useState(false);
   const [currChannel, setCurrChannel] = useState(null);
-
-  // const [selectedChannel, setSelectedChannel] = useState(null);
-
+  
   useEffect(() => {
     if (!team) return;
 

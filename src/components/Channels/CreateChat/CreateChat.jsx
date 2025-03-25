@@ -105,6 +105,8 @@ export const CreateChat = ({ setShowNewChat, showNewChat, setSelectedChat }) => 
       });
     } catch {
       console.error('Error creating chat');
+      setModalMessage('Chat could not be created. Please try again later!');
+      setShowModal(true);
     }
   };
 
@@ -135,10 +137,6 @@ export const CreateChat = ({ setShowNewChat, showNewChat, setSelectedChat }) => 
     }
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
-
   return (
     <div className='flex justify-between w-full h-full flex-col'>
       <div className='shadow-lg rounded-lg p-6 w-full'>
@@ -164,7 +162,7 @@ export const CreateChat = ({ setShowNewChat, showNewChat, setSelectedChat }) => 
           </div>
         )}
       </div>
-      {showModal && <Modal message={modalMessage} show={showModal} handleClose={handleCloseModal} />}
+      {showModal && <Modal show={showModal} handleClose={() => setShowModal(false)} message={modalMessage} />}
     </div>
   );
 };

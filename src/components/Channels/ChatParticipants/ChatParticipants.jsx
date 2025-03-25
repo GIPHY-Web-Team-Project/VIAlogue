@@ -9,6 +9,7 @@ import { updateChat } from '../../../services/chat.services';
 import SelectUsersTeamChat from '../../SelectUsers/SelectUsersTeamChat/SelectUsersTeamChat';
 import ViewStatus from '../../../views/ViewStatus/ViewStatus';
 import PropTypes from 'prop-types';
+import Modal from '../../UI/Modal/Modal';
 
 /**
  * ChatParticipants component displays a list of chat participants and provides functionality
@@ -34,6 +35,8 @@ export const ChatParticipants = ({ participants, setParticipants, handleLeaveCha
     const [usersNotInChat, setUsersNotInChat] = useState([]);
     const { users: allUsers } = useUsers(userData);
     const [selectedUsers, setSelectedUsers] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -112,6 +115,8 @@ export const ChatParticipants = ({ participants, setParticipants, handleLeaveCha
             setUsersNotInChat(usersNotInChat.filter((user) => !newUsers.includes(user.username)));
         } catch (error) {
             console.log(error);
+            setModalMessage(`New users could not be added. Please try again!`);
+            setShowModal(true);
         }
     }
 
@@ -156,6 +161,7 @@ export const ChatParticipants = ({ participants, setParticipants, handleLeaveCha
                     </div>
                 )}
             </div>
+            {showModal && <Modal show={showModal} handleClose={() => setShowModal(false)} message={modalMessage} />}
         </div>
     )
 }

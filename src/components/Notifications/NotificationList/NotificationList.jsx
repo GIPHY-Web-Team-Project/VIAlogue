@@ -97,10 +97,10 @@ const NotificationList = () => {
                     </div>
                     <ul className='text-left p-2 items-center justify-center'>
                         {notifications.map((notificationObj) => (
-                            notificationObj.type === 'other' && (
+                            notificationObj.type !== 'message' && (
                                 <li key={notificationObj.id}>
-                                    <SingleNotification 
-                                        notification={notificationObj} 
+                                    <SingleNotification
+                                        notification={notificationObj}
                                         onDelete={handleDeleteNotification}
                                     />
                                 </li>

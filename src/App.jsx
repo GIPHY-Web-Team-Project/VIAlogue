@@ -14,13 +14,15 @@ import Profile from './views/Profile/Profile';
 import TeamsPage from './views/Teams/TeamsPage/TeamsPage';
 import TeamWindow from './views/Teams/TeamWindow/TeamWindow';
 import UserStatus from './components/UserStatus/UserStatus';
+import Modal from './components/UI/Modal/Modal';
 
 export default function App() {
   const [appState, setAppState] = useState({
     user: null,
     userData: null,
   });
-
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
   const [user] = useAuthState(auth);
 
   if (appState.user !== user) {
@@ -43,6 +45,8 @@ export default function App() {
       })
       .catch((error) => {
         console.log(error);
+        setModalMessage(`Something went wrong. Please try again later!`);
+        setShowModal(true);
       });
   }, [user]);
 
@@ -64,6 +68,7 @@ export default function App() {
           </Routes>
         </div>
       </AppContext.Provider>
+      {showModal && <Modal show={showModal} handleClose={() => setShowModal(false)} message={modalMessage} />}
     </BrowserRouter>
   );
 }
