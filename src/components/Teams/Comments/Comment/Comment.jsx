@@ -6,7 +6,8 @@ import CommPostBtns from '../../../UI/CommPostBtns/CommPostBtns';
 import EditForm from '../../../UI/EditForm/EditForm';
 import { COMMENT } from '../../../../common/enums';
 
-export default function Comment({ comment, post, showBtns }) {
+export default function Comment({ comment, post }) {
+  const [showBtns, setShowBtns] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedComment, setEditedComment] = useState({
     content: comment.content,
@@ -52,11 +53,13 @@ export default function Comment({ comment, post, showBtns }) {
         <EditForm editedObj={editedComment} setIsEditing={setIsEditing} handleInputChange={handleInputChange} handleSave={handleSave} type={COMMENT} />
       ) : (
         <>
-          <section>
-            <CommPostAdditionalInfo obj={comment} />
-            <p className='break-words whitespace-normal max-w-3xl shadow-sm rounded-md px-2 py-1 mb-2'>{comment.content}</p>
-          </section>
-          {userData && userData.username === comment.author && <CommPostBtns showBtns={showBtns} setIsEditing={setIsEditing} handleDelete={handleDelete} objId={comment.id} />}
+          <div className='flex' onMouseEnter={() => setShowBtns(true)} onMouseLeave={() => setShowBtns(false)}>
+            <section className='min-w-full mr-4'>
+              <CommPostAdditionalInfo obj={comment} />
+              <p className='break-words whitespace-normal shadow-sm rounded-md px-2 py-1 mb-2'>{comment.content}</p>
+            </section>
+            <div>{userData && userData.username === comment.author && <CommPostBtns showBtns={showBtns} setIsEditing={setIsEditing} handleDelete={handleDelete} objId={comment.id} />}</div>
+          </div>
         </>
       )}
     </>

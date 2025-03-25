@@ -70,7 +70,7 @@ export default function Post({ post, onPostUpdate, handlePostDelete }) {
             <section className='flex justify-between mb-5'>
               <div>
                 <AvatarAndUsername obj={post} />
-                <h3 className='text-4xl ml-10'>{post.title}</h3>
+                <h3 className='text-4xl mt-4 ml-10'>{post.title}</h3>
               </div>
               <div>{userData && userData.username === post.author && <CommPostBtns showBtns={showBtns} setIsEditing={setIsEditing} handleDelete={handleDelete} objId={post.id} />}</div>
             </section>
