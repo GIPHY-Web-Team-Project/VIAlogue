@@ -1,10 +1,12 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { AppContext } from '../../../store/app-context';
 import LearnMore from '../LearnMore/LearnMore';
 import { TEXT_BUTTON } from '../../../common/enums';
 import Button from '../../../components/UI/Button/Button';
 import { variant } from '../../../common/button-const';
+import { getAllUsers } from '../../../services/user.service';
+import { getAllTeams } from '../../../services/stats.services';
 
 /**
  * LandingPage component renders the main landing page of the application.
@@ -22,7 +24,25 @@ export default function LandingPage() {
   const [learnMore, setLearnMore] = useState(false);
   const [numOfTeams, setNumOfTeams] = useState(null);
   const [numOfUsers, setNumOfUsers] = useState(null);
+  const [loading, setLoading] = useState(true);
   const { userData } = useContext(AppContext);
+
+  useEffect(() => {
+    setLoading(true);
+    const unsubscribe = () => {
+      getAllUsers(setNumOfUsers);
+      getAllTeams(setNumOfTeams);
+      setLoading(false);
+    };
+
+    return () => {
+      if (typeof unsubscribe === 'function') {
+        unsubscribe();
+      }
+    };
+  }, []);
+
+  numOfTeams && numOfUsers && console.log(numOfTeams, numOfUsers);
 
   return (
     <div className='flex flex-col flex-grow'>
@@ -50,7 +70,7 @@ export default function LandingPage() {
             <div className='grid grid-cols-2 grid-rows-2 gap-8 justify-items-center'>
               <p>Users</p>
               <p>Teams</p>
-              <span>{numOfUsers}</span>
+              <span>{numOfUsers.length}</span>
               <span>{numOfTeams}</span>
             </div>
             <Link className={variant.default} to={'/register'}>
