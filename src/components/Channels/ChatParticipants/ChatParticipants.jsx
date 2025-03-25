@@ -24,16 +24,16 @@ import PropTypes from 'prop-types';
  * @param {string} props.chatId - The ID of the current chat.
  * @returns {JSX.Element} The rendered ChatParticipants component.
  */
-export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, setSelectedUser, chatId }) => {
-  const { userData } = useContext(AppContext);
-  const [users, setUsers] = useState([]);
-  const navigate = useNavigate();
-  const [showLeave, setShowLeave] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
-  const [showSelectUsers, setShowSelectUsers] = useState(false);
-  const [usersNotInChat, setUsersNotInChat] = useState([]);
-  const { users: allUsers } = useUsers(userData);
-  const [selectedUsers, setSelectedUsers] = useState([]);
+export const ChatParticipants = ({ participants, setParticipants, handleLeaveChat, selectedUser, setSelectedUser, chatId }) => {
+    const { userData } = useContext(AppContext);
+    const [users, setUsers] = useState([]);
+    const navigate = useNavigate();
+    const [showLeave, setShowLeave] = useState(false);
+    const [showProfile, setShowProfile] = useState(false);
+    const [showSelectUsers, setShowSelectUsers] = useState(false);
+    const [usersNotInChat, setUsersNotInChat] = useState([]);
+    const { users: allUsers } = useUsers(userData);
+    const [selectedUsers, setSelectedUsers] = useState([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -88,82 +88,85 @@ export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, 
     }
   };
 
-  /**
-   * Handles adding new users to the chat by merging selected users with existing participants
-   * and updating the chat data.
-   *
-   * @async
-   * @function handleNewUsers
-   * @returns {Promise<void>} Resolves when the chat is successfully updated.
-   * @throws {Error} Logs an error to the console if the chat update fails.
-   */
-  const handleNewUsers = async () => {
-    const newUsers = selectedUsers.map((user) => user);
-    try {
-      await updateChat(chatId, [...participants, ...newUsers], 'users');
-      setSelectedUsers([]);
-      const userList = await Promise.all(
-        newUsers.map(async (username) => {
-          return await getUserByUsername(username);
-        })
-      );
-      setUsers([...users, ...userList]);
-      setUsersNotInChat(usersNotInChat.filter((user) => !newUsers.includes(user.username)));
-    } catch (error) {
-      console.log(error);
+    /**
+     * Handles adding new users to the chat by merging selected users with existing participants
+     * and updating the chat data.
+     *
+     * @async
+     * @function handleNewUsers
+     * @returns {Promise<void>} Resolves when the chat is successfully updated.
+     * @throws {Error} Logs an error to the console if the chat update fails.
+     */
+    const handleNewUsers = async () => {
+        const newUsers = selectedUsers.map((user) => user);
+        try {
+            await updateChat(chatId, [...participants, ...newUsers], "users");
+            setSelectedUsers([]);
+            const userList = await Promise.all(
+                newUsers.map(async (username) => {
+                    return await getUserByUsername(username);
+                })
+            );
+            setUsers([...users, ...userList]);
+            setParticipants([...participants, ...newUsers]);
+            setUsersNotInChat(usersNotInChat.filter((user) => !newUsers.includes(user.username)));
+        } catch (error) {
+            console.log(error);
+        }
     }
-  };
 
-  return (
-    <div className='absolute top-12 right-5 bg-gray-800 text-white z-50 shadow-lg overflow-y-auto border border-gray-600'>
-      <ul>
-        {users.map((user) => (
-          <li key={user.uid || user.username} className='p-2 hover:bg-gray-700 cursor-pointer'>
-            <div className='flex flex-row'>
-              <ViewStatus username={user.username} type={'participants'} source='chat-participants' />
-              <span className='content-center'>
-                <img className='mr-2 h-5 w-5 rounded-full overflow-hidden bg-gray-100' src={user.profilePicture || '/images/123.jpg'} alt={user.username} />
-              </span>
-              <span onClick={() => handleUserClick(user.username)} className='mr-2 text-s'>
-                {user.username}
-              </span>
-              {userData.username === user.username && showLeave && (
-                <Button btnStyle={CHAT_PARTICIPANTS_BTNS} onClick={handleLeaveChat}>
-                  Leave
-                </Button>
-              )}
-              {selectedUser === user.username && selectedUser !== userData.username && showProfile && (
-                <>
-                  <Button btnStyle={CHAT_PARTICIPANTS_BTNS} onClick={() => handleProfileView(user)}>
-                    View profile
-                  </Button>
-                </>
-              )}
+    return (
+        <div className="absolute top-12 right-5 bg-gray-800 text-white z-50 shadow-lg overflow-y-auto border border-gray-600 max-h-[60vh]">
+            <ul className='max-h-screen'>
+                {users.map((user) => (
+                    <li key={user.uid || user.username} className="p-2 hover:bg-gray-700 cursor-pointer">
+                        <div className="flex flex-row">
+                            <ViewStatus username={user.username} type={'participants'} source='chat-participants' />
+                            <span className='content-center'>
+                                <img className="mr-2 h-5 w-5 rounded-full overflow-hidden bg-gray-100" src={user.profilePicture || '/images/123.jpg'} alt={user.username} />
+                            </span>
+                            <span onClick={() => handleUserClick(user.username)} className="mr-2 text-s">{user.username}</span>
+                            {(userData.username === user.username) && showLeave && (
+                                <Button btnStyle={CHAT_PARTICIPANTS_BTNS} onClick={handleLeaveChat}>
+                                    Leave
+                                </Button>
+                            )}
+                            {(selectedUser === user.username) && (selectedUser !== userData.username) && showProfile && (
+                                <>
+                                    <Button btnStyle={CHAT_PARTICIPANTS_BTNS} onClick={() => handleProfileView(user)}>
+                                        View profile
+                                    </Button>
+                                </>
+                            )}
+                        </div>
+                    </li>
+                ))}
+            </ul>
+            <div className='h-auto bottom-auto'>
+            <button className="text-s flex flex-wrap place-content-center p-2 cursor-pointer border-t-2 border-gray-700 w-full" onClick={toggleSelectUsers}>Add people &nbsp; <img src="/images/add-people.png" className="h-5 w-5 flex justify-self-center align-center" /></button>
+                {showSelectUsers && (
+                    <div className="mt-4 h-auto">
+                        <SelectUsersTeamChat selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} userList={usersNotInChat} setUserList={setUsersNotInChat} />
+                        <button
+                            onClick={handleNewUsers}
+                            className="mt-2 w-full mb-2 border-t-2 border-gray-700 p-2 cursor-pointer"
+                        >
+                            Add to chat
+                        </button>
+                    </div>
+                )}
             </div>
-          </li>
-        ))}
-      </ul>
-      <button className='text-s flex flex-wrap place-content-center p-2 cursor-pointer border-t-2 border-gray-700 w-full' onClick={toggleSelectUsers}>
-        Add people &nbsp; <img src='/images/add-people.png' className='h-5 w-5 flex justify-self-center align-center' />
-      </button>
-      {showSelectUsers && (
-        <div className='mt-4'>
-          <SelectUsersTeamChat selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} userList={usersNotInChat} setUserList={setUsersNotInChat} />
-          <button onClick={handleNewUsers} className='mt-2 w-full mb-2 border-t-2 border-gray-700 p-2 cursor-pointer'>
-            Add to chat
-          </button>
         </div>
-      )}
-    </div>
-  );
-};
+    )
+}
 
 export default ChatParticipants;
 
 ChatParticipants.propTypes = {
-  participants: PropTypes.array.isRequired,
-  handleLeaveChat: PropTypes.func.isRequired,
-  selectedUser: PropTypes.string,
-  setSelectedUser: PropTypes.func.isRequired,
-  chatId: PropTypes.string,
+    participants: PropTypes.array.isRequired,
+    setParticipants: PropTypes.func.isRequired,
+    handleLeaveChat: PropTypes.func.isRequired,
+    selectedUser: PropTypes.string,
+    setSelectedUser: PropTypes.func.isRequired,
+    chatId: PropTypes.string
 };
