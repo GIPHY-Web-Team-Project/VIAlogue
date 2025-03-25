@@ -9,11 +9,10 @@ import PropTypes from 'prop-types';
  * @param {Object} props.chat - The chat object containing details of the chat.
  * @param {string} props.chat.title - The current title of the chat.
  * @param {string} props.chat.id - The unique identifier of the chat.
- * @param {Function} props.onCancel - Callback function to handle cancel action.
  *
  * @returns {JSX.Element} The rendered EditChat component.
  */
-export const EditChat = ({ chat, onCancel }) => {
+export const EditChat = ({ chat, onCancel, setSelectedChat }) => {
   const [title, setTitle] = useState(chat.title);
 
   /**
@@ -28,6 +27,7 @@ export const EditChat = ({ chat, onCancel }) => {
   const handleUpdate = async () => {
     if (title.trim() !== '') {
       await updateChat(chat.id, title, 'title');
+      setSelectedChat(prev => ({ ...prev, title }));
     }
     onCancel();
   };
@@ -50,4 +50,5 @@ export default EditChat;
 EditChat.propTypes = {
   chat: PropTypes.object.isRequired,
   onCancel: PropTypes.func.isRequired,
+  setSelectedChat: PropTypes.func.isRequired,
 };

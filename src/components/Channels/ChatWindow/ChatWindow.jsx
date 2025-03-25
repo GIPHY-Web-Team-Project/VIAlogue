@@ -124,7 +124,7 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat, setPar
               }
             </h1>}
             {edit && (
-              <EditChat chat={selectedChat} onCancel={() => setEdit(false)}/>
+              <EditChat chat={selectedChat} onCancel={() => setEdit(false)} setSelectedChat={setSelectedChat}/>
             )}
             </div>
             <div className="flex flex-col overflow-x-auto">
