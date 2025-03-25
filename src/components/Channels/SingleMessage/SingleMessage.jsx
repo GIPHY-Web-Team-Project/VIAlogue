@@ -8,6 +8,8 @@ import EmojiList from '../EmojiList/EmojiList';
 import { useNavigate } from 'react-router';
 import PropTypes from 'prop-types';
 import { formatDate } from '../../../utils/dateUtils';
+import { getUserByUsername } from '../../../services/user.service';
+import { useEffect } from 'react';
 
 /**
  * Component representing a single message in a chat.
@@ -31,11 +33,24 @@ export const SingleMessage = ({ msg, isFirstFromSender }) => {
   const [showOptions, setShowOptions] = useState(false);
   const { userData } = useContext(AppContext);
   const [showUsers, setShowUsers] = useState(false);
+  const [senderImage, setSenderImage] = useState('/images/123.jpg');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchSenderImage = async () => {
+      const user = await getUserByUsername(msg.sender);
+      if (user && user.profilePicture) {
+        setSenderImage(user.profilePicture);
+      }
+    };
+
+    fetchSenderImage();
+  }, [msg.sender]);
 
   const handleEdit = () => {
     setShowEdit(true);
   };
+
 
   return (
     <div className='message' onMouseEnter={() => setShowOptions(true)} onMouseLeave={() => setShowOptions(false)}>
@@ -45,10 +60,13 @@ export const SingleMessage = ({ msg, isFirstFromSender }) => {
         <div className='flex-1 flex-col pr-2 '>
           <div className='flex flex-row justify-between'>
             {isFirstFromSender && (
-             <div className='pt-4 flex flex-row justify-between w-full cursor-pointer' onClick={() => navigate(`/profile/${msg.sender}`)}>
-                <h3 className={userData.username === msg.sender ? 'text-blue-700' : 'text-blue-300'}>
-                  <strong>{userData.username === msg.sender ? 'You' : msg.sender}</strong>
-                </h3>
+              <div className='pt-4 flex flex-row justify-between w-full cursor-pointer' onClick={() => navigate(`/profile/${msg.sender}`)}>
+                <div className='flex flex-row'>
+                  <img src={senderImage} alt="Profile" className="w-5 h-5 rounded-full object-cover mr-2" />
+                  <h3 className={userData.username === msg.sender ? 'text-blue-700' : 'text-blue-300'}>
+                    <strong>{userData.username === msg.sender ? 'You' : msg.sender}</strong>
+                  </h3>
+                </div>
                 <label className='text-gray-500 text-xs align-center ml-4'>{formatDate(msg.createdOn)}</label>
               </div>
             )}
