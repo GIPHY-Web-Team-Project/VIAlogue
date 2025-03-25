@@ -50,30 +50,37 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
   useEffect(() => {
     if (chats) {
       chats.forEach((chat) => {
-        if (prevUnreadCounts[chat.id] !== undefined && chat.unreadCount > (prevUnreadCounts[chat.id] || 0)) {
+        if (
+          prevUnreadCounts[chat.id] !== undefined &&
+          chat.unreadCount > (prevUnreadCounts[chat.id] || 0) &&
+          chat.id !== selectedChatId
+        ) {
           audio.play();
         }
       });
-  
+
       setPrevUnreadCounts(
         chats.reduce((acc, chat) => {
-          acc[chat.id] = chat.unreadCount;
+          acc[chat.id] = chat.id === selectedChatId ? 0 : chat.unreadCount;
           return acc;
         }, {})
       );
     }
-  }, [chats]);
+  }, [chats, selectedChatId]);
 
   const handleChatClick = (chat) => {
-    markMessagesAsRead(chat.id, username);
-    setSelectedChat({ ...chat }); 
-    setSelectedChatId(chat.id);
-    setChats((prevChats) =>
-      prevChats.map((c) => (c.id === chat.id ? { ...c, unreadCount: 0 } : c))
-    );
+    markMessagesAsRead(chat.id, username).then(() => {
+      setSelectedChat({ ...chat });
+      setSelectedChatId(chat.id);
+      setChats((prevChats) =>
+        prevChats.map((c) =>
+          c.id === chat.id ? { ...c, unreadCount: 0 } : c
+        )
+      );
+    }).catch(error => {
+      console.error("Error marking messages as read:", error);
+    });
   };
-
-
 
   return (
     <div className='bg-gray-800 p-4 overflow-y-auto w-80'>
@@ -108,7 +115,7 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
                 ) : (
                   <p className="text-sm text-gray-500 italic">No messages yet</p>
                 )}
-                {chat.unreadCount > 0 && (
+                {chat.unreadCount > 0 && chat.id !== selectedChatId && (
                 <h5 className="bg-gray-950 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                     {chat.unreadCount}
                 </h5>
