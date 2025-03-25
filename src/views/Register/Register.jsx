@@ -64,11 +64,15 @@ export default function Register() {
   const register = async () => {
     try {
       if (!user.email || !user.password || !user.username) {
-        return alert('Please fill all empty sections.');
+        setModalMessage(`Please fill all empty sections.`);
+        setShowModal(true);
+        return;
       }
 
       if (!nameCheck(user.firstName) || !nameCheck(user.lastName)) {
-        throw new Error('First and last names must be between 4 and 32 characters and contain only letters');
+        setModalMessage(`First and last names must be between 4 and 32 characters and contain only letters.`);
+        setShowModal(true);
+        return;
       }
 
       const validateUsername = (username) => {
@@ -77,19 +81,24 @@ export default function Register() {
       };
 
       if (!validateUsername(user.username)) {
-        alert('Username must be between 4 and 32 characters and can only contain letters, numbers, underscores (_), dots (.), and hyphens (-).');
+        setModalMessage(`Username must be between 4 and 32 characters and can only contain letters, numbers, underscores (_), dots (.), and hyphens (-).`);
+        setShowModal(true);
         return;
       }
 
       console.log('Registering user: ', user.username);
       const userFromDB = await getUserByUsername(user.username);
       if (userFromDB) {
-        throw new Error(`User with username ${user.username} already exists`);
+        setModalMessage(`User with username ${user.username} already exists`);
+        setShowModal(true);
+        return;
       }
 
       const emailExists = await getUserByEmail(user.email);
       if (emailExists) {
-        throw new Error(`User with email ${user.email} already exists`);
+        setModalMessage(`User with email ${user.email} already exists`);
+        setShowModal(true);
+        return;
       }
 
       const userCredential = await createUserWithEmailAndPassword(auth, user.email, user.password);
@@ -97,8 +106,11 @@ export default function Register() {
       await signOut(auth);
       setModalMessage('Registration successful! Please log in.');
       setShowModal(true);
+      navigate('/login');
     } catch (error) {
-      alert(error.message);
+      console.error('Registration failed', error);
+      setModalMessage('Registration was not successful! Please try again.');
+      setShowModal(true);
     }
   };
 
@@ -107,11 +119,6 @@ export default function Register() {
       ...user,
       [prop]: e.target.value,
     });
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-    navigate('/login');
   };
 
   return (
@@ -206,7 +213,7 @@ export default function Register() {
           </Link>
         </p>
       </div>
-      <Modal show={showModal} handleClose={handleCloseModal} message={modalMessage} />
+      {showModal && <Modal show={showModal} handleClose={() => setShowModal(false)} message={modalMessage} />}
     </div>
   );
 }

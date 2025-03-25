@@ -1,6 +1,6 @@
+import React from 'react';
 import { POST } from '../../../common/enums';
 import PropTypes from 'prop-types';
-import React from 'react';
 
 export default function EditForm({ editedObj, setIsEditing, handleInputChange, handleSave, type }) {
   return (

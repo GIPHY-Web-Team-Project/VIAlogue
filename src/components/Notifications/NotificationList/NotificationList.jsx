@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import SingleNotification from "../SingleNotification/SingleNotification";
 import { useContext } from "react";
@@ -7,45 +7,52 @@ import { getNotificationsByUsername } from "../../../services/notification.servi
 import { deleteAllNotifications, deleteNotification } from "../../../services/notification.service";
 import notificationSound from '/new-notification.wav';
 
-/**
- * NotificationList Component
- * 
- * This component displays a list of notifications for the current user. It fetches notifications
- * based on the user's username and provides functionality to delete individual notifications or 
- * clear all notifications at once.
- * 
- * Features:
- * - Fetches notifications in real-time using a subscription mechanism.
- * - Displays a loading spinner while notifications are being fetched.
- * - Allows users to delete individual notifications or clear all notifications.
- * - Displays a message when there are no notifications.
- * 
- * @component
- * @returns {JSX.Element} The rendered NotificationList component.
- *
- * @dependencies
- * - React (useState, useEffect, useContext)
- * - AppContext for accessing user data.
- * - Utility functions: getNotificationsByUsername, deleteAllNotifications, deleteNotification.
- * - SingleNotification component for rendering individual notifications.
- */
 const NotificationList = () => {
     const { userData } = useContext(AppContext);
     const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [prevNotificationCount, setPrevNotificationCount] = useState(0);
-    const audio = new Audio(notificationSound);
+    const prevNotifications = useRef([]);
+    const audioRef = useRef(null);
+    const isFirstLoad = useRef(true);
+    const soundLock = useRef(false);
 
     useEffect(() => {
-        setLoading(true);
+        audioRef.current = new Audio(notificationSound);
+        audioRef.current.volume = 0.5;
 
         const unsubscribe = getNotificationsByUsername(userData.username, (receivedNotifications) => {
-            if (receivedNotifications.length > prevNotificationCount) {
-                audio.play(); // Play sound when a new notification is added
+            if (isFirstLoad.current) {
+                isFirstLoad.current = false;
+                setNotifications(receivedNotifications);
+                prevNotifications.current = receivedNotifications;
+                setLoading(false);
+                return;
+            }
+
+            const newNotifications = receivedNotifications.filter(
+                newNotif => !prevNotifications.current.some(
+                    prevNotif => prevNotif.id === newNotif.id
+                )
+            );
+
+            if (newNotifications.length > 0 && !soundLock.current) {
+                soundLock.current = true;
+                audioRef.current.currentTime = 0;
+                audioRef.current.play()
+                    .then(() => {
+                        const soundDuration = audioRef.current.duration * 1000 || 1000;
+                        setTimeout(() => {
+                            soundLock.current = false;
+                        }, soundDuration + 200);
+                    })
+                    .catch(error => {
+                        console.error("Audio play failed:", error);
+                        soundLock.current = false;
+                    });
             }
 
             setNotifications(receivedNotifications);
-            setPrevNotificationCount(receivedNotifications.length);
+            prevNotifications.current = receivedNotifications;
             setLoading(false);
         });
 
@@ -53,18 +60,26 @@ const NotificationList = () => {
             if (typeof unsubscribe === "function") {
                 unsubscribe();
             }
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current.currentTime = 0;
+            }
         };
     }, [userData.username]);
 
     const handleDeleteAll = async () => {
         await deleteAllNotifications(userData.username);
         setNotifications([]);
+        prevNotifications.current = [];
     };
 
     const handleDeleteNotification = async (notificationId) => {
         await deleteNotification(userData.username, notificationId);
         setNotifications(prevNotifications =>
             prevNotifications.filter(notification => notification.id !== notificationId)
+        );
+        prevNotifications.current = prevNotifications.current.filter(
+            notification => notification.id !== notificationId
         );
     };
 
@@ -74,25 +89,23 @@ const NotificationList = () => {
                 <div className="flex items-center justify-center h-full">
                     <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-blue-500"></div>
                 </div>
-            ) : notifications && notifications.length > 0 ? (
+            ) : notifications.length > 0 ? (
                 <div>
                     <div className="flex flex-row justify-between">
                         <h3 className='mb-4 border-b-2 border-gray-600 w-full text-center py-2'>Notifications</h3>
                         <button className="text-gray-600 hover:text-gray-800 p-1 flex-row py-2 mb-4" onClick={handleDeleteAll}>Clear</button>
                     </div>
                     <ul className='text-left p-2 items-center justify-center'>
-                        {notifications.map((notificationObj) => {
-                            if (notificationObj.type === 'other') {
-                                return (
-                                    <li key={notificationObj.id}>
-                                        <SingleNotification 
-                                            notification={notificationObj} 
-                                            onDelete={handleDeleteNotification} // Pass handler here
-                                        />
-                                    </li>
-                                );
-                            }
-                        })}
+                        {notifications.map((notificationObj) => (
+                            notificationObj.type !== 'message' && (
+                                <li key={notificationObj.id}>
+                                    <SingleNotification
+                                        notification={notificationObj}
+                                        onDelete={handleDeleteNotification}
+                                    />
+                                </li>
+                            )
+                        ))}
                     </ul>
                 </div>
             ) : (

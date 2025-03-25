@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getChannelPosts } from '../../../../services/posts.services';
 import Post from '../Post/Post';
-import React from 'react';
 import PropTypes from 'prop-types';
 
 export default function PostWindow({ channel }) {

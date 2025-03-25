@@ -1,10 +1,9 @@
-import { useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { AppContext } from '../../../../store/app-context';
 import { uploadPost } from '../../../../services/posts.services';
 import Button from '../../../UI/Button/Button';
 import { useParams } from 'react-router';
 import PropTypes from 'prop-types';
-import React from 'react';
 import Modal from '../../../UI/Modal/Modal';
 
 export default function CreatePost({ channelId, setViewCreatePost }) {
@@ -24,7 +23,7 @@ export default function CreatePost({ channelId, setViewCreatePost }) {
     const content = document.getElementById('content').value;
 
     if (!title || !content) {
-      setModalMessage('Please fill all fields');
+      setModalMessage('Please fill in all fields.');
       setShowModal(true);
       return;
     }
@@ -45,7 +44,7 @@ export default function CreatePost({ channelId, setViewCreatePost }) {
       await uploadPost(userData.username, title, content, channelId, teamId);
     } catch (error) {
       console.error(error);
-      setModalMessage('Failed to upload post!');
+      setModalMessage('Your post could not be uploaded. Please try again later.');
       setShowModal(true);
     }
 

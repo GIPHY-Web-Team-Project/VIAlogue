@@ -74,8 +74,6 @@ export const ChatPage = () => {
     return <LandingPage />;
   }
 
-  // console.log(selectedChat);
-
   if (userData) {
     return (
       <div className='flex flex-grow'>
@@ -88,7 +86,7 @@ export const ChatPage = () => {
             <>
               {selectedChat ? (
                 <>
-                  <ChatWindow selectedChat={selectedChat} participants={participants} setSelectedChat={setSelectedChat} />
+                  <ChatWindow selectedChat={selectedChat} participants={participants} setSelectedChat={setSelectedChat} setParticipants={setParticipants}/>
                 </>
               ) : (
                 <p>Select a chat to start messaging.</p>

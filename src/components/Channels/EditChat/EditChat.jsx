@@ -9,11 +9,10 @@ import PropTypes from 'prop-types';
  * @param {Object} props.chat - The chat object containing details of the chat.
  * @param {string} props.chat.title - The current title of the chat.
  * @param {string} props.chat.id - The unique identifier of the chat.
- * @param {Function} props.onCancel - Callback function to handle cancel action.
  *
  * @returns {JSX.Element} The rendered EditChat component.
  */
-export const EditChat = ({ chat, onCancel }) => {
+export const EditChat = ({ chat, onCancel, setSelectedChat }) => {
   const [title, setTitle] = useState(chat.title);
 
   /**
@@ -28,26 +27,28 @@ export const EditChat = ({ chat, onCancel }) => {
   const handleUpdate = async () => {
     if (title.trim() !== '') {
       await updateChat(chat.id, title, 'title');
+      setSelectedChat(prev => ({ ...prev, title }));
     }
     onCancel();
   };
 
-  return (
-    <div>
-      <input value={title} onChange={(e) => setTitle(e.target.value)} autoFocus />
-      <button className='ml-2 mr-2' onClick={handleUpdate}>
-        ✔️
-      </button>
-      <button className='ml-2 mr-2' onClick={onCancel}>
-        ✖️
-      </button>
-    </div>
-  );
-};
+    return (
+        <div className="flex items-center">
+            <input className='text-xl'
+                value={title} 
+                onChange={e => setTitle(e.target.value)} 
+                autoFocus
+            />
+            <button className="text-gray-300 hover:text-gray-500 mx-2" onClick={handleUpdate}>&#10003; </button>
+            <button className="text-gray-300 hover:text-gray-500 " onClick={onCancel}> &#10007;</button>
+        </div>
+    )
+}
 
 export default EditChat;
 
 EditChat.propTypes = {
   chat: PropTypes.object.isRequired,
   onCancel: PropTypes.func.isRequired,
+  setSelectedChat: PropTypes.func.isRequired,
 };

@@ -6,6 +6,7 @@ import { auth, db } from '../../config/firebase-config';
 import { signOut } from 'firebase/auth';
 import SideBar from '../../components/UI/SideBar/SideBar';
 import ViewStatus from '../ViewStatus/ViewStatus';
+import Modal from '../../components/UI/Modal/Modal';
 
 /**
  * Profile component that displays and allows editing of user profile information.
@@ -72,7 +73,8 @@ export default function Profile() {
     email: '',
   });
   const navigate = useNavigate();
-
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
@@ -111,6 +113,8 @@ export default function Profile() {
       navigate('/login');
     } catch (error) {
       console.error('Error logging out:', error);
+      setModalMessage(`We could not log you out. Please try again later!`);
+      setShowModal(true);
     }
   };
 
@@ -126,6 +130,8 @@ export default function Profile() {
       setIsEditing(false);
     } catch (error) {
       console.error('Error updating profile:', error);
+      setModalMessage(`We could not update your profile. Please try again later!`);
+      setShowModal(true);
     }
   };
 
@@ -248,6 +254,7 @@ export default function Profile() {
           )}
         </div>
       </div>
+      {showModal && <Modal show={showModal} handleClose={() => setShowModal(false)} message={modalMessage} />}
     </div>
   );
 }

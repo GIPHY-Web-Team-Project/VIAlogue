@@ -61,8 +61,8 @@ export const SingleMessage = ({ msg, isFirstFromSender }) => {
             {isFirstFromSender && (
               <div className='pt-4 flex flex-row justify-between w-full cursor-pointer' onClick={() => navigate(`/profile/${msg.sender}`)}>
                 <div className='flex flex-row'>
-                  <img src={senderImage} alt='Profile' className='w-5 h-5 rounded-full object-cover mr-2' />
-                  <h3 className={userData.username === msg.sender ? 'text-blue-700' : 'text-blue-300'}>
+                  <img src={senderImage} alt="Profile" className="w-5 h-5 rounded-full object-cover mr-2" />
+                  <h3 className={userData.username === msg.sender ? 'text-blue' : 'text-teal-200'}>
                     <strong>{userData.username === msg.sender ? 'You' : msg.sender}</strong>
                   </h3>
                 </div>
@@ -83,11 +83,11 @@ export const SingleMessage = ({ msg, isFirstFromSender }) => {
                   <EmojiList message={msg} />
                   {userData.username === msg.sender && (
                     <div className='flex flex-row'>
-                      <button className='text-gray-600 hover:text-gray-800 p-1 flex-row' onClick={handleEdit}>
-                        ✏️
+                      <button className='hover:text-gray-300 p-1 flex-row text-white' onClick={handleEdit}>
+                        &#128393;
                       </button>
-                      <button className='text-gray-600 hover:text-gray-800 p-1 flex-row' onClick={() => deleteMessage(msg.chatId, msg.id)}>
-                        ✖️
+                      <button className='text-gray-300 hover:text-gray-500 p-1 flex-row' onClick={() => deleteMessage(msg.chatId, msg.id)}>
+                        &#120299;
                       </button>
                     </div>
                   )}

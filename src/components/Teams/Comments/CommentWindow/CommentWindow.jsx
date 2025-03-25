@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LeaveComment from '../LeaveComment/LeaveComment';
 import { getAllComments } from '../../../../services/comments.services';
 import Comment from '../Comment/Comment';
-import React from 'react';
 import PropTypes from 'prop-types';
 
 export default function CommentWindow({ post }) {

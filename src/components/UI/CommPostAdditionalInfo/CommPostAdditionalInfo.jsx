@@ -1,7 +1,8 @@
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../../store/app-context';
 import { getUserByUsername } from '../../../services/user.service';
 import { useNavigate } from 'react-router';
+import PropTypes from 'prop-types';
 
 export default function CommPostAdditionalInfo({ obj }) {
   const [avatarSrc, setAvatarSrc] = useState(null);
@@ -39,3 +40,7 @@ export default function CommPostAdditionalInfo({ obj }) {
     </div>
   );
 }
+
+CommPostAdditionalInfo.propTypes = {
+  obj: PropTypes.object.isRequired,
+};

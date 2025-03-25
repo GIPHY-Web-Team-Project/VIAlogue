@@ -1,10 +1,9 @@
-import { useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { LEAVE_COMMENT } from '../../../../common/enums';
 import { uploadComment } from '../../../../services/comments.services';
 import { AppContext } from '../../../../store/app-context';
 import Modal from '../../../UI/Modal/Modal';
 import Button from '../../../UI/Button/Button';
-import React from 'react';
 import PropTypes from 'prop-types';
 
 export default function LeaveComment({ post }) {
