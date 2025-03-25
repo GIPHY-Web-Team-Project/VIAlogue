@@ -8,23 +8,27 @@ import SideBar from '../../components/UI/SideBar/SideBar';
 import ViewStatus from '../ViewStatus/ViewStatus';
 
 /**
- * Profile component for displaying and editing user profile information.
+ * Profile component that displays and allows editing of user profile information.
  *
  * @component
  * @returns {JSX.Element} The rendered Profile component.
  *
  * @description
  * This component fetches and displays user profile data, including profile picture,
- * username, email, first name, last name, age, phone, gender, birthdate, and bio.
- * It allows the user to edit their profile information and save changes.
- * The component also provides functionality for logging out.
+ * personal details, and bio. It allows the user to edit their profile information
+ * and save changes. Additionally, it provides options for initiating a chat or
+ * video call with another user.
  *
- * @requires useContext - To access the AppContext for user data.
- * @requires useRef - To manage the file input reference for profile picture upload.
- * @requires useState - To manage local state for profile data and editing mode.
+ * @requires useContext - To access the `AppContext` for user data.
+ * @requires useRef - To manage the file input for profile picture upload.
+ * @requires useState - To manage component state for profile data and editing mode.
  * @requires useEffect - To fetch user data from the database on component mount.
  * @requires useParams - To retrieve the username from the URL parameters.
- * @requires useNavigate - To navigate to different routes.
+ * @requires useNavigate - To navigate between routes.
+ *
+ * @function calculateAge
+ * @param {Object} birthdate - The user's birthdate object containing day, month, and year.
+ * @returns {number|string} The calculated age or an empty string if birthdate is incomplete.
  *
  * @function handleLogout
  * Logs the user out, updates their status to "offline", and navigates to the login page.
@@ -33,15 +37,22 @@ import ViewStatus from '../ViewStatus/ViewStatus';
  * Saves the updated profile data to the database and exits editing mode.
  *
  * @function handleProfilePictureChange
- * Handles the profile picture upload and updates the local state with the new picture.
- *
- * @function calculateAge
- * Calculates the user's age based on their birthdate.
+ * Handles the profile picture upload and updates the state with the new image.
  *
  * @function handleChange
- * Handles changes to form inputs and updates the local state accordingly.
+ * Updates the form data state when input fields are changed.
+ *
+ * @function updateUserStatus
+ * @param {string} username - The username of the user.
+ * @param {string} status - The new status to set for the user.
+ * Updates the user's status in the database.
+ *
+ * @state {Object} formData - The user's profile data, including name, contact info, and bio.
+ * @state {string} profilePicture - The URL or base64 string of the user's profile picture.
+ * @state {boolean} isEditing - Indicates whether the profile is in editing mode.
  *
  * @example
+ * // Render the Profile component
  * <Profile />
  */
 export default function Profile() {
@@ -83,6 +94,7 @@ export default function Profile() {
 
     return () => unsubscribe();
   }, [username]);
+
   if (!userData) {
     return null;
   }
@@ -95,7 +107,6 @@ export default function Profile() {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-
       updateUserStatus(userData.username, 'offline');
       navigate('/login');
     } catch (error) {
@@ -156,54 +167,47 @@ export default function Profile() {
   };
 
   return (
-    <div className='flex flex-grow items-center bg-gray-900'>
+    <div className='flex flex-grow items-center bg-gray-900 min-h-screen'>
       <SideBar type='menu' />
-      <div className='bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-prose mx-auto'>
+      <div className='bg-gray-800 p-4 md:p-8 rounded-lg shadow-lg w-full max-w-4xl mx-auto my-4'>
         <div className='flex flex-col items-center'>
-          <img src={profilePicture || '/images/123.jpg'} alt='Profile' className='w-40 h-40 rounded-full cursor-pointer' onClick={() => fileInputRef.current.click()} />
+          <div className='flex items-center'>
+            <img src={profilePicture || '/images/123.jpg'} alt='Profile' className='w-32 h-32 md:w-40 md:h-40 rounded-full cursor-pointer' onClick={() => fileInputRef.current.click()} />
+          </div>
           <input type='file' ref={fileInputRef} className='hidden' onChange={handleProfilePictureChange} />
         </div>
-        <div>
-          <ViewStatus username={username} />
+        <div className='text-center mt-4 flex flex-row justify-center'>
+          <ViewStatus username={username} source='profile-details' />
         </div>
-        <div className='flex flex-row mt-6 space-y-4 justify-between'>
-          <div className='mr-6'>
-            <div>
+        <div className='flex flex-col md:flex-row mt-6 space-y-4 md:space-y-0 md:space-x-4 justify-between'>
+          <div className='w-full md:w-1/2'>
+            <div className='mb-4'>
               <label className='text-gray-400'>Username:</label>
               <div className='bg-gray-700 p-2 rounded'>{formData.username}</div>
             </div>
-            <div>
+            <div className='mb-4'>
               <label className='text-gray-400'>Email:</label>
               <div className='bg-gray-700 p-2 rounded'>{formData.email}</div>
             </div>
-
-            {/* First Name */}
-            <div>
+            <div className='mb-4'>
               <label className='text-gray-400'>First Name:</label>
               <input type='text' name='firstName' value={formData.firstName} onChange={handleChange} disabled={!isEditing} className='bg-gray-700 p-2 rounded w-full' />
             </div>
-
-            {/* Last Name */}
-            <div>
+            <div className='mb-4'>
               <label className='text-gray-400'>Last Name:</label>
               <input type='text' name='lastName' value={formData.lastName} onChange={handleChange} disabled={!isEditing} className='bg-gray-700 p-2 rounded w-full' />
             </div>
-
-            {/* Age */}
-            <div>
+            <div className='mb-4'>
               <label className='text-gray-400'>Age:</label>
               <input type='text' value={calculateAge(formData.birthdate)} disabled className='bg-gray-700 p-2 rounded w-full' />
             </div>
           </div>
-          <div>
-            {/* Phone */}
-            <div>
+          <div className='w-full md:w-1/2'>
+            <div className='mb-4'>
               <label className='text-gray-400'>Phone:</label>
               <input type='text' name='phone' value={formData.phone} onChange={handleChange} disabled={!isEditing} className='bg-gray-700 p-2 rounded w-full' />
             </div>
-
-            {/* Gender */}
-            <div>
+            <div className='mb-4'>
               <label className='text-gray-400'>Gender:</label>
               <select name='gender' value={formData.gender} onChange={handleChange} disabled={!isEditing} className='bg-gray-700 p-2 rounded w-full'>
                 <option value='male'>Male</option>
@@ -211,9 +215,7 @@ export default function Profile() {
                 <option value='other'>Other</option>
               </select>
             </div>
-
-            {/* Birthdate */}
-            <div>
+            <div className='mb-4'>
               <label className='text-gray-400'>Birthdate:</label>
               <div className='flex space-x-2 pt-0.5'>
                 <input type='number' name='day' value={formData.birthdate.day} onChange={handleChange} placeholder='Day' disabled={!isEditing} className='bg-gray-700 p-2 rounded w-16' />
@@ -221,9 +223,7 @@ export default function Profile() {
                 <input type='number' name='year' value={formData.birthdate.year} onChange={handleChange} placeholder='Year' disabled={!isEditing} className='bg-gray-700 p-2 rounded w-24' />
               </div>
             </div>
-
-            {/* Bio */}
-            <div>
+            <div className='mb-4'>
               <label className='text-gray-400'>Bio:</label>
               <textarea name='bio' value={formData.bio} onChange={handleChange} disabled={!isEditing} className='bg-gray-700 p-2 rounded w-full min-h-[12vh] overflow-auto' />
             </div>

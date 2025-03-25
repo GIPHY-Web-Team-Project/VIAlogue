@@ -4,6 +4,9 @@ import { getChatsByUsername } from '../../../services/chat.services';
 import { AppContext } from '../../../store/app-context';
 import Button from '../../UI/Button/Button';
 import PropTypes from 'prop-types';
+import { markMessagesAsRead } from '../../../services/message.services';
+import { formatDateShort } from '../../../utils/dateUtils';
+import newMessageSound from '/new-message.mp3';
 
 /**
  * ChatList component displays a list of chat conversations for a given user.
@@ -21,11 +24,19 @@ import PropTypes from 'prop-types';
 export const ChatList = ({ username, handleNewChat, chats, setChats, setSelectedChat }) => {
   const { userData } = useContext(AppContext);
   const [loading, setLoading] = useState(true);
+  const [selectedChatId, setSelectedChatId] = useState(null);
+  const [prevUnreadCounts, setPrevUnreadCounts] = useState({});
+  const audio = new Audio(newMessageSound);
 
   useEffect(() => {
     setLoading(true);
-    const unsubscribe = getChatsByUsername(username, (chats) => {
-      setChats(chats);
+    const unsubscribe = getChatsByUsername(username, (fetchedChats) => {
+      setChats((prevChats) => {
+        if (JSON.stringify(prevChats) !== JSON.stringify(fetchedChats)) {
+          return [...fetchedChats];
+        }
+        return prevChats;
+      });
       setLoading(false);
     });
 
@@ -36,8 +47,33 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
     };
   }, [username]);
 
+  useEffect(() => {
+    if (chats) {
+      chats.forEach((chat) => {
+        if (prevUnreadCounts[chat.id] !== undefined && chat.unreadCount > (prevUnreadCounts[chat.id] || 0) && chat.id !== selectedChatId) {
+          audio.play();
+        }
+      });
+
+      setPrevUnreadCounts(
+        chats.reduce((acc, chat) => {
+          acc[chat.id] = chat.id === selectedChatId ? 0 : chat.unreadCount;
+          return acc;
+        }, {})
+      );
+    }
+  }, [chats, selectedChatId]);
+
   const handleChatClick = (chat) => {
-    setSelectedChat(chat);
+    markMessagesAsRead(chat.id, username)
+      .then(() => {
+        setSelectedChat({ ...chat });
+        setSelectedChatId(chat.id);
+        setChats((prevChats) => prevChats.map((c) => (c.id === chat.id ? { ...c, unreadCount: 0 } : c)));
+      })
+      .catch((error) => {
+        console.error('Error marking messages as read:', error);
+      });
   };
 
   return (
@@ -45,22 +81,22 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
       <div className='flex flex-row justify-between border-b-2 border-gray-600 mb-2'>
         <h3 className='flex flex-row mb-2'>Chat</h3>
         <Button btnStyle={NONE} onClick={() => handleNewChat()}>
-          <img src='/images/newchat.jpg' alt='New chat' className='w-7 h-7 ml-2' />
+          <img src='/images/newchat.jpg' alt='New chat' className='w-7 h-7 ml-2 mb-2 cursor-pointer' />
         </Button>
       </div>
-      <div className='flex flex-col overflow-y-auto h-[80vh] pb-4'>
+      <div className='flex flex-col overflow-y-auto h-[90vh] pb-4'>
         {loading ? (
-          // Show loading spinner while fetching chats
           <div className='flex items-center justify-center h-full'>
             <div className='animate-spin rounded-full h-10 w-10 border-t-2 border-blue-500'></div>
           </div>
         ) : chats && chats.length > 0 ? (
           chats.map((chat) => {
+            const isSelected = chat.id === selectedChatId;
             return (
               <div key={chat.id} onClick={() => handleChatClick(chat)} className='hover:border-2 border-gray-600 p-2 mt-1 mb-1 rounded-md cursor-pointer hover:bg-gray-700'>
                 <Button btnStyle={CHAT_TEAM_LIST_ITEM}>{chat.title}</Button>
                 {chat.latestMessage ? (
-                  <p className='text-sm text-gray-400 overflow-ellipsis overflow-hidden flex flex-row'>
+                  <p className='text-sm text-gray-500 overflow-ellipsis overflow-hidden flex flex-row'>
                     <strong>{chat.latestMessage.sender !== userData.username ? chat.latestMessage.sender : 'You'}: </strong> &nbsp;{chat.latestMessage.message}
                   </p>
                 ) : (

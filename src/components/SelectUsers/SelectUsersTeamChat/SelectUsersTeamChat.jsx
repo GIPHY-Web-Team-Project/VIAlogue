@@ -18,12 +18,12 @@ export default function SelectUsersTeamChat({ selectedUsers, setSelectedUsers, u
     const userObj = users.find((u) => u.username === user);
     if (userObj) {
       setUserList((prevList) => [...prevList, userObj]);
+      setSelectedUsers(selectedUsers.filter((selectedUser) => selectedUser !== user));
     }
-    setSelectedUsers(selectedUsers.filter((selectedUser) => selectedUser !== user));
   };
 
   return (
-    <div className='flex flex-row justify-between'>
+    <div className='flex flex-row justify-between overflow-y-auto h-[60vh]'>
       <div className='flex flex-col w-full h-full'>
         <SearchBar type='users' objects={users} objectList={userList} setObjectList={setUserList} selectedUsers={selectedUsers} />
         <ul>

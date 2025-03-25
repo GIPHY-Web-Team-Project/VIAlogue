@@ -101,6 +101,14 @@ export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, 
     const newUsers = selectedUsers.map((user) => user);
     try {
       await updateChat(chatId, [...participants, ...newUsers], 'users');
+      setSelectedUsers([]);
+      const userList = await Promise.all(
+        newUsers.map(async (username) => {
+          return await getUserByUsername(username);
+        })
+      );
+      setUsers([...users, ...userList]);
+      setUsersNotInChat(usersNotInChat.filter((user) => !newUsers.includes(user.username)));
     } catch (error) {
       console.log(error);
     }
@@ -112,10 +120,11 @@ export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, 
         {users.map((user) => (
           <li key={user.uid || user.username} className='p-2 hover:bg-gray-700 cursor-pointer'>
             <div className='flex flex-row'>
-              <span>
+              <ViewStatus username={user.username} type={'participants'} source='chat-participants' />
+              <span className='content-center'>
                 <img className='mr-2 h-5 w-5 rounded-full overflow-hidden bg-gray-100' src={user.profilePicture || '/images/123.jpg'} alt={user.username} />
               </span>
-              <span onClick={() => handleUserClick(user.username)} className='mr-2'>
+              <span onClick={() => handleUserClick(user.username)} className='mr-2 text-s'>
                 {user.username}
               </span>
               {userData.username === user.username && showLeave && (
@@ -130,7 +139,6 @@ export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, 
                   </Button>
                 </>
               )}
-              <ViewStatus username={user.username} type={'participants'} />
             </div>
           </li>
         ))}
@@ -141,7 +149,7 @@ export const ChatParticipants = ({ participants, handleLeaveChat, selectedUser, 
       {showSelectUsers && (
         <div className='mt-4'>
           <SelectUsersTeamChat selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} userList={usersNotInChat} setUserList={setUsersNotInChat} />
-          <button onClick={handleNewUsers} className='mt-2 w-full mb-2 border-t-2 border-gray-700 p-2'>
+          <button onClick={handleNewUsers} className='mt-2 w-full mb-2 border-t-2 border-gray-700 p-2 cursor-pointer'>
             Add to chat
           </button>
         </div>

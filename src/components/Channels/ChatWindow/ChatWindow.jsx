@@ -39,24 +39,21 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!selectedChat?.id) {
-      setLoading(false);
-      return;
-    }
-
+    if (!selectedChat) return; 
+    console.log('Updating messages for chat:', selectedChat.id); 
     setLoading(true);
-
-    const unsubscribe = getMessagesByChatId(selectedChat?.id, (fetchedMessages) => {
+  
+    const unsubscribe = getMessagesByChatId(selectedChat.id, (fetchedMessages) => {
       setMessages(fetchedMessages);
       setLoading(false);
     });
-
+  
     return () => {
       if (typeof unsubscribe === 'function') {
         unsubscribe();
       }
     };
-  }, [selectedChat.id]);
+  }, [selectedChat]);
 
   useEffect(() => {
     setTimeout(() => {

@@ -12,6 +12,7 @@ import SelectUsersTeamChat from '../SelectUsers/SelectUsersTeamChat/SelectUsersT
 import SelectUsersChannel from '../SelectUsers/SelectUsersChannel/SelectUsersChannel';
 import { useUsers } from '../../hooks/useUsers';
 import PropTypes from 'prop-types';
+import { addNotification } from '../../services/notification.service';
 
 export default function CreateComp({ setViewCreateWindow, type, team }) {
   const { userData } = useContext(AppContext);
@@ -60,6 +61,11 @@ export default function CreateComp({ setViewCreateWindow, type, team }) {
 
     try {
       if (type === TEAM) {
+        members.forEach(async (member) => {
+          if (member !== userData.username) { 
+            await addNotification(member, 'Team', `You have been invited to join ${title} by ${userData.username}`);
+          }
+        });
         await createTeam(title, userData.username, members, async (teamId) => {
           navigate(`/teams/${teamId}`);
         });

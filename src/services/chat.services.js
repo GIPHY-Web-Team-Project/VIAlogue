@@ -1,17 +1,24 @@
 import { db } from '../config/firebase-config';
 import { ref, push, onValue, update, get } from 'firebase/database';
+import { getMessageById } from './message.services';
 
 /**
- * Retrieves chats associated with a specific username and provides the data through a callback function.
- * Filters out deleted chats and includes the latest message for each chat if available.
+ * Retrieves chats associated with a specific username, including additional metadata such as
+ * the latest message and unread message count for each chat. The chats are sorted by the
+ * timestamp of the latest message in descending order.
  *
  * @async
- * @function getChatsByUsername
+ * @function
  * @param {string} username - The username to filter chats by.
- * @param {function} callback - A callback function to handle the retrieved chats.
- *                              It receives an array of chat objects as its argument.
- * @returns {function} - A function to unsubscribe from the real-time database listener.
+ * @param {function(Array): void} callback - A callback function that receives the updated list of chats.
+ * Each chat object includes the following properties:
+ *   - `users` (Array<string>): The users participating in the chat.
+ *   - `isDeleted` (boolean): Indicates if the chat is deleted.
+ *   - `latestMessage` (Object|null): The most recent message in the chat, or null if no messages exist.
+ *   - `unreadCount` (number): The count of unread messages for the given username.
+ * @returns {function(): void} - A function to unsubscribe from the real-time database listener.
  */
+
 export const getChatsByUsername = async (username, callback) => {
   const chatsRef = ref(db, 'chats');
 
@@ -25,25 +32,41 @@ export const getChatsByUsername = async (username, callback) => {
     const filteredChats = Object.values(chatsData).filter((chat) => chat.users.includes(username) && !chat.isDeleted);
 
     const chatPromises = filteredChats.map(async (chat) => {
-      if (chat.messages && Object.keys(chat.messages).length > 0) {
+      let unreadCount = 0;
+      let latestMessage = null;
+
+      if (chat.messages) {
         const messageIds = Object.keys(chat.messages);
-        const latestMessageId = messageIds[messageIds.length - 1];
-
-        const messageRef = ref(db, `messages/${latestMessageId}`);
-        const messageSnapshot = await get(messageRef);
-
-        if (messageSnapshot.exists()) {
-          chat.latestMessage = messageSnapshot.val();
-        } else {
-          chat.latestMessage = null;
+        for (const messageId of messageIds) {
+          const messageRef = ref(db, `messages/${messageId}`);
+          const messageSnapshot = await get(messageRef);
+          if (messageSnapshot.exists()) {
+            const messageData = messageSnapshot.val();
+            if (!latestMessage || new Date(messageData.createdOn) > new Date(latestMessage.createdOn)) {
+              latestMessage = messageData;
+            }
+            if (messageData.unreadBy?.includes(username)) {
+              unreadCount++;
+            }
+          }
         }
-      } else {
-        chat.latestMessage = null;
       }
+
+      chat.latestMessage = latestMessage;
+      chat.unreadCount = unreadCount;
       return chat;
     });
 
     const updatedChats = await Promise.all(chatPromises);
+
+    updatedChats.sort((a, b) => {
+      if (!a.latestMessage && !b.latestMessage) return 0;
+      if (!a.latestMessage) return 1;
+      if (!b.latestMessage) return -1;
+
+      return new Date(b.latestMessage.createdOn) - new Date(a.latestMessage.createdOn);
+    });
+
     callback(updatedChats);
   });
 
@@ -62,15 +85,17 @@ export const getChatsByUsername = async (username, callback) => {
  * @returns {Promise<function>} A promise that resolves to an unsubscribe function
  *                              to stop listening for real-time updates.
  */
-export const getChatById = async (chatId, callback) => {
-  const chatRef = await ref(db, `chats/${chatId}`);
+export const getChatById = (chatId, callback) => {
+  const chatRef = ref(db, `chats/${chatId}`);
+
   const unsubscribe = onValue(chatRef, (snapshot) => {
     if (snapshot.exists()) {
-      return callback(Object.values(snapshot.val()));
+      callback(snapshot.val());
     } else {
-      return callback(null);
+      callback(null);
     }
   });
+
   return unsubscribe;
 };
 
@@ -89,6 +114,7 @@ export const createChat = async (users, title = '', callback) => {
     users,
     title,
     messages: [],
+    createdOn: new Date().toString(),
   };
 
   const result = await push(ref(db, 'chats'), chat);
@@ -123,15 +149,37 @@ export const deleteChat = async (chatId) => {
   await update(ref(db, `chats/${chatId}`), { isDeleted: true });
 };
 
-export const sortChats = (chats, sortBy) => {
-  switch (sortBy) {
-    case 'recent':
-      return chats.sort((a, b) => new Date(b.messages[b.messages.length - 1].createdOn) - new Date(a.messages[a.messages.length - 1].createdOn));
-    case 'oldest':
-      return chats.sort((a, b) => new Date(a.messages[a.messages.length - 1].createdOn) - new Date(b.messages[b.messages.length - 1].createdOn));
-    case 'title':
-      return chats.sort((a, b) => a.title.localeCompare(b.title));
-    default:
-      return chats;
+export const sortChats = (chats, sortBy = 'title') => {
+  if (sortBy !== 'title') {
+    chats.sort((a, b) => {
+      const lastAMessageId = a.messages[a.messages.length - 1];
+      const lastBMessageId = b.messages[b.messages.length - 1];
+      const lastAMessage = getMessageById(lastAMessageId);
+      const lastBMessage = getMessageById(lastBMessageId);
+      switch (sortBy) {
+        case 'oldest':
+          return new Date(lastAMessage.createdOn) - new Date(lastBMessage.createdOn);
+        default:
+          return new Date(lastBMessage.createdOn) - new Date(lastAMessage.createdOn);
+      }
+    });
+  }
+  if (sortBy === 'title') {
+    return chats.sort((a, b) => a.title.localeCompare(b.title));
+  }
+  return chats;
+};
+
+export const getChatByParticipants = async (participants) => {
+  const chatsRef = ref(db, 'chats');
+  const snapshot = await get(chatsRef);
+  if (snapshot.exists()) {
+    const chats = snapshot.val();
+    const chat = Object.values(chats).find(
+      (chat) => chat.users.length === participants.length && chat.users.every((user) => participants.includes(user)) && !chat.isDeleted // Ensure it's not a deleted chat
+    );
+    return chat || null;
+  } else {
+    return null;
   }
 };

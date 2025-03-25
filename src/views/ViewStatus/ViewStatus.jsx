@@ -29,10 +29,11 @@ import PropTypes from 'prop-types';
  * - ref and onValue from Firebase: To interact with the Firebase Realtime Database.
  * - SetStatus: A child component for changing the user's status.
  */
-export default function ViewStatus({ username, type = 'user' }) {
+export default function ViewStatus({ username, type = 'user', source = 'profile' }) {
   const { userData } = useContext(AppContext);
   const [status, setStatus] = useState('offline');
   const [showDropdown, setShowDropdown] = useState(false);
+
   useEffect(() => {
     const statusRef = ref(db, 'status/' + username);
 
@@ -47,9 +48,16 @@ export default function ViewStatus({ username, type = 'user' }) {
   }, [username]);
 
   return (
-    <div className='text-gray-400 text-center mt-2'>
+    <div className='text-gray-400'>
       <div className='relative inline-block text-center mt-2' onMouseEnter={() => setShowDropdown(true)} onMouseLeave={() => setShowDropdown(false)}>
-        <span className={`font-bold ${status === 'online' ? 'text-green-500' : status === 'busy' ? 'text-yellow-500' : status === 'away' ? 'text-orange-500' : 'text-red-500'}`}>{status}</span>
+        <div className='flex flex-row'>
+          <img src={`/images/${status}.png`} alt={`${status} icon`} className={(source === 'profile' && `h-6 w-6`) || (source === 'chat-participants' && `h-4 w-4 content-center mr-2`) || (source === 'profile-details' && 'h-10 w-10')} />
+          {source === 'profile-details' && (
+            <span className='content-center ml-2' style={{ textTransform: 'capitalize' }}>
+              {status}
+            </span>
+          )}
+        </div>
         {userData.username === username && type === 'user' && <div>{showDropdown && <SetStatus setShowDropdown={setShowDropdown} status={status} setStatus={setStatus} />}</div>}
       </div>
     </div>
@@ -59,4 +67,5 @@ export default function ViewStatus({ username, type = 'user' }) {
 ViewStatus.propTypes = {
   username: PropTypes.string.isRequired,
   type: PropTypes.string,
+  source: PropTypes.string,
 };

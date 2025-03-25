@@ -18,3 +18,5 @@ export const MEMBERS = 'members';
 export const POST = 'post';
 export const COMMENT = 'comment';
 export const EDIT = 'edit';
+
+export const CHAT_SEND = 'chatSend';
