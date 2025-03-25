@@ -35,7 +35,7 @@ export default function ChannelList({ team, setViewChannel, setCurrChannel }) {
 
   return (
     <div className='flex flex-col justify-between bg-gray-800 p-4 overflow-y-auto min-w-max'>
-      <div className='flex-grow'>
+      <div>
         <Button onClick={() => handleHome()}>Home</Button>
         <ul className='flex flex-col'>
           {channels &&

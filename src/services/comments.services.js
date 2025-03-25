@@ -23,6 +23,7 @@ export const deleteComment = async (postId, id) => {
   await remove(ref(db, `comments/${id}`));
   await remove(ref(db, `posts/${postId}/comments/${id}`));
 };
+
 export const getAllComments = async (postId, callback) => {
   const commentsRef = ref(db, 'comments');
   const unsubscribe = onValue(commentsRef, (snapshot) => {

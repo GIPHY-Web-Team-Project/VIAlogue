@@ -34,8 +34,8 @@ export default function LeaveComment({ post }) {
 
   return (
     <div>
-      <section className='flex flex-col  max-w-lg'>
-        <textarea className='mt-4 mb-2 border-4 p-2 border-gray-700 rounded-md' id='comment' placeholder='Enter comment' />
+      <section className='flex flex-col max-w-lg'>
+        <textarea className='mt-4 mb-2 border-4 p-2 border-gray-600 rounded-md' id='comment' placeholder='Enter comment' />
         <Button btnStyle={LEAVE_COMMENT} onClick={() => handleLeaveComment()}>
           Comment
         </Button>

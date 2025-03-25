@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-
 import { getChannelPosts } from '../../../../services/posts.services';
 import Post from '../Post/Post';
 
@@ -18,14 +17,20 @@ export default function PostWindow({ channel }) {
     };
   }, [channel]);
 
-  // console.log(posts);
+  const handlePostUpdate = (updatedPost) => {
+    setPosts((prevPosts) => prevPosts.map((post) => (post.id === updatedPost.id ? updatedPost : post)));
+  };
+
+  const handlePostDelete = (postId) => {
+    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+  };
 
   return (
     <div>
       {posts.length > 0 ? (
         posts.map((post) => (
-          <div key={post.id} className='border-4 shadow-lg p-2 rounded-md border-gray-800 mb-5'>
-            <Post post={post} />
+          <div key={post.id}>
+            <Post post={post} onPostUpdate={handlePostUpdate} handlePostDelete={handlePostDelete} />
           </div>
         ))
       ) : (

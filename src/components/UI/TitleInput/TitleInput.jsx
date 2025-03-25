@@ -1,8 +1,8 @@
-export default function TitleInput() {
+export default function TitleInput({ placeholder = 'Enter title' }) {
   return (
     <>
       <label htmlFor='title'>Title: </label>
-      <input type='text' id='title' placeholder='Enter title' />
+      <input type='text' id='title' placeholder={placeholder} />
     </>
   );
 }

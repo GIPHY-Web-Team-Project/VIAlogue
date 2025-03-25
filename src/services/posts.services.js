@@ -1,4 +1,4 @@
-import { onValue, push, ref, update } from 'firebase/database';
+import { onValue, push, ref, remove, update } from 'firebase/database';
 import { db } from '../config/firebase-config';
 
 export const uploadPost = async (author, title, content, channelId, teamId) => {
@@ -19,6 +19,11 @@ export const updatePost = async (id, title, content) => {
   await update(ref(db, `posts/${id}`), { title, content });
 };
 
+export const deletePost = async (postId, id) => {
+  await remove(ref(db, `posts/${id}`));
+  await remove(ref(db, `comments/${postId}/comments/${id}`));
+};
+
 export const getChannelPosts = async (channelId, teamId, callback) => {
   const channelPostsRef = ref(db, `teams/${teamId}/channels/${channelId}/posts`);
 
@@ -34,14 +39,19 @@ export const getChannelPosts = async (channelId, teamId, callback) => {
     for (const postId of postIds) {
       const postRef = ref(db, `posts/${postId}`);
       await new Promise((resolve) => {
-        onValue(postRef, (postRef) => {
-          if (postRef.exists()) {
-            posts.push(postRef.val());
+        onValue(postRef, (postSnapshot) => {
+          if (postSnapshot.exists()) {
+            const post = postSnapshot.val();
+            if (!posts.some((p) => p.id === post.id)) {
+              posts.push(post);
+            }
           }
           resolve();
         });
       });
     }
+
+    posts.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn));
 
     callback(posts);
   });

@@ -22,18 +22,16 @@ export default function TeamsList() {
   }, [userData]);
 
   return (
-    <div className=''>
-      <ul className='grid grid-cols-3 gap-32 my-10'>
-        {teams.length !== 0 ? (
-          <>
-            {teams.map((team) => (
-              <Team key={team.id} team={team} />
-            ))}
-          </>
-        ) : (
-          <h1>Create a team to see your teams here!</h1>
-        )}
-      </ul>
-    </div>
+    <ul className='grid grid-cols-3 gap-32 my-10 overflow-y-auto px-70 pt-2'>
+      {teams.length !== 0 ? (
+        <>
+          {teams.map((team) => (
+            <Team key={team.id} team={team} />
+          ))}
+        </>
+      ) : (
+        <h1>Create a team to see your teams here!</h1>
+      )}
+    </ul>
   );
 }

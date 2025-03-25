@@ -2,13 +2,15 @@ import { useContext, useState } from 'react';
 import CommPostAdditionalInfo from '../../../UI/CommPostAdditionalInfo/CommPostAdditionalInfo';
 import { AppContext } from '../../../../store/app-context';
 import { deleteComment, updateComment } from '../../../../services/comments.services';
+import CommPostBtns from '../../../UI/CommPostBtns/CommPostBtns';
+import EditForm from '../../../UI/EditForm/EditForm';
+import { COMMENT } from '../../../../common/enums';
 
-export default function Comment({ comment, post }) {
+export default function Comment({ comment, post, showBtns }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedComment, setEditedComment] = useState({
     content: comment.content,
   });
-  const { userData } = useContext(AppContext);
 
   const handleInputChange = (e) => {
     setEditedComment({
@@ -42,28 +44,19 @@ export default function Comment({ comment, post }) {
     }
   };
 
+  const { userData } = useContext(AppContext);
+
   return (
     <>
       {isEditing ? (
-        <div className='edit-form'>
-          <textarea name='content' value={editedComment.content} onChange={handleInputChange} className='edit-content' />
-          <button onClick={handleSave}>Save</button>
-          <button onClick={() => setIsEditing(false)}>Cancel</button>
-        </div>
+        <EditForm editedObj={editedComment} setIsEditing={setIsEditing} handleInputChange={handleInputChange} handleSave={handleSave} type={COMMENT} />
       ) : (
         <>
-          <p className='break-words whitespace-normal max-w-3xl shadow-lg border-1 border-gray-700 rounded-md px-2 py-1 mb-2'>{comment.content}</p>
-          <CommPostAdditionalInfo obj={comment} />
-          {userData && userData.username === comment.author && (
-            <div className='self-end'>
-              <span className='hover:cursor-pointer hover:ring rounded-md' onClick={() => setIsEditing(true)}>
-                ✏
-              </span>
-              <span className='hover:cursor-pointer hover:ring rounded-md' onClick={() => handleDelete(comment.id)}>
-                ❌
-              </span>
-            </div>
-          )}
+          <section>
+            <CommPostAdditionalInfo obj={comment} />
+            <p className='break-words whitespace-normal max-w-3xl shadow-sm rounded-md px-2 py-1 mb-2'>{comment.content}</p>
+          </section>
+          {userData && userData.username === comment.author && <CommPostBtns showBtns={showBtns} setIsEditing={setIsEditing} handleDelete={handleDelete} objId={comment.id} />}
         </>
       )}
     </>

@@ -11,7 +11,7 @@ export default function TeamsPage() {
   return (
     <div className='flex flex-grow'>
       <SideBar type='menu' />
-      <div className='flex flex-grow justify-center'>
+      <div className='flex flex-grow justify-center max-h-screen'>
         <TeamsList />
         <Button btnStyle={CREATE_TEAM} onClick={() => setViewCreateWindow(true)}>
           Create a Team
