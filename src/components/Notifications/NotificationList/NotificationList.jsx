@@ -5,6 +5,7 @@ import { useContext } from "react";
 import { AppContext } from "../../../store/app-context";
 import { getNotificationsByUsername } from "../../../services/notification.service";
 import { deleteAllNotifications, deleteNotification } from "../../../services/notification.service";
+import notificationSound from '/new-notification.wav';
 
 /**
  * NotificationList Component
@@ -32,17 +33,24 @@ const NotificationList = () => {
     const { userData } = useContext(AppContext);
     const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [prevNotificationCount, setPrevNotificationCount] = useState(0);
+    const audio = new Audio(notificationSound);
 
     useEffect(() => {
         setLoading(true);
 
         const unsubscribe = getNotificationsByUsername(userData.username, (receivedNotifications) => {
+            if (receivedNotifications.length > prevNotificationCount) {
+                audio.play(); // Play sound when a new notification is added
+            }
+
             setNotifications(receivedNotifications);
+            setPrevNotificationCount(receivedNotifications.length);
             setLoading(false);
         });
 
         return () => {
-            if (typeof unsubscribe === 'function') {
+            if (typeof unsubscribe === "function") {
                 unsubscribe();
             }
         };

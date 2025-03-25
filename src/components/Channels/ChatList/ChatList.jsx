@@ -6,7 +6,7 @@ import Button from '../../UI/Button/Button';
 import PropTypes from 'prop-types';
 import { markMessagesAsRead } from '../../../services/message.services';
 import { formatDateShort } from '../../../utils/dateUtils';
-import newMessageSound from '/new-message.wav';
+import newMessageSound from '/new-message.mp3';
 
 /**
  * ChatList component displays a list of chat conversations for a given user.
