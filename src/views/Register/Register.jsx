@@ -76,12 +76,12 @@ export default function Register() {
       }
 
       const validateUsername = (username) => {
-        const usernameRegex = /^[a-zA-Z0-9_.-]{4,32}$/;
+        const usernameRegex = /^[a-zA-Z0-9_.-]{5,35}$/;
         return usernameRegex.test(username);
       };
 
       if (!validateUsername(user.username)) {
-        setModalMessage(`Username must be between 4 and 32 characters and can only contain letters, numbers, underscores (_), dots (.), and hyphens (-).`);
+        setModalMessage(`Username must be between 5 and 35 characters and can only contain letters, numbers, underscores (_), dots (.), and hyphens (-).`);
         setShowModal(true);
         return;
       }
