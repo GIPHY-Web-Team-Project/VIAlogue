@@ -42,7 +42,7 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className='flex flex-col flex-grow items-center h-full max-h-screen'>
+    <div className='flex flex-col flex-grow items-center'>
       {!userData && (
         <>
           {learnMore ? (
@@ -69,16 +69,15 @@ export default function LandingPage() {
               </div>
             ) : (
               <div className='grid grid-cols-2 grid-rows-2 gap-8 justify-items-center w-full '>
-                <p className='text-2xl border-b-2 border-gray-700 pb-2'>Users</p>
-                <p className='text-2xl border-b-2 border-gray-700 pb-2'>Teams</p>
                 <div className='w-20 h-20 bg-gray-600 rounded-full flex items-center justify-center text-white text-lg font-bold'>{numOfUsers && numOfUsers.length}</div>
                 <div className='w-20 h-20 bg-gray-600 rounded-full flex items-center justify-center text-white text-lg font-bold'>{numOfTeams && numOfTeams}</div>
+                <p className='text-2xl border-gray-700'>Users</p>
+                <p className='text-2xl border-gray-700'>Teams</p>
               </div>
             )}
-
-            <Link className={variant.joinNow} to={'/register'}>
+            {/* <Link className={variant.joinNow} to={'/register'}>
               Join now!
-            </Link>
+            </Link> */}
           </section>
         </>
       )}
