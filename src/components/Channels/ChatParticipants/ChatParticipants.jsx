@@ -10,8 +10,8 @@ import SelectUsersTeamChat from '../../SelectUsers/SelectUsersTeamChat/SelectUse
 import ViewStatus from '../../../views/ViewStatus/ViewStatus';
 import PropTypes from 'prop-types';
 import Modal from '../../UI/Modal/Modal';
-// import defaultAvatar from '../../../../public/images/123.jpg';
-// import addPeople from '../../../../public/images/add-people.png';
+import defaultAvatar from '../../../../public/images/123.jpg';
+import addPeople from '../../../../public/images/add-people.png';
 
 /**
  * ChatParticipants component displays a list of chat participants and provides functionality
@@ -130,7 +130,7 @@ export const ChatParticipants = ({ participants, setParticipants, handleLeaveCha
             <div className='flex flex-row'>
               <ViewStatus username={user.username} type={'participants'} source='chat-participants' />
               <span className='content-center'>
-                <img className='mr-2 h-5 w-5 rounded-full overflow-hidden bg-gray-100' src={user.profilePicture || '../../../../public/images/123.jpg'} alt={user.username} />
+                <img className='mr-2 h-5 w-5 rounded-full overflow-hidden bg-gray-100' src={user.profilePicture || defaultAvatar} alt={user.username} />
               </span>
               <span onClick={() => handleUserClick(user.username)} className='mr-2 text-s'>
                 {user.username}
@@ -153,7 +153,7 @@ export const ChatParticipants = ({ participants, setParticipants, handleLeaveCha
       </ul>
       <div className='h-auto bottom-auto'>
         <button className='text-s flex flex-wrap place-content-center p-2 cursor-pointer border-t-2 border-gray-700 w-full' onClick={toggleSelectUsers}>
-          Add people &nbsp; <img src='../../../../public/images/add-people.png' className='h-5 w-5 flex justify-self-center align-center' />
+          Add people &nbsp; <img src={addPeople} className='h-5 w-5 flex justify-self-center align-center' />
         </button>
         {showSelectUsers && (
           <div className='mt-4 h-auto'>

@@ -9,7 +9,7 @@ import { updateChat } from '../../../services/chat.services';
 import ChatParticipants from '../ChatParticipants/ChatParticipants';
 import EditChat from '../EditChat/EditChat';
 import PropTypes from 'prop-types';
-// import membersImg from '../../../../public/images/members.jpg';
+import membersImg from '../../../../public/images/members.jpg';
 
 /**
  * ChatWindow component renders the chat interface for a selected chat.
@@ -127,7 +127,7 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat, setPar
                 {edit && <EditChat chat={selectedChat} onCancel={() => setEdit(false)} setSelectedChat={setSelectedChat} />}
               </div>
               <div className='flex flex-col overflow-x-auto'>
-                <img src='../../../../public/images/members.jpg' alt='Members' className='w-8 h-8 pr-2' onClick={toggleShowParticipants} />
+                <img src={membersImg} alt='Members' className='w-8 h-8 pr-2' onClick={toggleShowParticipants} />
                 {showParticipants && <ChatParticipants participants={participants} setParticipants={setParticipants} handleLeaveChat={handleLeaveChat} selectedUser={selectedUser} setSelectedUser={setSelectedUser} chatId={selectedChat.id} />}
               </div>
             </div>
