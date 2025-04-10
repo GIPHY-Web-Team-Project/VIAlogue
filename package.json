@@ -1,5 +1,6 @@
 {
   "name": "package.json",
+  "homepage": "https:///GIPHY-Web-Team-Project.github.io/VIAlogue/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -8,12 +9,15 @@
     "build": "vite build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.9",
     "emoji-picker-react": "^4.12.0",
     "firebase": "^11.4.0",
+    "gh-pages": "^6.3.0",
     "gif-picker-react": "^1.4.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
