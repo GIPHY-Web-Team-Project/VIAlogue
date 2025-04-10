@@ -1,5 +1,5 @@
 import LandingPage from './views/LandingPage/main/LandingPage';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, HashRouter } from 'react-router-dom';
 import { AppContext } from './store/app-context';
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header/Header';
@@ -51,7 +51,7 @@ export default function App() {
   }, [user]);
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <AppContext.Provider value={{ ...appState, setAppState }}>
         <div className='font-medium flex flex-col w-screen h-screen max-w-screen max-h-screen bg-gray-900 text-white'>
           {!user && <Header />}
@@ -69,6 +69,6 @@ export default function App() {
         </div>
       </AppContext.Provider>
       {showModal && <Modal show={showModal} handleClose={() => setShowModal(false)} message={modalMessage} />}
-    </BrowserRouter>
+    </HashRouter>
   );
 }
