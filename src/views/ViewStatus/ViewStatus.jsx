@@ -51,7 +51,7 @@ export default function ViewStatus({ username, type = 'user', source = 'profile'
     <div className='text-gray-400'>
       <div className='relative inline-block text-center mt-2' onMouseEnter={() => setShowDropdown(true)} onMouseLeave={() => setShowDropdown(false)}>
         <div className='flex flex-row'>
-          <img src={`/images/${status}.png`} alt={`${status} icon`} className={(source === 'profile' && `h-6 w-6`) || (source === 'chat-participants' && `h-4 w-4 content-center mr-2`) || (source === 'profile-details' && 'h-10 w-10')} />
+          <img src={`../../../../public/images/${status}.png`} alt={`${status} icon`} className={(source === 'profile' && `h-6 w-6`) || (source === 'chat-participants' && `h-4 w-4 content-center mr-2`) || (source === 'profile-details' && 'h-10 w-10')} />
           {source === 'profile-details' && (
             <span className='content-center ml-2' style={{ textTransform: 'capitalize' }}>
               {status}

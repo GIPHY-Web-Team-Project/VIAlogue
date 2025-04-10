@@ -178,7 +178,7 @@ export default function Profile() {
       <div className='bg-gray-800 p-4 md:p-8 rounded-lg shadow-lg w-full max-w-4xl mx-auto my-4'>
         <div className='flex flex-col items-center'>
           <div className='flex items-center'>
-            <img src={profilePicture || '/images/123.jpg'} alt='Profile' className='w-32 h-32 md:w-40 md:h-40 rounded-full cursor-pointer' onClick={() => fileInputRef.current.click()} />
+            <img src={profilePicture || '../../../../public/images/123.jpg'} alt='Profile' className='w-32 h-32 md:w-40 md:h-40 rounded-full cursor-pointer' onClick={() => fileInputRef.current.click()} />
           </div>
           <input type='file' ref={fileInputRef} className='hidden' onChange={handleProfilePictureChange} />
         </div>
