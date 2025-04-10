@@ -1,7 +1,7 @@
 import { useParams } from 'react-router';
 import SideBar from '../../../components/UI/SideBar/SideBar';
 import React, { useEffect, useState } from 'react';
-import { getTeamById } from '../../../services/team.services';
+import { getTeamByIdSubs } from '../../../services/team.services';
 import ChannelList from '../../../components/Teams/Channels/ChannelList/ChannelList';
 import Loading from '../../../components/UI/Loading/Loading';
 import Channel from '../../../components/Teams/Channels/Channel/Channel';
@@ -16,9 +16,7 @@ export default function TeamWindow() {
   const [loading, setLoading] = useState(false);
   const [viewChannel, setViewChannel] = useState(false);
   const [currChannel, setCurrChannel] = useState(null);
-
-  // const [selectedChannel, setSelectedChannel] = useState(null);
-
+  
   useEffect(() => {
     if (!team) return;
 
@@ -38,7 +36,7 @@ export default function TeamWindow() {
     if (!teamId) return;
     setLoading(true);
 
-    const unsubscribe = getTeamById(teamId, (team) => {
+    const unsubscribe = getTeamByIdSubs(teamId, (team) => {
       setTeam(team);
       setLoading(false);
     });
@@ -60,13 +58,12 @@ export default function TeamWindow() {
           <>
             <ChannelList team={team} setViewChannel={setViewChannel} setCurrChannel={setCurrChannel} />
             {viewChannel === true ? (
-              <Channel channel={currChannel} />
+              <Channel channel={currChannel} setCurrChannel={setCurrChannel} />
             ) : (
               <>
-                <div className=''>
-                  {/* {team.avatar} */}
-                  <h3>{team?.title}</h3>
-                  <p>Owner: {team?.owner}</p>
+                <div className='flex flex-col items-center gap-4 mt-12'>
+                  <h3 className='text-6xl'>{team?.title}</h3>
+                  <p className='text-3xl pb-2 border-b-2 border-gray-600'>Owner: {team?.owner}</p>
                 </div>
               </>
             )}

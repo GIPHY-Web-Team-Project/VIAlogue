@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router';
 import ViewStatus from '../../../views/ViewStatus/ViewStatus';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 export default function TeamParticipants({ users }) {
   const navigate = useNavigate();
@@ -24,3 +26,7 @@ export default function TeamParticipants({ users }) {
     </ul>
   );
 }
+
+TeamParticipants.propTypes = {
+  users: PropTypes.array.isRequired,
+};

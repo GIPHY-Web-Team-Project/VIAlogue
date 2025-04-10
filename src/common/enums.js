@@ -9,6 +9,7 @@ export const CANCEL = 'cancel';
 export const CREATE_TEAM = 'createTeam';
 export const CHAT_TEAM_LIST_ITEM = 'chatTeamListItem';
 export const LEAVE_COMMENT = 'leaveComment';
+export const START_CHATTING = 'startChatting';
 
 // ENUMS
 export const TEAM = 'team';

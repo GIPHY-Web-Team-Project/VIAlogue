@@ -6,7 +6,7 @@ import { auth } from '../../config/firebase-config';
 import Button from '../../components/UI/Button/Button';
 import { CANCEL } from '../../common/enums';
 import { variant } from '../../common/button-const';
-
+import Modal from '../../components/UI/Modal/Modal';
 /**
  * Login component for user authentication.
  *
@@ -61,10 +61,14 @@ export default function Login() {
     password: '',
   });
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   const login = () => {
     if (!user.email || !user.password) {
-      return alert('Please enter both email and password');
+      setModalMessage(`Please enter both email and password!`);
+      setShowModal(true);
+      return;
     }
 
     signInWithEmailAndPassword(auth, user.email, user.password)
@@ -80,7 +84,8 @@ export default function Login() {
       })
       .catch((error) => {
         console.error('Login failed', error);
-        alert('Login failed: ' + error.message);
+        setModalMessage(`We couldn't log you in. Please try again!`);
+        setShowModal(true);
       });
   };
 
@@ -92,7 +97,7 @@ export default function Login() {
   };
 
   return (
-    <div className='flex flex-grow items-center justify-center bg-gray-900 min-h-screen p-4'>
+    <div className='flex flex-grow items-center justify-center bg-gray-900 max-h-screen p-4'>
       <div className='bg-gray-800 p-6 md:p-8 rounded-lg shadow-lg w-full max-w-sm'>
         <h2 className='text-2xl font-bold text-center text-gray-100 mb-4'>Login</h2>
         <p className='text-gray-400 text-center mb-6'>Enter your credentials to log in</p>
@@ -113,6 +118,7 @@ export default function Login() {
           </Link>
         </p>
       </div>
+      {showModal && <Modal show={showModal} handleClose={() => setShowModal(false)} message={modalMessage} />}
     </div>
   );
 }

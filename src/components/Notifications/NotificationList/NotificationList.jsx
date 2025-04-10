@@ -99,8 +99,8 @@ const NotificationList = () => {
                         {notifications.map((notificationObj) => (
                             notificationObj.type !== 'message' && (
                                 <li key={notificationObj.id}>
-                                    <SingleNotification 
-                                        notification={notificationObj} 
+                                    <SingleNotification
+                                        notification={notificationObj}
                                         onDelete={handleDeleteNotification}
                                     />
                                 </li>

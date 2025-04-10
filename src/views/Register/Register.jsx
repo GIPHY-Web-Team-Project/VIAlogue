@@ -64,32 +64,41 @@ export default function Register() {
   const register = async () => {
     try {
       if (!user.email || !user.password || !user.username) {
-        return alert('Please fill all empty sections.');
+        setModalMessage(`Please fill all empty sections.`);
+        setShowModal(true);
+        return;
       }
 
       if (!nameCheck(user.firstName) || !nameCheck(user.lastName)) {
-        throw new Error('First and last names must be between 4 and 32 characters and contain only letters');
+        setModalMessage(`First and last names must be between 4 and 32 characters and contain only letters.`);
+        setShowModal(true);
+        return;
       }
 
       const validateUsername = (username) => {
-        const usernameRegex = /^[a-zA-Z0-9_.-]{4,32}$/;
+        const usernameRegex = /^[a-zA-Z0-9_.-]{5,35}$/;
         return usernameRegex.test(username);
       };
 
       if (!validateUsername(user.username)) {
-        alert('Username must be between 4 and 32 characters and can only contain letters, numbers, underscores (_), dots (.), and hyphens (-).');
+        setModalMessage(`Username must be between 5 and 35 characters and can only contain letters, numbers, underscores (_), dots (.), and hyphens (-).`);
+        setShowModal(true);
         return;
       }
 
       console.log('Registering user: ', user.username);
       const userFromDB = await getUserByUsername(user.username);
       if (userFromDB) {
-        throw new Error(`User with username ${user.username} already exists`);
+        setModalMessage(`User with username ${user.username} already exists`);
+        setShowModal(true);
+        return;
       }
 
       const emailExists = await getUserByEmail(user.email);
       if (emailExists) {
-        throw new Error(`User with email ${user.email} already exists`);
+        setModalMessage(`User with email ${user.email} already exists`);
+        setShowModal(true);
+        return;
       }
 
       const userCredential = await createUserWithEmailAndPassword(auth, user.email, user.password);
@@ -97,8 +106,11 @@ export default function Register() {
       await signOut(auth);
       setModalMessage('Registration successful! Please log in.');
       setShowModal(true);
+      navigate('/login');
     } catch (error) {
-      alert(error.message);
+      console.error('Registration failed', error);
+      setModalMessage('Registration was not successful! Please try again.');
+      setShowModal(true);
     }
   };
 
@@ -109,93 +121,49 @@ export default function Register() {
     });
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-    navigate('/login');
-  };
-
   return (
-    <div className='flex flex-grow items-center justify-center bg-gray-900 min-h-screen p-4'>
+    <div className='flex flex-grow items-center justify-center bg-gray-900 max-h-screen p-4'>
       <div className='bg-gray-800 p-6 md:p-8 rounded-lg shadow-lg w-full max-w-md'>
         <h3 className='text-2xl md:text-3xl font-bold text-center text-gray-100 mb-6'>Register</h3>
 
-        <div className='space-y-4'>
+        <div className='space-y-4 mb-6'>
           <div>
             <label className='text-gray-400' htmlFor='firstName'>
               First name:
             </label>
-            <input
-              className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
-              value={user.firstName}
-              onChange={updateUser('firstName')}
-              type='text'
-              name='firstName'
-              id='firstName'
-            />
+            <input className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' value={user.firstName} onChange={updateUser('firstName')} type='text' name='firstName' id='firstName' />
           </div>
 
           <div>
             <label className='text-gray-400' htmlFor='lastName'>
               Last name:
             </label>
-            <input
-              className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
-              value={user.lastName}
-              onChange={updateUser('lastName')}
-              type='text'
-              name='lastName'
-              id='lastName'
-            />
+            <input className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' value={user.lastName} onChange={updateUser('lastName')} type='text' name='lastName' id='lastName' />
           </div>
 
           <div>
             <label className='text-gray-400' htmlFor='username'>
               Username:
             </label>
-            <input
-              className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
-              value={user.username}
-              onChange={updateUser('username')}
-              type='text'
-              name='username'
-              id='username'
-            />
+            <input className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' value={user.username} onChange={updateUser('username')} type='text' name='username' id='username' />
           </div>
 
           <div>
             <label className='text-gray-400' htmlFor='email'>
               Email:
             </label>
-            <input
-              className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
-              value={user.email}
-              onChange={updateUser('email')}
-              type='email'
-              name='email'
-              id='email'
-            />
+            <input className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' value={user.email} onChange={updateUser('email')} type='email' name='email' id='email' />
           </div>
 
           <div>
             <label className='text-gray-400' htmlFor='password'>
               Password:
             </label>
-            <input
-              className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
-              value={user.password}
-              onChange={updateUser('password')}
-              type='password'
-              name='password'
-              id='password'
-            />
+            <input className='w-full p-3 mt-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500' value={user.password} onChange={updateUser('password')} type='password' name='password' id='password' />
           </div>
         </div>
 
-        <Button
-          onClick={register}
-          id='btn-register-form'
-          className='w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition mt-6'
-        >
+        <Button onClick={register} id='btn-register-form'>
           Register
         </Button>
 
@@ -206,7 +174,7 @@ export default function Register() {
           </Link>
         </p>
       </div>
-      <Modal show={showModal} handleClose={handleCloseModal} message={modalMessage} />
+      {showModal && <Modal show={showModal} handleClose={() => setShowModal(false)} message={modalMessage} />}
     </div>
   );
 }

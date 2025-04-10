@@ -5,9 +5,8 @@ import EmojiPicker from 'emoji-picker-react';
 import GifPicker from 'gif-picker-react';
 import { API_KEY } from '../../../common/constants';
 import PropTypes from 'prop-types';
-//import { getChatById } from '../../../services/chat.services';
-//import { addNotification } from '../../../services/notification.service';
 import { CHAT_SEND } from '../../../common/enums';
+import Modal from '../../UI/Modal/Modal';
 
 /**
  * MessageWindow component allows users to send messages, emojis, and GIFs in a chat interface.
@@ -33,6 +32,8 @@ export const MessageWindow = ({ chatId, sender }) => {
   const [message, setMessage] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showGifPicker, setShowGifPicker] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   /**
    * Handles the creation of a new message.
@@ -45,20 +46,6 @@ export const MessageWindow = ({ chatId, sender }) => {
     if (message.trim() === '') return;
     await addMessage(chatId, message, sender);
     setMessage('');
-
-    // const unsubscribe = getChatById(chatId, (chat) => {
-    //   if (chat) {
-    //       setReceivers(chat.users.filter((user) => user !== sender));
-    //       const chatTitle = chat.title;
-    //       receivers.forEach(async (receiver) => {
-    //         await addNotification(receiver, `New message in ${chatTitle}`, `${sender}: ${message}`, 'message');
-    //       });
-    //   } else {
-    //       console.log("Chat not found.");
-    //   }
-    // });
-
-    // return () => unsubscribe();
   };
 
   /**
@@ -102,6 +89,8 @@ export const MessageWindow = ({ chatId, sender }) => {
       await addMessage(chatId, '', sender, gifObject.url);
     } catch (error) {
       console.error(error);
+      setModalMessage('GIF could not be sent. Please try again.');
+      setShowModal(true);
     }
     setShowGifPicker(!showGifPicker);
   };
@@ -129,6 +118,7 @@ export const MessageWindow = ({ chatId, sender }) => {
       <Button btnStyle={CHAT_SEND} onClick={handleNewMessage}>
         Send
       </Button>
+      {showModal && <Modal show={showModal} handleClose={() => setShowModal(false)} message={modalMessage} />}
     </div>
   );
 };
