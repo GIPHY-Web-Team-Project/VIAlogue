@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { markMessagesAsRead } from '../../../services/message.services';
 import { formatDateShort } from '../../../utils/dateUtils';
 import newMessageSound from '/new-message.mp3';
+import newChat from '../../../../public/images/newchat.jpg';
 
 /**
  * ChatList component displays a list of chat conversations for a given user.
@@ -81,7 +82,7 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
       <div className='flex flex-row justify-between border-b-2 border-gray-600 mb-2'>
         <h3 className='flex flex-row mb-2'>Chat</h3>
         <Button btnStyle={NONE} onClick={() => handleNewChat()}>
-          <img src='/images/newchat.jpg' alt='New chat' className='w-7 h-7 ml-2 mb-2 cursor-pointer' />
+          <img src={newChat} alt='New chat' className='w-7 h-7 ml-2 mb-2 cursor-pointer' />
         </Button>
       </div>
       <div className='flex flex-col overflow-y-auto h-[90vh] pb-4'>
