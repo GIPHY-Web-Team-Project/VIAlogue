@@ -1,5 +1,5 @@
 import LandingPage from './views/LandingPage/main/LandingPage';
-import { BrowserRouter, Routes, Route, HashRouter } from 'react-router-dom';
+import { Routes, Route, HashRouter } from 'react-router-dom';
 import { AppContext } from './store/app-context';
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header/Header';
