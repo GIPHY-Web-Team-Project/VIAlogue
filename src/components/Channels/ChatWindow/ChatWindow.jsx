@@ -135,7 +135,7 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat, setPar
           <div className='flex flex-col overflow-y-auto h-[80vh] pb-4'>
             {loading ? (
               <div className='flex items-center justify-center h-full'>
-                <div className='animate-spin rounded-full h-10 w-10 border-t-2 border-blue-500'></div>
+                <div className='animate-spin rounded-full h-10 w-10 border-t-2 border-blue'></div>
               </div>
             ) : messages && messages.length > 0 ? (
               messages.map((messageObj, index) => {
