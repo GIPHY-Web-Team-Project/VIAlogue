@@ -135,12 +135,12 @@ export const ChatParticipants = ({ participants, setParticipants, handleLeaveCha
               <span onClick={() => handleUserClick(user.username)} className='mr-2 text-s'>
                 {user.username}
               </span>
-              {userData.username === user.username && showLeave && (
+              {(userData.username === user.username) && showLeave && (
                 <Button btnStyle={CHAT_PARTICIPANTS_BTNS} onClick={handleLeaveChat}>
                   Leave
                 </Button>
               )}
-              {selectedUser === user.username && selectedUser !== userData.username && showProfile && (
+              {(selectedUser === user.username) && selectedUser !== userData.username && showProfile && (
                 <>
                   <Button btnStyle={CHAT_PARTICIPANTS_BTNS} onClick={() => handleProfileView(user)}>
                     View profile

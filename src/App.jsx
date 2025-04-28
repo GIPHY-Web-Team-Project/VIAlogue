@@ -53,7 +53,7 @@ export default function App() {
   return (
     <HashRouter>
       <AppContext.Provider value={{ ...appState, setAppState }}>
-        <div className='font-medium flex flex-col w-screen h-screen max-w-screen max-h-screen bg-gray-900 text-white'>
+        <div className='font-medium flex flex-col w-screen h-screen max-w-screen max-h-screen animate-gradient bg-gradient-to-r from-gray-600 to-gray-800 bg-[length:400%_400%] text-white'>
           {!user && <Header />}
           <UserStatus />
           <Routes>

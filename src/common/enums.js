@@ -11,6 +11,8 @@ export const CHAT_TEAM_LIST_ITEM = 'chatTeamListItem';
 export const LEAVE_COMMENT = 'leaveComment';
 export const START_CHATTING = 'startChatting';
 
+export const SIGNUP = 'signUp';
+
 // ENUMS
 export const TEAM = 'team';
 export const CHANNEL = 'channel';
@@ -21,3 +23,7 @@ export const COMMENT = 'comment';
 export const EDIT = 'edit';
 
 export const CHAT_SEND = 'chatSend';
+
+export const EDIT_PROFILE = 'editProfile';
+
+export const LOGOUT = 'logout';
