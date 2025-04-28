@@ -7,6 +7,7 @@ import { API_KEY } from '../../../common/constants';
 import PropTypes from 'prop-types';
 import { CHAT_SEND } from '../../../common/enums';
 import Modal from '../../UI/Modal/Modal';
+import * as Popover from '@radix-ui/react-popover';
 
 /**
  * MessageWindow component allows users to send messages, emojis, and GIFs in a chat interface.
@@ -98,23 +99,26 @@ export const MessageWindow = ({ chatId, sender }) => {
   return (
     <div className='mt-4 border border-gray-500 flex flex-row justify-between p-2 rounded-lg sticky bottom-0'>
       <textarea className='flex-1 p-2 mr-2 border-none rounded-lg resize-none focus:ring-2 focus:ring-blue-500' rows='1' placeholder='Type a message...' value={message} onChange={(e) => setMessage(e.target.value)} onKeyDown={handleKeyDown} />
-
-      <button className='mr-4' onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
-        😀
-      </button>
-      {showEmojiPicker && (
-        <div className='absolute bottom-20 right-10 z-10'>
+      <Popover.Root open={showEmojiPicker} onOpenChange={setShowEmojiPicker}>
+        <Popover.Trigger asChild>
+          <button className='mr-4'>
+            😀
+          </button>
+        </Popover.Trigger>
+        <Popover.Content side="top" align="end" className="z-10 bg-white shadow-lg rounded p-2">
           <EmojiPicker onEmojiClick={handleEmojiClick} theme='dark' />
-        </div>
-      )}
-      <button className='mr-4' onClick={() => setShowGifPicker(!showGifPicker)}>
-        GIF
-      </button>
-      {showGifPicker && (
-        <div className='absolute bottom-20 right-15 z-10'>
-          <GifPicker tenorApiKey={API_KEY} onGifClick={handleGifClick} theme='dark' />
-        </div>
-      )}
+        </Popover.Content>
+      </Popover.Root>
+      <Popover.Root open={showGifPicker} onOpenChange={setShowGifPicker}>
+        <Popover.Trigger asChild>
+          <button className="mr-4 hover:text-blue">
+            GIF
+          </button>
+        </Popover.Trigger>
+        <Popover.Content side="top" align="end" className="z-10 bg-white shadow-lg rounded p-2">
+          <GifPicker tenorApiKey={API_KEY} onGifClick={handleGifClick} theme="dark" />
+        </Popover.Content>
+      </Popover.Root>
       <Button btnStyle={CHAT_SEND} onClick={handleNewMessage}>
         Send
       </Button>

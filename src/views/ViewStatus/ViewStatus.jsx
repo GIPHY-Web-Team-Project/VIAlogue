@@ -4,6 +4,11 @@ import { db } from '../../config/firebase-config';
 import SetStatus from '../../components/SetStatus/SetStatus';
 import { AppContext } from '../../store/app-context';
 import PropTypes from 'prop-types';
+import online from '../../../public/images/online.png';
+import offline from '../../../public/images/offline.png';
+import doNotDisturb from '../../../public/images/do not disturb.png';
+import busy from '../../../public/images/busy.png';
+import away from '../../../public/images/away.png';
 
 /**
  * ViewStatus Component
@@ -47,11 +52,34 @@ export default function ViewStatus({ username, type = 'user', source = 'profile'
     };
   }, [username]);
 
+  const currStatus = () => {
+    let temp = '';
+    switch (status) {
+      case 'online':
+        temp = online;
+        break;
+      case 'offline':
+        temp = offline;
+        break;
+      case 'do not disturb':
+        temp = doNotDisturb;
+        break;
+      case 'busy':
+        temp = busy;
+        break;
+      case 'away':
+        temp = away;
+        break;
+    }
+
+    return temp;
+  };
+
   return (
     <div className='text-gray-400'>
       <div className='relative inline-block text-center mt-2' onMouseEnter={() => setShowDropdown(true)} onMouseLeave={() => setShowDropdown(false)}>
         <div className='flex flex-row'>
-          <img src={`/images/${status}.png`} alt={`${status} icon`} className={(source === 'profile' && `h-6 w-6`) || (source === 'chat-participants' && `h-4 w-4 content-center mr-2`) || (source === 'profile-details' && 'h-10 w-10')} />
+          <img src={currStatus()} alt={`${status} icon`} className={(source === 'profile' && `h-6 w-6`) || (source === 'chat-participants' && `h-4 w-4 content-center mr-2`) || (source === 'profile-details' && 'h-10 w-10')} />
           {source === 'profile-details' && (
             <span className='content-center ml-2' style={{ textTransform: 'capitalize' }}>
               {status}
