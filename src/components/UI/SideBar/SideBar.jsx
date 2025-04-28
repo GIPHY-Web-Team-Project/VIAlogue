@@ -9,6 +9,10 @@ import PropTypes from 'prop-types';
 import NotificationList from '../../Notifications/NotificationList/NotificationList';
 import { getNotificationsCountForUser } from '../../../services/notification.service';
 import { useEffect } from 'react';
+import notifications from '../../../../public/images/notifications.png';
+import teamsImg from '../../../../public/images/teams.png';
+import updatedShortDark from '../../../../public/images/updated-short-dark.png';
+import defaultAvatar from '../../../../public/images/123.jpg';
 
 export default function SideBar({ type, username, handleNewChat, chats, setChats, setSelectedChat }) {
   const { userData } = useContext(AppContext);
@@ -35,23 +39,23 @@ export default function SideBar({ type, username, handleNewChat, chats, setChats
         <div className='flex flex-col gap-4'>
           <div className={variant.home} onMouseEnter={() => setShowNotification(true)} onMouseLeave={() => setShowNotification(false)}>
             <div className='relative cursor-pointer py-2'>
-              <img src='/images/notifications.png' className='h-10 w-10 flex justify-self-center' />
+              <img src={notifications} className='h-10 w-10 flex justify-self-center' />
               {notificationCount > 0 && <span className='text-gray-300 absolute top-0 right-0 bottom-auto text-xs flex items-center justify-center rounded-full bg-gray-500 w-5 h-6'>{notificationCount}</span>}
             </div>
             {showNotification && <NotificationList />}
           </div>
           <NavLink className={({ isActive }) => `relative py-2 ${variant.home} ${isActive ? 'border-b-2 border-gray-500' : 'bg-gray-700'}`} to={'/teams'}>
-            <img src='/images/teams.png' className='h-12 w-12 flex justify-self-center' />
+            <img src={teamsImg} className='h-12 w-12 flex justify-self-center' />
           </NavLink>
           <NavLink className={({ isActive }) => `relative py-2 ${variant.home} ${isActive ? 'border-b-2 border-gray-500' : 'bg-gray-700'}`} to={'/chats'}>
-            <img src='/images/updated-short-dark.png' className='h-14 w-14 flex justify-self-center' />
+            <img src={updatedShortDark} className='h-14 w-14 flex justify-self-center' />
           </NavLink>
         </div>
         <div className='relative bottom-5 flex flex-col justify-between'>
           <div>
             {userData && (
               <NavLink to={`/profile/${userData.username}`} className='mt-10'>
-                <img src={userData.profilePicture || '/images/123.jpg'} className='h-13 w-13 flex justify-self-center rounded-full' />
+                <img src={userData.profilePicture || defaultAvatar} className='h-13 w-13 flex justify-self-center rounded-full' />
               </NavLink>
             )}
           </div>

@@ -5,7 +5,6 @@ import { MAX_TEAM_TITLE_LENGTH, MIN_TEAM_TITLE_LENGTH } from '../../common/const
 import { CHANNEL, TEAM } from '../../common/enums';
 import { createTeam } from '../../services/team.services';
 import { createChannel } from '../../services/channel.services';
-import TitleInput from '../UI/TitleInput/TitleInput';
 import Button from '../UI/Button/Button';
 import Modal from '../UI/Modal/Modal';
 import SelectUsersTeamChat from '../SelectUsers/SelectUsersTeamChat/SelectUsersTeamChat';
@@ -85,14 +84,17 @@ export default function CreateComp({ setViewCreateWindow, type, team }) {
   };
 
   return (
-    <div className='bg-gray-900 p-6 rounded-lg shadow-lg relative'>
-      <h3 className='text-2xl'>Create {type}</h3>
-      <TitleInput />
+    <div className='bg-gray-900 w-[30vw] p-6 rounded-lg shadow-lg relative'>
+      <h3 className='text-4xl text-center mb-4'>Create {type}</h3>
+      <label htmlFor='title' className='text-lg'>
+        Post title:
+      </label>
+      <input id='title' name='title' placeholder='Enter title' className='text-xl py-1 px-2 border-2 border-gray-700 rounded-md ml-2' />
       <br /> <br />
       {type === CHANNEL && members && <SelectUsersChannel selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} teamMembers={members} type={type} />}
       {type === TEAM && <SelectUsersTeamChat selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} userList={userList} setUserList={setUserList} />}
       <br /> <br />
-      <div className=''>
+      <div className='flex items-center justify-between'>
         <Button
           onClick={() => {
             handleCreate();

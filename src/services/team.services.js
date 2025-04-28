@@ -20,6 +20,7 @@ export const createTeam = async (title, owner, members, callback) => {
     const result = await push(teamsRef, team);
     const id = result.key;
     await update(ref(db, `teams/${id}`), { id });
+
     await createChannel('general', { title, id: id }, members, owner);
     return callback(id);
   }
@@ -44,10 +45,10 @@ export const getTeamsByUsername = async (username, callback) => {
   return unsubscribe;
 };
 
-export const getTeamById = async (teamId, callback) => {
-  const teamRef = ref(db, `teams/${teamId}`);
+export const getTeamByIdSubs = async (teamId, callback) => {
+  const teamsRef = ref(db, `teams/${teamId}`);
 
-  const unsubscribe = onValue(teamRef, (snapshot) => {
+  const unsubscribe = onValue(teamsRef, (snapshot) => {
     if (snapshot.exists()) {
       const team = snapshot.val();
       callback(team);
@@ -57,6 +58,18 @@ export const getTeamById = async (teamId, callback) => {
   });
 
   return unsubscribe;
+};
+
+export const getTeamById = async (teamId) => {
+  try {
+    const snapshot = await get(ref(db, `teams/${teamId}`));
+
+    if (snapshot.exists()) {
+      return snapshot.val();
+    }
+  } catch (error) {
+    console.error(error.message);
+  }
 };
 
 export const updateTeam = async (teamId, updatedTeam) => {

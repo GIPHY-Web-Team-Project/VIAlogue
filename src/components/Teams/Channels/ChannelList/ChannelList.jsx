@@ -38,12 +38,12 @@ export default function ChannelList({ team, setViewChannel, setCurrChannel }) {
     <div className='flex flex-col justify-between bg-gray-800 p-4 overflow-y-auto min-w-max'>
       <div>
         <Button onClick={() => handleHome()}>Home</Button>
-        <ul className='flex flex-col'>
+        <ul className='flex flex-col items-center'>
           {channels &&
             channels.length > 0 &&
             channels.map((channel) => (
-              <li className={variant.chatTeamListItem} onClick={() => changeChannel(channel)} key={channel.id}>
-                {channel.title}
+              <li className={`${variant.chatTeamListItem} text-xl mt-4 border-2 border-gray-700 px-2 py-1 rounded-md w-full max-w-full text-center`} onClick={() => changeChannel(channel)} key={channel.id}>
+                {channel.title.length >= 9 ? `${channel.title.slice(0, 6)}...` : channel.title}
               </li>
             ))}
         </ul>
@@ -58,13 +58,8 @@ export default function ChannelList({ team, setViewChannel, setCurrChannel }) {
   );
 }
 
-// team?.channels?.map((channel) => (
-//     <li key={channel.id} onClick={() => setSelectedChannel(channel)}>
-//     {channel.title}
-//   </li>
-// ))
-
 ChannelList.propTypes = {
-  team: PropTypes.object,
-  setViewChannel: PropTypes.func,
+  team: PropTypes.object.isRequired,
+  setViewChannel: PropTypes.func.isRequired,
+  setCurrChannel: PropTypes.func.isRequired,
 };

@@ -1,5 +1,5 @@
 import LandingPage from './views/LandingPage/main/LandingPage';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route, HashRouter } from 'react-router-dom';
 import { AppContext } from './store/app-context';
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header/Header';
@@ -14,13 +14,16 @@ import Profile from './views/Profile/Profile';
 import TeamsPage from './views/Teams/TeamsPage/TeamsPage';
 import TeamWindow from './views/Teams/TeamWindow/TeamWindow';
 import UserStatus from './components/UserStatus/UserStatus';
+import Modal from './components/UI/Modal/Modal';
 
 export default function App() {
   const [appState, setAppState] = useState({
     user: null,
     userData: null,
   });
-  const [selectedChat, setSelectedChat] = useState(null);
+  const [selectedChat, setSelectedChat] = useState(null);  
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
   const [user] = useAuthState(auth);
 
   if (appState.user !== user) {
@@ -43,13 +46,15 @@ export default function App() {
       })
       .catch((error) => {
         console.log(error);
+        setModalMessage(`Something went wrong. Please try again later!`);
+        setShowModal(true);
       });
   }, [user]);
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <AppContext.Provider value={{ ...appState, setAppState, selectedChat, setSelectedChat }}>
-        <div className='font-medium flex flex-col w-screen h-screen max-w-screen max-h-screen bg-gray-900 text-white'>
+        <div className='font-medium flex flex-col w-screen h-screen max-w-screen max-h-screen animate-gradient bg-gradient-to-r from-gray-600 to-gray-800 bg-[length:400%_400%] text-white'>
           {!user && <Header />}
           <UserStatus />
           <Routes>
@@ -64,6 +69,7 @@ export default function App() {
           </Routes>
         </div>
       </AppContext.Provider>
-    </BrowserRouter>
+      {showModal && <Modal show={showModal} handleClose={() => setShowModal(false)} message={modalMessage} />}
+    </HashRouter>
   );
 }

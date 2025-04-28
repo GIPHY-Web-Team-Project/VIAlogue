@@ -31,9 +31,6 @@ export default function SelectUsersChannel({ selectedUsers, setSelectedUsers, te
     setSelectedUsers(selectedUsers.filter((selectedUser) => selectedUser !== user));
   };
 
-  console.log(selectedUsers);
-  console.log(userList);
-
   return (
     <div className='flex flex-row justify-between'>
       <div className='flex flex-col w-full h-full'>

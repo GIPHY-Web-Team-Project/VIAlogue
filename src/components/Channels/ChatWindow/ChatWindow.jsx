@@ -9,6 +9,7 @@ import { updateChat } from '../../../services/chat.services';
 import ChatParticipants from '../ChatParticipants/ChatParticipants';
 import EditChat from '../EditChat/EditChat';
 import PropTypes from 'prop-types';
+import membersImg from '../../../../public/images/members.jpg';
 
 /**
  * ChatWindow component renders the chat interface for a selected chat.
@@ -97,6 +98,7 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat, setPar
   const handleEditTitle = () => {
     setEdit(true);
   };
+
   if (!userData) {
     return <p>Loading...</p>;
   }
@@ -109,49 +111,46 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat, setPar
     return (
       <div className='flex flex-col w-full bg-transparent justify-between m-4'>
         <div>
-        {selectedChat && (
-          <div className="flex flex-row justify-between">
-            <div className="w-full"
-            onMouseEnter={() => setEditTitle(true)}
-            onMouseLeave={() => setEditTitle(false)}
-            >
-             {!edit && <h1 className="text-2xl border-b-2 mb-4 pb-2 border-black shadow-2xl">{selectedChat.title} 
-              { editTitle &&
-              <button className="text-gray-400 hover:text-gray-600 p-1 flex-row" onClick={handleEditTitle}>
-                &#128393;
-              </button>
-              }
-            </h1>}
-            {edit && (
-              <EditChat chat={selectedChat} onCancel={() => setEdit(false)}/>
-            )}
-            </div>
-            <div className="flex flex-col overflow-x-auto">
-              <img src="/images/members.jpg" alt="Members" className="w-8 h-8 pr-2" onClick={toggleShowParticipants} />
-              {showParticipants && (
-                <ChatParticipants participants={participants} setParticipants={setParticipants} handleLeaveChat={handleLeaveChat} selectedUser={selectedUser} setSelectedUser={setSelectedUser} chatId={selectedChat.id}/>
-              )}
-            </div>
-          </div>
-        )}
-        <div className="flex flex-col overflow-y-auto h-[80vh] pb-4">
-        {loading ? (
-            <div className="flex items-center justify-center h-full">
-              <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-blue-500"></div>
-            </div>
-          ) : messages && messages.length > 0 ? (
-            messages.map((messageObj, index) => {
-              const isFirstFromSender = index === 0 || messages[index - 1].sender !== messageObj.sender;
-              return (
-              <div key={messageObj.id}>
-                <SingleMessage key={messageObj.id} msg={messageObj} isFirstFromSender={isFirstFromSender}/>
+          {selectedChat && (
+            <div className='flex flex-row justify-between'>
+              <div className='w-full' onMouseEnter={() => setEditTitle(true)} onMouseLeave={() => setEditTitle(false)}>
+                {!edit && (
+                  <h1 className='text-2xl border-b-2 mb-4 pb-2 border-black shadow-2xl'>
+                    {selectedChat.title}
+                    {editTitle && (
+                      <button className='text-gray-400 hover:text-gray-600 p-1 flex-row' onClick={handleEditTitle}>
+                        &#128393;
+                      </button>
+                    )}
+                  </h1>
+                )}
+                {edit && <EditChat chat={selectedChat} onCancel={() => setEdit(false)} setSelectedChat={setSelectedChat} />}
               </div>
-            )})
-          ) : (
-            <p>No messages yet. Start typing and send your first message.</p>
+              <div className='flex flex-col overflow-x-auto'>
+                <img src={membersImg} alt='Members' className='w-8 h-8 pr-2' onClick={toggleShowParticipants} />
+                {showParticipants && <ChatParticipants participants={participants} setParticipants={setParticipants} handleLeaveChat={handleLeaveChat} selectedUser={selectedUser} setSelectedUser={setSelectedUser} chatId={selectedChat.id} />}
+              </div>
+            </div>
           )}
-          <div ref={messagesEndRef}></div>
-        </div>
+          <div className='flex flex-col overflow-y-auto h-[80vh] pb-4'>
+            {loading ? (
+              <div className='flex items-center justify-center h-full'>
+                <div className='animate-spin rounded-full h-10 w-10 border-t-2 border-blue-500'></div>
+              </div>
+            ) : messages && messages.length > 0 ? (
+              messages.map((messageObj, index) => {
+                const isFirstFromSender = index === 0 || messages[index - 1].sender !== messageObj.sender;
+                return (
+                  <div key={messageObj.id}>
+                    <SingleMessage key={messageObj.id} msg={messageObj} isFirstFromSender={isFirstFromSender} />
+                  </div>
+                );
+              })
+            ) : (
+              <p>No messages yet. Start typing and send your first message.</p>
+            )}
+            <div ref={messagesEndRef}></div>
+          </div>
         </div>
         <MessageWindow chatId={selectedChat.id} sender={userData?.username || 'Unknown'} />
       </div>
@@ -165,5 +164,5 @@ ChatWindow.propTypes = {
   selectedChat: PropTypes.object,
   participants: PropTypes.array,
   setSelectedChat: PropTypes.func,
-  setParticipants: PropTypes.func
+  setParticipants: PropTypes.func,
 };
