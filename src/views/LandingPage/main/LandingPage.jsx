@@ -25,7 +25,7 @@ export default function LandingPage() {
   const [numOfTeams, setNumOfTeams] = useState(null);
   const [numOfUsers, setNumOfUsers] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { userData } = useContext(AppContext);
+  const { userData, userLoading } = useContext(AppContext);
 
   useEffect(() => {
     const unsubscribe = () => {
@@ -41,14 +41,22 @@ export default function LandingPage() {
     };
   }, []);
 
+  if (userLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen opacity-100 transition-opacity duration-500 ease-out">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-blue"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className='flex flex-col flex-grow items-center'>
+    <div className='flex flex-col flex-grow items-center opacity-${userLoading ? 0 : 100} transition-opacity duration-500 ease-in delay-300'>
       {!userData && (
         <>
           {learnMore ? (
             <LearnMore setLearnMore={setLearnMore} />
           ) : (
-            <section className='flex justify-between pl-16 w-full mt-30'>
+            <section className='flex flex-col items-center bg-gray-700 rounded-xl mt-8 md:mt-auto w-full max-w-full md:max-w-[80vw] lg:max-w-[50vw] px-4 md:px-8 pt-4 md:pt-8 mb-8'>
               <div className='flex flex-col items-start justify-between w-full max-w-[50vw] mt-20 gap-8'>
                 <h1 className='text-6xl font-bold'>Communication is key - start chatting now!</h1>
                 <h4 className='text-2xl font-bold'>Conversations that fit your flow.

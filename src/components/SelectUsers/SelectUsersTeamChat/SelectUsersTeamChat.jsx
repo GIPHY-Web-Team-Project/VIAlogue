@@ -23,10 +23,10 @@ export default function SelectUsersTeamChat({ selectedUsers, setSelectedUsers, u
   };
 
   return (
-    <div className='flex flex-row justify-between h-auto'>
-      <div className='flex flex-col w-full h-full'>
+    <div className='flex flex-row justify-between h-auto '>
+      <div className='flex flex-col w-full h-full '>
         <SearchBar type='users' objects={users} objectList={userList} setObjectList={setUserList} selectedUsers={selectedUsers} />
-        <ul>
+        <ul className='max-h-[300px] overflow-y-auto'>
           <div className='flex flex-col justify-between h-full p-2 border-t-gray-600 border-t-2'>
             {userList.map((user) => (
               <div key={user.uid}>
@@ -43,8 +43,8 @@ export default function SelectUsersTeamChat({ selectedUsers, setSelectedUsers, u
       </div>
       <div className='flex flex-col ml-8 w-full h-full'>
         <h2 className='text-xl pb-5 border-b-gray-600 border-b-2'>Selected so far:</h2>
-        <ul>
-          <div className='p-2'>
+        <ul  className='max-h-[300px] overflow-y-auto'>
+          <div className='p-2 overflow-y-auto'>
             {selectedUsers.map((username) => (
               <div key={username}>
                 <li className='flex flex-row justify-between align-center pb-2'>

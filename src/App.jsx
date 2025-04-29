@@ -20,6 +20,7 @@ export default function App() {
   const [appState, setAppState] = useState({
     user: null,
     userData: null,
+    userLoading: true,
   });
   const [selectedChat, setSelectedChat] = useState(null);  
   const [showModal, setShowModal] = useState(false);
@@ -34,40 +35,53 @@ export default function App() {
   }
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) { 
+      setAppState((prev) => ({ ...prev, userLoading: false }));
+      return;
+    }
+
+    setAppState((prev) => ({ ...prev, userLoading: true }));
 
     getUserData(appState.user.uid)
       .then((data) => {
         const userData = data[Object.keys(data)[0]];
-        setAppState({
-          ...appState,
+        setAppState((prev) => ({
+          ...prev,
           userData,
-        });
+          userLoading: false,
+        }));
       })
       .catch((error) => {
         console.log(error);
         setModalMessage(`Something went wrong. Please try again later!`);
         setShowModal(true);
+        setAppState((prev) => ({ ...prev, userLoading: false }));
       });
   }, [user]);
 
   return (
     <HashRouter>
       <AppContext.Provider value={{ ...appState, setAppState, selectedChat, setSelectedChat }}>
-        <div className='font-medium flex flex-col w-screen h-screen max-w-screen max-h-screen animate-gradient bg-gradient-to-r from-gray-600 to-gray-800 bg-[length:400%_400%] text-white'>
+        <div className='font-medium flex flex-col w-full h-full min-w-screen min-h-screen overflow-hidden animate-gradient bg-gradient-to-r from-gray-600 to-gray-800 bg-[length:400%_400%] text-white'>
           {!user && <Header />}
           <UserStatus />
-          <Routes>
-            <Route path='/' element={<LandingPage />} />
-            <Route path='/register' element={<Register />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/teams' element={<TeamsPage />} />
-            <Route path='/teams/:teamId' element={<TeamWindow />} />
-            <Route path='/profile/:username' element={<Profile />} />
-            <Route path='/chats' element={<ChatPage />} />
-            <Route path='*' element={<h1>404 Not Found</h1>} />
-          </Routes>
-        </div>
+          {appState.userLoading ? (
+              <div className="flex items-center justify-center h-screen">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-blue-500"></div>
+              </div>
+            ) : (
+              <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/teams" element={<TeamsPage />} />
+                <Route path="/teams/:teamId" element={<TeamWindow />} />
+                <Route path="/profile/:username" element={<Profile />} />
+                <Route path="/chats" element={<ChatPage />} />
+                <Route path="*" element={<h1>404 Not Found</h1>} />
+              </Routes>
+            )}
+          </div>
       </AppContext.Provider>
       {showModal && <Modal show={showModal} handleClose={() => setShowModal(false)} message={modalMessage} />}
     </HashRouter>

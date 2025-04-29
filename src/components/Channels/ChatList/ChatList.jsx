@@ -27,6 +27,7 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
   const [loading, setLoading] = useState(true);
   const [selectedChatId, setSelectedChatId] = useState(null);
   const [prevUnreadCounts, setPrevUnreadCounts] = useState({});
+  const [showNewChatText, setShowNewChatText] = useState(false);
   const audio = new Audio(newMessageSound);
 
   useEffect(() => {
@@ -78,12 +79,17 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
   };
 
   return (
-    <div className='bg-gray-800 p-4 overflow-y-auto w-80'>
-      <div className='flex flex-row justify-between border-b-2 border-gray-600 mb-2'>
-        <h3 className='flex flex-row mb-2'>Chat</h3>
-        <Button btnStyle={NONE} onClick={() => handleNewChat()}>
-          <img src={newChatImg} alt='New chat' className='w-7 h-7 ml-2 mb-2 cursor-pointer' />
-        </Button>
+    <div className='bg-gray-700 p-3 overflow-y-auto w-80'>
+      <div className='flex flex-row justify-between items-center border-b-2 border-gray-600 pb-2 px-2'>
+        <h3 className='text-lg font-medium'>Chat</h3>
+        <div onMouseEnter={() => setShowNewChatText(true)} onMouseLeave={() => setShowNewChatText(false)} className='relative flex items-center'>
+          <button onClick={() => handleNewChat()} className='text-gray-400 hover:text-blue text-3xl flex items-center pb-2'>&#128390;
+          {/*<img src={newChatImg} alt='New chat' className='w-7 h-7 ml-2 mb-2 cursor-pointer' />*/}
+          </button>
+          {showNewChatText && <span className='absolute top-full left-1/2 transform -translate-x-1/2 
+                   bg-gray-800 text-white text-sm px-2 py-1 rounded 
+                   whitespace-nowrap z-50 shadow-lg'>New chat</span>}
+          </div>
       </div>
       <div className='flex flex-col overflow-y-auto h-[90vh] pb-4'>
         {loading ? (
@@ -98,7 +104,7 @@ export const ChatList = ({ username, handleNewChat, chats, setChats, setSelected
                 key={chat.id}
                 onClick={() => handleChatClick(chat)}
                 className={`p-2 rounded-md cursor-pointer border-gray-600 hover:bg-gray-600
-                ${isSelected ? 'bg-gray-700 text-white' : 'bg-gray-800'}`}
+                ${isSelected ? 'bg-gray-800 text-white' : 'bg-gray-700'}`}
               >
                 <div className='flex flex-row justify-between'>
                   <Button btnStyle={CHAT_TEAM_LIST_ITEM}>{chat.title}</Button>
