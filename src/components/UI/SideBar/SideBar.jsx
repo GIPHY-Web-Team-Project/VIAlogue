@@ -18,6 +18,9 @@ export default function SideBar({ type, username, handleNewChat, chats, setChats
   const { userData } = useContext(AppContext);
   const [showNotification, setShowNotification] = useState(false);
   const [notificationCount, setNotificationCount] = useState(0);
+  const [showTeamsText, setShowTeamsText] = useState(false);
+  const [showChatText, setShowChatText] = useState(false);
+  const [showProfileText, setShowProfileText] = useState(false);
 
   useEffect(() => {
     if (!userData) return;
@@ -35,7 +38,7 @@ export default function SideBar({ type, username, handleNewChat, chats, setChats
 
   if (type === 'menu') {
     return (
-      <div className='flex flex-col justify-between h-full bg-gray-700 p-2'>
+      <div className='flex flex-col justify-between h-full bg-transparent p-2'>
         <div className='flex flex-col gap-4'>
           <div className={variant.home} onMouseEnter={() => setShowNotification(true)} onMouseLeave={() => setShowNotification(false)}>
             <div className='relative cursor-pointer py-2'>
@@ -44,22 +47,25 @@ export default function SideBar({ type, username, handleNewChat, chats, setChats
             </div>
             {showNotification && <NotificationList />}
           </div>
-          <NavLink className={({ isActive }) => `relative py-2 ${variant.home} ${isActive ? 'border-b-2 border-gray-500' : 'bg-gray-700'}`} to={'/teams'}>
+          <NavLink className={({ isActive }) => `relative py-2 ${variant.home} ${isActive ? 'border-b-2 border-gray-500' : 'bg-gray-700'}`} to={'/teams'} onMouseEnter={() => setShowTeamsText(true)} onMouseLeave={() => setShowTeamsText(false)}>
             <img src={teamsImg} className='h-12 w-12 flex justify-self-center' />
+            {showTeamsText && <span className='absolute top-full left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-sm px-2 py-1 rounded whitespace-nowrap z-50 shadow-lg'>Teams</span>}
           </NavLink>
-          <NavLink className={({ isActive }) => `relative py-2 ${variant.home} ${isActive ? 'border-b-2 border-gray-500' : 'bg-gray-700'}`} to={'/chats'}>
+          <NavLink className={({ isActive }) => `relative py-2 ${variant.home} ${isActive ? 'border-b-2 border-gray-500' : 'bg-gray-700'}`} to={'/chats'} onMouseEnter={() => setShowChatText(true)} onMouseLeave={() => setShowChatText(false)}>
             <img src={updatedShortDark} className='h-14 w-14 flex justify-self-center' />
+            {showChatText && <span className='absolute top-full left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-sm px-2 py-1 rounded whitespace-nowrap z-50 shadow-lg'>Chats</span>}
           </NavLink>
         </div>
-        <div className='relative bottom-5 flex flex-col justify-between'>
+        <div className='absolute bottom-5 left-4'>
           <div>
             {userData && (
-              <NavLink to={`/profile/${userData.username}`} className='mt-10'>
+              <NavLink to={`/profile/${userData.username}`} className='mt-10' onMouseEnter={() => setShowProfileText(true)} onMouseLeave={() => setShowProfileText(false)}>
                 <img src={userData.profilePicture || defaultAvatar} className='h-13 w-13 flex justify-self-center rounded-full' />
+                {showProfileText && <span className='absolute bottom-full left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-sm px-2 py-1 rounded whitespace-nowrap z-50 shadow-lg'>Profile</span>}
               </NavLink>
             )}
           </div>
-          <div className='absolute top-6 right-1'>{userData && <ViewStatus username={userData.username} />}</div>
+          <div className='absolute top-6 right-0'>{userData && <ViewStatus username={userData.username} />}</div>
         </div>
       </div>
     );

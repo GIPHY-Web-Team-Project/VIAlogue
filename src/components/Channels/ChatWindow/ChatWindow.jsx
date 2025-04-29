@@ -9,7 +9,7 @@ import { updateChat } from '../../../services/chat.services';
 import ChatParticipants from '../ChatParticipants/ChatParticipants';
 import EditChat from '../EditChat/EditChat';
 import PropTypes from 'prop-types';
-import membersImg from '../../../../public/images/members.jpg';
+import membersImg from '../../../../public/images/members.png';
 
 /**
  * ChatWindow component renders the chat interface for a selected chat.
@@ -38,7 +38,8 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat, setPar
   const [edit, setEdit] = useState(false);
   const messagesEndRef = useRef(null);
   const [loading, setLoading] = useState(true);
-
+  const [showParticipantsText, setShowParticipantsText] = useState(false);
+  
   useEffect(() => {
     if (!selectedChat) return;
     console.log('Updating messages for chat:', selectedChat.id);
@@ -109,16 +110,16 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat, setPar
 
   if (selectedChat) {
     return (
-      <div className='flex flex-col w-full bg-transparent justify-between m-4'>
+      <div className='flex flex-col w-full  justify-between'>
         <div>
           {selectedChat && (
-            <div className='flex flex-row justify-between'>
+            <div className='flex flex-row justify-between border-b-2 border-black shadow-2xl'>
               <div className='w-full' onMouseEnter={() => setEditTitle(true)} onMouseLeave={() => setEditTitle(false)}>
                 {!edit && (
-                  <h1 className='text-2xl border-b-2 mb-4 pb-2 border-black shadow-2xl'>
+                  <h1 className='text-2xl mb-4 pb-2 '>
                     {selectedChat.title}
                     {editTitle && (
-                      <button className='text-gray-400 hover:text-gray-600 p-1 flex-row' onClick={handleEditTitle}>
+                      <button className='text-gray-400 hover:text-blue px-1 flex-row' onClick={handleEditTitle}>
                         &#128393;
                       </button>
                     )}
@@ -126,8 +127,11 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat, setPar
                 )}
                 {edit && <EditChat chat={selectedChat} onCancel={() => setEdit(false)} setSelectedChat={setSelectedChat} />}
               </div>
-              <div className='flex flex-col overflow-x-auto'>
-                <img src={membersImg} alt='Members' className='w-8 h-8 pr-2' onClick={toggleShowParticipants} />
+              <div className='flex flex-col'>
+                <div onMouseEnter={() => setShowParticipantsText(true)} onMouseLeave={() => setShowParticipantsText(false)} className='relative flex items-center'>
+                  <img src={membersImg} alt='Members' className='w-15 h-12 pr-2 cursor-pointer' onClick={toggleShowParticipants} />
+                  {showParticipantsText && <span className='absolute top-full left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-sm px-2 py-1 rounded whitespace-nowrap z-[9999] shadow-lg mt-1'>Members</span>}
+                </div>
                 {showParticipants && <ChatParticipants participants={participants} setParticipants={setParticipants} handleLeaveChat={handleLeaveChat} selectedUser={selectedUser} setSelectedUser={setSelectedUser} chatId={selectedChat.id} />}
               </div>
             </div>
@@ -135,7 +139,7 @@ export const ChatWindow = ({ selectedChat, participants, setSelectedChat, setPar
           <div className='flex flex-col overflow-y-auto h-[80vh] pb-4'>
             {loading ? (
               <div className='flex items-center justify-center h-full'>
-                <div className='animate-spin rounded-full h-10 w-10 border-t-2 border-blue-500'></div>
+                <div className='animate-spin rounded-full h-10 w-10 border-t-2 border-blue'></div>
               </div>
             ) : messages && messages.length > 0 ? (
               messages.map((messageObj, index) => {

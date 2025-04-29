@@ -84,9 +84,9 @@ export const ChatPage = () => {
           ) : (
             <>
               {selectedChat ? (
-                <>
+                <div className='bg-gray-800 flex flex-col w-full h-full justify-between p-4'>
                   <ChatWindow selectedChat={selectedChat} participants={participants} setSelectedChat={setSelectedChat} setParticipants={setParticipants}/>
-                </>
+                </div>
               ) : (
                 <p>Select a chat to start messaging.</p>
               )}

@@ -123,8 +123,8 @@ export const ChatParticipants = ({ participants, setParticipants, handleLeaveCha
   };
 
   return (
-    <div className='absolute top-12 right-5 bg-gray-800 text-white z-50 shadow-lg overflow-y-auto border border-gray-600 max-h-[60vh]'>
-      <ul className='max-h-screen'>
+    <div className='absolute top-12 right-5 bg-gray-800 text-white z-50 shadow-lg border border-gray-600 max-h-[70vh]'>
+      <ul className='max-h-[300px] overflow-y-auto'>
         {users.map((user) => (
           <li key={user.uid || user.username} className='p-2 hover:bg-gray-700 cursor-pointer'>
             <div className='flex flex-row'>
@@ -151,13 +151,13 @@ export const ChatParticipants = ({ participants, setParticipants, handleLeaveCha
           </li>
         ))}
       </ul>
-      <div className='h-auto bottom-auto'>
+      <div className='max-h-[700px] overflow-y-auto'>
         <button className='text-s flex flex-wrap place-content-center p-2 cursor-pointer border-t-2 border-gray-700 w-full' onClick={toggleSelectUsers}>
           Add people &nbsp; <img src={addPeople} className='h-5 w-5 flex justify-self-center align-center' />
         </button>
         {showSelectUsers && (
           <div className='mt-4 h-auto'>
-            <SelectUsersTeamChat selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} userList={usersNotInChat} setUserList={setUsersNotInChat} />
+            <SelectUsersTeamChat selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} userList={usersNotInChat} setUserList={setUsersNotInChat}/>
             <button onClick={handleNewUsers} className='mt-2 w-full mb-2 border-t-2 border-gray-700 p-2 cursor-pointer'>
               Add to chat
             </button>
